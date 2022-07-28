@@ -145,7 +145,9 @@ require (
 
 replace (
 	github.com/cosmos/cosmos-sdk => github.com/cheqd/cosmos-sdk v0.45.5-cheqd-tag
+	// Fix upstream GHSA-h395-qcrw-5vmq vulnerability.
+	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
-	github.com/tendermint/tendermint => github.com/forbole/tendermint v0.34.13-0.20210820072129-a2a4af55563d
+	github.com/tecbot/gorocksdb => github.com/cosmos/gorocksdb v1.2.0
 	google.golang.org/grpc => google.golang.org/grpc v1.33.2
 )

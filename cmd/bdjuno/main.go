@@ -58,6 +58,8 @@ func getBasicManagers() []module.BasicManager {
 	return []module.BasicManager{
 		gaiaapp.ModuleBasics,
 		app.ModuleBasics,
+		cheqd.ModuleBasics,
+		resource.ModuleBasics,
 	}
 }
 
