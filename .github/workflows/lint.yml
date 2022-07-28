@@ -1,29 +1,62 @@
-name: Lint
-# Lint runs golangci-lint over the entire Desmos repository.
-# This workflow is run on every pull request and push to master.
-# The `golangci` will pass without running if no *.{go, mod, sum} files have been changed.
+name: "Lint"
 on:
-  pull_request:
-  push:
-    branches:
-      - master
+  workflow_call:
+defaults:
+  run:
+    shell: bash
+
 
 jobs:
-  GolangCI:
-    name: golangci-lint
+
+  sh-euox-pipefail-check:
+    name: "Shell pipefail check"
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    
     steps:
       - uses: actions/checkout@v3
-      - uses: technote-space/get-diff-action@v6.1.0
-        with:
-          SUFFIX_FILTER: |
-            .go
-            .mod
-            .sum
-      - uses: golangci/golangci-lint-action@v3.2.0
+
+      - name: Run 'set -euox pipefail' check
+        run: bash ./.github/scripts/ensure_set_euox_pipefail.sh
+
+  go-lint:
+    # We can't use VALIDATE_GO from super linter because of this issue:
+    # https://github.com/github/super-linter/issues/143
+    name: "Golang"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3
         with:
           version: v1.28
           args: --timeout 10m
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-        if: "env.GIT_DIFF != ''"
+
+  super-lint:
+    name: "Super Linter"
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # Required to fetch version
+    
+    - name: Run Super Linter
+      uses: github/super-linter/slim@v4
+      env:
+        IGNORE_GITIGNORED_FILES: true
+        DEFAULT_BRANCH: "chains/cheqd"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        LOG_LEVEL: WARN
+        VALIDATE_ALL_CODEBASE: true
+        MULTI_STATUS: true
+
+        VALIDATE_BASH: true
+        VALIDATE_DOCKERFILE_HADOLINT: true
+        DOCKERFILE_HADOLINT_FILE_NAME: '../linters/.hadolint.yml'
+        VALIDATE_GITHUB_ACTIONS: true
+        VALIDATE_OPENAPI: true
+        VALIDATE_PYTHON_PYLINT: true
+        VALIDATE_XML: true
+        VALIDATE_YAML: true

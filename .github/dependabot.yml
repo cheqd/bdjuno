@@ -1,17 +1,42 @@
+#################################
+# GitHub Dependabot Config info #
+#################################
+
 version: 2
 updates:
-  - package-ecosystem: github-actions
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-  - package-ecosystem: gomod
+      interval: "weekly"
+
+  # Maintain dependencies for NPM
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    reviewers:
-      - riccardom
-    labels:
-      - automerge
-      - dependencies
+      interval: "weekly"
+
+  # Maintain dependencies for Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Maintain dependencies for Golang
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Maintain dependencies for Terraform
+  - package-ecosystem: "terraform"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Maintain dependencies for Python
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
