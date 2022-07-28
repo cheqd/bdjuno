@@ -47,7 +47,6 @@ jobs:
       env:
         IGNORE_GITIGNORED_FILES: true
         DEFAULT_BRANCH: "chains/cheqd"
-        LINTER_RULES_PATH: '.github/linters'
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         LOG_LEVEL: WARN
         VALIDATE_ALL_CODEBASE: true
@@ -55,6 +54,7 @@ jobs:
 
         VALIDATE_BASH: true
         VALIDATE_DOCKERFILE_HADOLINT: true
+        DOCKERFILE_HADOLINT_FILE_NAME: '../linters/.hadolint.yml'
         VALIDATE_GITHUB_ACTIONS: true
         VALIDATE_OPENAPI: true
         VALIDATE_PYTHON_PYLINT: true
