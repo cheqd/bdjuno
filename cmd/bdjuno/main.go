@@ -2,8 +2,6 @@ package main
 
 import (
 	"github.com/cheqd/cheqd-node/app"
-	cheqd "github.com/cheqd/cheqd-node/app"
-	resource "github.com/cheqd/cheqd-node/app"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/forbole/juno/v3/cmd"
 	initcmd "github.com/forbole/juno/v3/cmd/init"
@@ -18,6 +16,8 @@ import (
 
 	"github.com/forbole/bdjuno/v3/database"
 	"github.com/forbole/bdjuno/v3/modules"
+
+	gaiaapp "github.com/cosmos/gaia/v7/app"
 )
 
 func main() {
@@ -56,9 +56,8 @@ func main() {
 // This should be edited by custom implementations if needed.
 func getBasicManagers() []module.BasicManager {
 	return []module.BasicManager{
+		gaiaapp.ModuleBasics,
 		app.ModuleBasics,
-		cheqd.ModuleBasics,
-		resource.ModuleBasics,
 	}
 }
 
