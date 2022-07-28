@@ -10,6 +10,8 @@ override:
   error:
   warning:
   info:
+    - DL3007
     - DL3008
+    - DL3018
     - DL3027
   style:
