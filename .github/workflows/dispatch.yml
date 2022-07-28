@@ -1,0 +1,17 @@
+name: "Workflow Dispatch"
+on: push
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+jobs:
+
+  call-lint:
+    name: "Lint"
+    uses: cheqd/bdjuno/.github/workflows/lint.yml@chains/cheqd
+  
+  call-test:
+    name: "Test"
+    uses: cheqd/bdjuno/.github/workflows/test.yml@chains/cheqd
+
