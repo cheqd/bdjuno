@@ -9,9 +9,8 @@ jobs:
 
   call-lint:
     name: "Lint"
-    uses: cheqd/bdjuno/.github/workflows/lint.yml@chains/cheqd
+    uses: cheqd/bdjuno/.github/workflows/lint.yml@chains/cheqd/mainnet
   
   call-test:
     name: "Test"
-    uses: cheqd/bdjuno/.github/workflows/test.yml@chains/cheqd
-
+    uses: cheqd/bdjuno/.github/workflows/test.yml@chains/cheqd/mainnet
