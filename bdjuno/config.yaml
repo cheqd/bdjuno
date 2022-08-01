@@ -32,11 +32,11 @@ parsing:
     fast_sync: true
     average_block_time: 5s
 database:
-    name: ${DATABASE}
-    host: ${HOSTNAME}
-    port: ${PORT}
-    user: ${USERNAME}
-    password: ${PASSWORD}
+    name: ${DATABASE_NAME}
+    host: ${DATABASE_HOST}
+    port: ${DATABASE_PORT}
+    user: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
     schema: public
     ssl_mode: require
     max_open_connections: 5
