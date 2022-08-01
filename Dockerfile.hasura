@@ -1,0 +1,7 @@
+FROM hasura/graphql-engine:v2.1.1
+
+WORKDIR /hasura
+EXPOSE 8080
+STOPSIGNAL SIGTERM
+ENTRYPOINT [ "hasura" ]
+CMD [ "--config", "/hasura/config.yaml" ]
