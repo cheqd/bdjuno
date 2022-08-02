@@ -11,11 +11,10 @@ jobs:
   build-docker:
     name: "Deploy to DigitalOcean Container Registry"
     runs-on: ubuntu-latest
-    environment: testnet
     env:
       IMAGE_NAME: ${{ github.repository }}
       COMMIT_SHA: ${{ github.sha }}
-      NETWORK_NAME: ${{ secrets.NETWORK_NAME }}
+      NETWORK_NAME: testnet
 
     steps:
       - uses: actions/checkout@v3
