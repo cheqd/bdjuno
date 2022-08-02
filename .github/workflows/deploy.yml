@@ -35,7 +35,7 @@ jobs:
         run: doctl registry login --expiry-seconds 600
 
       - name: Build image
-        run: docker build -t registry.digitalocean.com/cheqd/bdjuno:${{ env.COMMIT_SHA }} .
+        run: docker build -f Dockerfile -t registry.digitalocean.com/cheqd/bdjuno:${{ env.COMMIT_SHA }} .
 
       - name: Push image
         run: docker push registry.digitalocean.com/cheqd/bdjuno:${{ env.COMMIT_SHA }}
