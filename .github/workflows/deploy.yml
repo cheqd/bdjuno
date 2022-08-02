@@ -36,7 +36,12 @@ jobs:
         run: doctl registry login --expiry-seconds 600
 
       - name: Build image
-        run: docker build -f Dockerfile -t registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.COMMIT_SHA }} .
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          platforms: linux/amd64
+          load: true
+          tags: registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.COMMIT_SHA }}
 
       - name: Push image
         run: docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.COMMIT_SHA }}
