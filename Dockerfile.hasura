@@ -1,3 +1,0 @@
-FROM dvasdekis/hasura-cli-docker:latest
-
-ADD hasura /hasuracli/
