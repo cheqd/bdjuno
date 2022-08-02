@@ -16,4 +16,4 @@ RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh \
 COPY hasura/* .
 
 ENTRYPOINT [ "hasura" ]
-CMD [ "--config", "/hasuracli/config.yaml" ]
+CMD [ "--config /hasuracli/config.yaml" ]
