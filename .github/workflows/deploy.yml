@@ -14,6 +14,7 @@ jobs:
     env:
       IMAGE_NAME: ${{ github.repository }}
       COMMIT_SHA: ${{ github.sha }}
+      NETWORK_NAME: ${{ secrets.NETWORK_NAME }}
 
     steps:
       - uses: actions/checkout@v3
@@ -42,13 +43,10 @@ jobs:
           platforms: linux/amd64
           load: true
           tags: |
-            registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ secrets.NETWORK_NAME }}-latest
+            registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.NETWORK_NAME }}-latest
             registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.COMMIT_SHA }}
-          secrets: |
-            "NETWORK_NAME=${{ secrets.NETWORK_NAME }}"
-
 
       - name: Push image
         run: |
-          docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ secrets.NETWORK_NAME }}-latest
+          docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.NETWORK_NAME }}-latest
           docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.COMMIT_SHA }}
