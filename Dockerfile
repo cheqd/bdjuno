@@ -19,6 +19,7 @@ RUN go mod download && make build
 FROM alpine:3.16 AS bdjuno
 
 WORKDIR /bdjuno
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 # Copy BDJuno binary
 COPY --from=builder /go/src/github.com/forbole/bdjuno/build/bdjuno /usr/bin/bdjuno
