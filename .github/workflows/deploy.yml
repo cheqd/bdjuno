@@ -11,6 +11,7 @@ jobs:
   build-docker:
     name: "Deploy to DigitalOcean Container Registry"
     runs-on: ubuntu-latest
+    environment: testnet
     env:
       IMAGE_NAME: ${{ github.repository }}
       COMMIT_SHA: ${{ github.sha }}
