@@ -1,4 +1,4 @@
-module github.com/forbole/bdjuno/v3
+module github.com/cheqd/bdjuno/v3
 
 go 1.17
 
@@ -6,6 +6,7 @@ require (
 	github.com/cheqd/cheqd-node v0.6.0
 	github.com/cosmos/cosmos-sdk v0.45.5
 	github.com/cosmos/gaia/v7 v7.0.2
+	github.com/forbole/bdjuno/v3 v3.1.0
 	github.com/forbole/juno/v3 v3.3.0
 	github.com/go-co-op/gocron v1.16.1
 	github.com/gogo/protobuf v1.3.3
@@ -104,7 +105,6 @@ require (
 	github.com/multiformats/go-base32 v0.0.3 // indirect
 	github.com/multiformats/go-base36 v0.1.0 // indirect
 	github.com/multiformats/go-multibase v0.0.3 // indirect
-	github.com/onsi/gomega v1.18.1 // indirect
 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
