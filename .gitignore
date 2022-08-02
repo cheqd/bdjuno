@@ -1,5 +1,5 @@
 ### APP-SPECIFIC EXCLUSIONS ###
-config.dev.yaml
+config.yaml
 
 # Coverage
 coverage.*
