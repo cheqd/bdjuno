@@ -9,7 +9,7 @@ defaults:
 jobs:
 
   build-docker:
-    name: "Deploy to DigitalOcean Container Registry"
+    name: "DigitalOcean Container Registry"
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: ${{ github.repository }}
