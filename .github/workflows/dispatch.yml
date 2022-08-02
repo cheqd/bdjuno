@@ -7,10 +7,18 @@ concurrency:
 
 jobs:
 
-  call-lint:
-    name: "Lint"
-    uses: cheqd/bdjuno/.github/workflows/lint.yml@chains/cheqd/mainnet
+  # call-lint:
+  #   name: "Lint"
+  #   uses: ./.github/workflows/lint.yml
   
-  call-test:
-    name: "Test"
-    uses: cheqd/bdjuno/.github/workflows/test.yml@chains/cheqd/mainnet
+  # call-build:
+  #   name: "Build & Test"
+  #   needs: call-lint
+  #   uses: ./.github/workflows/build.yml
+
+  call-deploy:
+    name: "Deploy"
+    # needs: call-build
+    # if: ${{ github.ref_protected == true }}
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
