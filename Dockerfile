@@ -6,6 +6,6 @@ RUN make install && make build
 
 FROM alpine:latest
 WORKDIR /bdjuno
-COPY --from=builder ./build/bdjuno /usr/bin/bdjuno
-COPY deploy/config.yaml ./.bdjuno/config.yaml
+COPY --from=builder build/bdjuno /usr/bin/bdjuno
+COPY deploy/config.yaml .bdjuno/config.yaml
 CMD [ "bdjuno" ]
