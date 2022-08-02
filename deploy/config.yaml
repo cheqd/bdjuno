@@ -56,3 +56,5 @@ pricefeed:
             - denom: cheq
               exponent: 9
               price_id: cheqd-network
+actions:
+    port: 3000
