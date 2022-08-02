@@ -1,5 +1,5 @@
 ### APP-SPECIFIC EXCLUSIONS ###
-**/config.yaml
+.bdjuno/**
 
 # Coverage
 coverage.*
