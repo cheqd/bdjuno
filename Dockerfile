@@ -7,6 +7,6 @@ RUN make build
 
 FROM alpine:latest
 WORKDIR /bdjuno
-COPY .bdjuno ./bdjuno/.bdjuno
+COPY deploy/config.yaml /bdjuno/.bdjuno/config.yaml
 COPY --from=builder /go/src/github.com/forbole/bdjuno/build/bdjuno /usr/bin/bdjuno
 CMD [ "bdjuno" ]
