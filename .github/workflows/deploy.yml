@@ -11,6 +11,8 @@ jobs:
   build-docker:
     name: "Build and push Docker image to DigitalOcean Container Registry"
     runs-on: ubuntu-latest
+    env:
+      COMMIT_SHA: ${{ github.sha }}
 
     steps:
       - uses: actions/checkout@v3
@@ -32,11 +34,8 @@ jobs:
       - name: Login to DigitalOcean Container Registry
         run: doctl registry login --expiry-seconds 600
 
-      - name: Update SHA
-        run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/site/_meta
-
       - name: Build image
-        run: docker build -t registry.digitalocean.com/cheqd/bdjuno:$(echo $GITHUB_SHA | head -c7) .
+        run: docker build -t registry.digitalocean.com/cheqd/bdjuno:$(echo ${{ env.COMMIT_SHA }} | head -c7) .
 
       - name: Push image
-        run: docker push registry.digitalocean.com/cheqd/bdjuno:$(echo $GITHUB_SHA | head -c7)
+        run: docker push registry.digitalocean.com/cheqd/bdjuno:$(echo ${{ env.COMMIT_SHA }} | head -c7)
