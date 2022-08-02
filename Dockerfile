@@ -1,11 +1,11 @@
 FROM golang:1.17-alpine AS builder
 RUN apk update && apk add --no-cache make git
-WORKDIR /bdjuno
+WORKDIR /go/src/github.com/forbole/bdjuno
 COPY . ./
-RUN make install && make build
+RUN go mod download && make build
 
 FROM alpine:latest
 WORKDIR /bdjuno
-COPY --from=builder build/bdjuno /usr/bin/bdjuno
-COPY deploy/config.yaml .bdjuno/config.yaml
+COPY --from=builder /go/src/github.com/forbole/bdjuno/build/bdjuno /usr/bin/bdjuno
+COPY deploy/* .bdjuno/
 CMD [ "bdjuno" ]
