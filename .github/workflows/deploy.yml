@@ -33,7 +33,7 @@ jobs:
         run: doctl registry login --expiry-seconds 600
 
       - name: Build image
-        run: docker build -t registry.digitalocean.com/"$ {{github.repostory}}":"$ {{github.sha}}" .
+        run: docker build -t registry.digitalocean.com/"$({{ github.repostory }})":"$({{ github.sha }})" .
 
       - name: Push image
-        run: docker push registry.digitalocean.com/"$ {{github.repostory}}":"$ {{github.sha}}"
+        run: docker push registry.digitalocean.com/"$({{ github.repostory }})":"$({{ github.sha }})"
