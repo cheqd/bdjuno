@@ -45,7 +45,7 @@ jobs:
             registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ secrets.NETWORK_NAME }}-latest
             registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.COMMIT_SHA }}
           secrets: |
-            "NETWORK_NAME=${{ secrets.NETWORK_NAME }}""
+            "NETWORK_NAME=${{ secrets.NETWORK_NAME }}"
 
 
       - name: Push image
