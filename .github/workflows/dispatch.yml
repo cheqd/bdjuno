@@ -9,11 +9,11 @@ jobs:
 
   call-lint:
     name: "Lint"
-    uses: cheqd/bdjuno/.github/workflows/lint.yml
+    uses: ./.github/workflows/lint.yml
   
   call-build:
     name: "Build & Test"
-    uses: cheqd/bdjuno/.github/workflows/build.yml
+    uses: ./.github/workflows/build.yml
 
   # call-deploy:
   #   name: "Deploy"
