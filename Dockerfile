@@ -18,11 +18,21 @@ RUN go mod download && make build
 
 FROM alpine:3.16 AS bdjuno
 
-WORKDIR /bdjuno
-SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
-
 # Copy BDJuno binary
 COPY --from=builder /go/src/github.com/forbole/bdjuno/build/bdjuno /usr/bin/bdjuno
+
+# Set user directory and details
+ARG HOME_DIR="/bdjuno"
+ARG USER="bdjuno"
+
+# Add cheqd user to use in the container
+RUN addgroup --system ${USER} \
+    && adduser ${USER} --system --home ${HOME_DIR} --shell /bin/bash
+
+# Set working directory & bash defaults
+WORKDIR ${HOME_DIR}
+USER ${USER}
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 # Copy chain-specific config file from Git repo
 COPY deploy/* .bdjuno/
