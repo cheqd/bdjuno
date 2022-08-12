@@ -36,7 +36,7 @@ jobs:
       - name: Login to DigitalOcean Container Registry
         run: doctl registry login --expiry-seconds 600
 
-      - name: Build image
+      - name: Build BDJuno image
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -45,6 +45,17 @@ jobs:
           tags: |
             registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.NETWORK_NAME }}-latest
             registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.COMMIT_SHA }}
+
+      - name: Build Hasura image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          platforms: linux/amd64
+          file: Dockerfile.hasura
+          load: true
+          tags: |
+            registry.digitalocean.com/hasura-cli:${{ env.NETWORK_NAME }}-latest
+            registry.digitalocean.com/hasura-cli:${{ env.COMMIT_SHA }}
 
       - name: Push image
         run: |
