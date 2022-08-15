@@ -25,7 +25,7 @@ COPY --from=builder /go/src/github.com/forbole/bdjuno/build/bdjuno /usr/bin/bdju
 ARG HOME_DIR="/bdjuno"
 ARG USER="bdjuno"
 
-# Add cheqd user to use in the container
+# Add non-root user to use in the container
 RUN addgroup --system ${USER} \
     && adduser ${USER} --system --home ${HOME_DIR} --shell /bin/bash
 
