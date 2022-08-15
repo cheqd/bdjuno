@@ -22,8 +22,6 @@ jobs:
       COMMIT_SHA: ${{ github.sha }}
     outputs:
       NETWORK_NAME: ${{ steps.set-network.outputs.NETWORK_NAME }}
-    environment:
-      name: ${{ steps.set-network.outputs.NETWORK_NAME }}
 
     steps:
       - uses: actions/checkout@v3
