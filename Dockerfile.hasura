@@ -20,10 +20,11 @@ USER ${USER}
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 # Get latest Hasura CLI and install
-RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
+RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh \
+	| INSTALL_PATH=${HOME_DIR}/bin bash
 
 # Copy chain-specific config file from Git repo
 COPY hasura/* .
 
-ENTRYPOINT [ "hasura" ]
+ENTRYPOINT [ "/hasuracli/bin/hasura" ]
 CMD [ "--config /hasuracli/config.yaml" ]
