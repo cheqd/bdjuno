@@ -1,6 +1,12 @@
 name: "Deploy"
 on:
-  workflow_call:
+  push:
+    branches:
+      - chains/cheqd/**
+      - hasura-cli
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 defaults:
   run:
     shell: bash
@@ -9,17 +15,24 @@ defaults:
 jobs:
 
   build-docker:
-    name: "DigitalOcean Container Registry"
+    name: "Docker Image"
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: ${{ github.repository }}
       COMMIT_SHA: ${{ github.sha }}
-      NETWORK_NAME: testnet
+    outputs:
+      NETWORK_NAME: ${{ steps.set-network.outputs.NETWORK_NAME }}
 
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Set network name
+        id: set-network
+        run: |
+          NETWORK_NAME=$( endsWith ( "${{ github.ref }}" "mainnet") ? "mainnet" : "testnet" )
+          echo ::set-output name=NETWORK_NAME::"$NETWORK_NAME"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -36,30 +49,33 @@ jobs:
       - name: Login to DigitalOcean Container Registry
         run: doctl registry login --expiry-seconds 600
 
-      - name: Build BDJuno image
-        uses: docker/build-push-action@v3
+      - name: Configure Docker image metadata
+        id: meta
+        uses: docker/metadata-action@v4
         with:
-          context: .
-          platforms: linux/amd64
-          load: true
+          images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
           tags: |
-            registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.NETWORK_NAME }}-latest
-            registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.COMMIT_SHA }}
+            ${{ env.NETWORK_NAME }}-latest
+            ${{ env.NETWORK_NAME }}-${{ env.COMMIT_SHA }}
+          labels: |
+            org.opencontainers.image.title="cheqd BDJuno Docker Image"
+            org.opencontainers.image.description="BDJuno for cheqd network"
+            org.opencontainers.image.source="https://github.com/cheqd/bdjuno"
+            org.opencontainers.image.vendor="Cheqd Foundation Limited"
+            org.opencontainers.image.created={{date 'dddd, MMMM Do YYYY, h:mm:ss a'}}
+            org.opencontainers.image.documentation="https://docs.cheqd.io/node"
 
-      - name: Build Hasura image
+      - name: Build and BDJuno image
         uses: docker/build-push-action@v3
         with:
           context: .
+          file: Dockerfile
           platforms: linux/amd64
-          file: Dockerfile.hasura
           load: true
-          tags: |
-            registry.digitalocean.com/hasura-cli:${{ env.NETWORK_NAME }}-latest
-            registry.digitalocean.com/hasura-cli:${{ env.COMMIT_SHA }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Push image
         run: |
           docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.NETWORK_NAME }}-latest
-          docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.COMMIT_SHA }}
-          docker push registry.digitalocean.com/hasura-cli:${{ env.NETWORK_NAME }}-latest
-          docker push registry.digitalocean.com/hasura-cli:${{ env.COMMIT_SHA }}
+          docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.NETWORK_NAME }}-${{ env.COMMIT_SHA }}
