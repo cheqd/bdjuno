@@ -1,0 +1,30 @@
+###############################################################
+###        STAGE 1: Build Hasura CLI pre-requisites        	###
+###############################################################
+
+FROM alpine:3.16 AS builder
+
+RUN apk update && apk add --no-cache curl bash
+
+# Set user directory and details
+ARG HOME_DIR="/hasuracli"
+ARG USER="hasuracli"
+
+# Add non-root user to use in the container
+RUN addgroup --system ${USER} \
+    && adduser ${USER} --system --home ${HOME_DIR} --shell /bin/bash
+
+# Set working directory & bash defaults
+WORKDIR ${HOME_DIR}
+USER ${USER}
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+
+# Get latest Hasura CLI and install
+RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh \
+	| INSTALL_PATH=${HOME_DIR}/bin bash
+
+# Copy chain-specific config file from Git repo
+COPY hasura/* .
+
+ENTRYPOINT [ "/hasuracli/bin/hasura" ]
+CMD [ "--config /hasuracli/config.yaml" ]
