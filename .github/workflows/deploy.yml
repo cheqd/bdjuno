@@ -31,7 +31,7 @@ jobs:
       - name: Set network name
         id: set-network
         run: |
-          NETWORK_NAME=$( endsWith ( "${{ github.ref }}" "mainnet") ? "mainnet" : "testnet" )
+          NETWORK_NAME=${GITHUB_REF##*/}
           echo ::set-output name=NETWORK_NAME::"$NETWORK_NAME"
 
       - name: Set up Docker Buildx
