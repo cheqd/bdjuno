@@ -52,7 +52,6 @@ jobs:
           context: .
           platforms: linux/amd64
           file: Dockerfile.hasura
-          push: true
           load: true
           tags: |
             registry.digitalocean.com/hasura-cli:${{ env.NETWORK_NAME }}-latest
@@ -62,3 +61,5 @@ jobs:
         run: |
           docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.NETWORK_NAME }}-latest
           docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ env.COMMIT_SHA }}
+          docker push registry.digitalocean.com/hasura-cli:${{ env.NETWORK_NAME }}-latest
+          docker push registry.digitalocean.com/hasura-cli:${{ env.COMMIT_SHA }}

@@ -24,16 +24,16 @@ COPY --from=builder /go/src/github.com/forbole/bdjuno/build/bdjuno /usr/bin/bdju
 # Set user directory and details
 ARG HOME_DIR="/bdjuno"
 ARG USER="bdjuno"
+ARG UID=1000
+ARG GID=1000
 
 # Add cheqd user to use in the container
 RUN apk add bash --no-cache && \
-    addgroup --system ${USER} && \
-    adduser ${USER} --system --home ${HOME_DIR} --shell /bin/bash
+    addgroup --system ${USER} --gid ${GID} && \
+    adduser ${USER} --system --home ${HOME_DIR} --shell /bin/bash --uid ${UID}
 
 # Set working directory & bash defaults
 WORKDIR ${HOME_DIR}
-USER ${USER}
-SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 # Copy chain-specific config file from Git repo
 COPY deploy/* .bdjuno/
@@ -41,7 +41,9 @@ COPY deploy/* .bdjuno/
 # Fetch genesis file for network
 ARG NETWORK_NAME="testnet"
 RUN wget -q https://raw.githubusercontent.com/cheqd/cheqd-node/main/networks/${NETWORK_NAME}/genesis.json \
-	-O .bdjuno/genesis.json
+    -O ${HOME_DIR}/.bdjuno/genesis.json && chown -R bdjuno:bdjuno /bdjuno
 
-ENTRYPOINT [ "bdjuno start" ]
-CMD [ "--home /bdjuno/.bdjuno" ]
+USER ${USER}
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+
+CMD ["bdjuno", "start",  "--home /bdjuno/.bdjuno" ]
