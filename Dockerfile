@@ -39,10 +39,9 @@ COPY deploy/* .bdjuno/
 
 # Fetch genesis file for network
 ARG NETWORK_NAME="testnet"
-RUN wget -q https://raw.githubusercontent.com/cheqd/cheqd-node/main/networks/${NETWORK_NAME}/genesis.json \
-    -O ${HOME_DIR}/.bdjuno/genesis.json && chown -R bdjuno:bdjuno ${HOME_DIR}
+ENV network_name=${NETWORK_NAME}
+RUN wget -q https://raw.githubusercontent.com/cheqd/cheqd-node/main/networks/${network_name}/genesis.json \
+    -O ./.bdjuno/genesis.json && chown -R bdjuno:bdjuno .
 
-USER ${USER}
-SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
-
-CMD ["bdjuno", "start",  "--home /bdjuno/.bdjuno" ]
+ENTRYPOINT [ "bdjuno start" ]
+CMD [ "--home /bdjuno/.bdjuno" ]
