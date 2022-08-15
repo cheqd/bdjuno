@@ -26,8 +26,9 @@ ARG HOME_DIR="/bdjuno"
 ARG USER="bdjuno"
 
 # Add cheqd user to use in the container
-RUN addgroup --system ${USER} \
-    && adduser ${USER} --system --home ${HOME_DIR} --shell /bin/bash
+RUN apk add bash --no-cache && \
+    addgroup --system ${USER} && \
+    adduser ${USER} --system --home ${HOME_DIR} --shell /bin/bash
 
 # Set working directory & bash defaults
 WORKDIR ${HOME_DIR}
