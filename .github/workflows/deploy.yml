@@ -52,6 +52,7 @@ jobs:
           context: .
           platforms: linux/amd64
           file: Dockerfile.hasura
+          push: true
           load: true
           tags: |
             registry.digitalocean.com/hasura-cli:${{ env.NETWORK_NAME }}-latest
