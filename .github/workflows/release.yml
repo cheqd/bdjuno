@@ -70,12 +70,12 @@ jobs:
         with:
           context: .
           file: Dockerfile
+          build-args:
+            NETWORK_NAME: ${{ steps.set-network.outputs.NETWORK_NAME }}
           platforms: linux/amd64
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-        env:
-          NETWORK: ${{ steps.set-network.outputs.NETWORK_NAME }}
 
       - name: Push image
         run: |
