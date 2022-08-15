@@ -1,12 +1,6 @@
 name: "Release"
 on:
-  push:
-    branches:
-      - chains/cheqd/**
-      - hasura-cli
-concurrency: 
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  workflow_call:
 defaults:
   run:
     shell: bash
