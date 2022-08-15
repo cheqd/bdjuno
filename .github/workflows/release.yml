@@ -74,6 +74,8 @@ jobs:
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+        env:
+          NETWORK: ${{ steps.set-network.outputs.NETWORK_NAME }}
 
       - name: Push image
         run: |
