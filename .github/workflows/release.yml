@@ -50,11 +50,7 @@ jobs:
           images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
           tags: |
             ${{ steps.set-network.outputs.NETWORK_NAME }}-latest
-            ${{ steps.set-network.outputs.NETWORK_NAME }}-${{ env.COMMIT_SHA }}
           labels: |
-            org.opencontainers.image.title="cheqd BDJuno Docker Image"
-            org.opencontainers.image.description="BDJuno for cheqd network"
-            org.opencontainers.image.source="https://github.com/cheqd/bdjuno"
             org.opencontainers.image.vendor="Cheqd Foundation Limited"
             org.opencontainers.image.created={{date 'dddd, MMMM Do YYYY, h:mm:ss a'}}
             org.opencontainers.image.documentation="https://docs.cheqd.io/node"
@@ -72,4 +68,3 @@ jobs:
       - name: Push image
         run: |
           docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ steps.set-network.outputs.NETWORK_NAME }}-latest
-          docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ steps.set-network.outputs.NETWORK_NAME }}-${{ env.COMMIT_SHA }}
