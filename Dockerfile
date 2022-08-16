@@ -37,11 +37,5 @@ SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 # Copy chain-specific config file from Git repo
 COPY deploy/* .bdjuno/
 
-# Fetch genesis file for network
-ARG NETWORK_NAME="testnet"
-ENV network_name=${NETWORK_NAME}
-RUN wget -q https://raw.githubusercontent.com/cheqd/cheqd-node/main/networks/${network_name}/genesis.json \
-    -O ./.bdjuno/genesis.json && chown -R bdjuno:bdjuno .
-
 ENTRYPOINT [ "bdjuno start" ]
 CMD [ "--home /bdjuno/.bdjuno" ]
