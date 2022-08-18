@@ -1,5 +1,6 @@
 # Exclude all Markdown files
 **/*.md
+.docs/**
 
 # Skip build/test folders
 .bdjuno/**
