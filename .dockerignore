@@ -1,11 +1,8 @@
 # Exclude all Markdown files
 **/*.md
-.docs/**
 
-# Skip build/test folders
+# Skip unncecessary folders
 .bdjuno/**
 build/**
-
-# Skip Git-related folders
+.docs/**
 .github/**
-.git/**
