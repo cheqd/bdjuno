@@ -8,8 +8,8 @@ defaults:
 
 jobs:
 
-  build-docker:
-    name: "Docker Image"
+  build-bdjuno:
+    name: "BDJuno Docker Image"
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: ${{ github.repository }}
@@ -55,7 +55,7 @@ jobs:
             org.opencontainers.image.created={{date 'dddd, MMMM Do YYYY, h:mm:ss a'}}
             org.opencontainers.image.documentation="https://docs.cheqd.io/node"
 
-      - name: Build and BDJuno image
+      - name: Build BDJuno image
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -65,6 +65,59 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Push image
+      - name: Push BDJuno image
         run: |
           docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ steps.set-network.outputs.NETWORK_NAME }}-latest
+
+build-hasuracli:
+    name: "Hasura CLI Docker Image"
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: ${{ github.repository }}
+      COMMIT_SHA: ${{ github.sha }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        id: buildx
+        with:
+          install: true
+          version: latest
+
+      - name: Install DigitalOcean CLI
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Login to DigitalOcean Container Registry
+        run: doctl registry login --expiry-seconds 600
+
+      - name: Configure Docker image metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: registry.digitalocean.com/hasura-metadata
+          tags: |
+            hasuracli-latest
+          labels: |
+            org.opencontainers.image.vendor="Cheqd Foundation Limited"
+            org.opencontainers.image.created={{date 'dddd, MMMM Do YYYY, h:mm:ss a'}}
+            org.opencontainers.image.documentation="https://docs.cheqd.io/node"
+
+      - name: Build Hasura CLI image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile.hasura
+          platforms: linux/amd64
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Push Hasura CLI image
+        run: |
+          docker push registry.digitalocean.com/hasura-metadata:hasuracli-latest
