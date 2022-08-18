@@ -5,6 +5,7 @@
 FROM alpine:3.16
 
 RUN apk update && apk add --no-cache curl bash
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 # Get latest Hasura CLI and install
 RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
@@ -20,7 +21,6 @@ RUN addgroup --system ${USER} \
 # Set working directory & bash defaults
 WORKDIR ${HOME_DIR}
 USER ${USER}
-SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 # Copy chain-specific config file from Git repo
 COPY hasura/ /hasura/
