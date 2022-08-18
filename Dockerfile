@@ -18,6 +18,8 @@ RUN go mod download && make build
 
 FROM alpine:3.16 AS bdjuno
 
+RUN apk update && apk add --no-cache bash
+
 # Copy BDJuno binary
 COPY --from=builder /go/src/github.com/forbole/bdjuno/build/bdjuno /usr/local/bin/bdjuno
 
@@ -28,14 +30,15 @@ SHELL ["/bin/sh", "-euo", "pipefail", "-c"]
 
 # Add non-root user to use in the container
 RUN addgroup --system $USER \
-    && adduser $USER --system --home $HOME_DIR --shell /bin/sh
+    && adduser $USER --system --home $HOME_DIR --shell /bin/bash
 
 # Set working directory & bash defaults
 WORKDIR $HOME_DIR
 USER $USER
 
 # Copy chain-specific config file from Git repo
-COPY deploy/ {HOME_DIR}/.bdjuno/
+COPY --chown=$USER:$USER deploy/ .bdjuno/
+RUN chmod +x .bdjuno/env-vars.sh
 
 ENTRYPOINT [ "bdjuno start" ]
 CMD [ "--home /bdjuno/.bdjuno" ]
