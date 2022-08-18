@@ -10,4 +10,3 @@ sed -i "s, DATABASE_HOST, '${HOSTNAME}',g" .bdjuno/config.yaml
 sed -i "s, DATABASE_PORT, '${PORT}',g" .bdjuno/config.yaml
 sed -i "s, DATABASE_USER, '${USERNAME}',g" .bdjuno/config.yaml
 sed -i "s, DATABASE_PASSWORD, '${PASSWORD}',g" .bdjuno/config.yaml
-sed -i "s, ACTIONS_BASE_URL, '${ACTIONS_BASE_URL}',g" .bdjuno/config.yaml
