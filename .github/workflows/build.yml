@@ -8,24 +8,8 @@ defaults:
 
 jobs:
 
-  unit-tests:
-    name: "Unit Tests"
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup Go
-        uses: actions/setup-go@v3
-        with:
-          go-version-file: ./go.mod
-          cache: true
-
-      - name: Test & Create coverage report
-        run: make install test-unit stop-docker-test
-
   build-binary:
-    name: "Build Binary"
+    name: "BDJuno Binary"
     runs-on: ubuntu-latest
 
     steps:
@@ -43,3 +27,39 @@ jobs:
 
       - name: "Build BDJuno binary"
         run: make build
+      
+      - name: Test & Create coverage report
+        run: make install test-unit stop-docker-test
+
+  build-docker:
+    name: "BDJuno Docker Image"
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_TEST_IMAGE: ${{ github.repository }}:${{ github.sha }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        id: buildx
+        with:
+          install: true
+          version: latest
+
+      - name: Build image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          load: true
+          target: bdjuno
+          tags: ${{ env.DOCKER_TEST_IMAGE }}
+          outputs: type=docker,dest=/tmp/bdjuno-image.tar
+
+      - name: Upload Docker test image
+        uses: actions/upload-artifact@v3
+        with:
+          name: bdjuno-image.tar
+          path: /tmp/bdjuno-image.tar
