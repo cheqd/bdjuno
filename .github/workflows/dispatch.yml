@@ -22,3 +22,10 @@ jobs:
     if: ${{ github.ref_protected == true }}
     uses: ./.github/workflows/release.yml
     secrets: inherit
+
+  call-codeql:
+    name: "CodeQL"
+    needs: call-release
+    if: ${{ github.ref_protected == true }}
+    uses: ./.github/workflows/codeql.yml
+    secrets: inherit
