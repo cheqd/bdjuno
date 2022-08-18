@@ -1,11 +1,6 @@
 name: "CodeQL"
 on:
-  push:
-    branches:
-      - chains/cheqd/**
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  workflow_call:
 defaults:
   run:
     shell: bash
