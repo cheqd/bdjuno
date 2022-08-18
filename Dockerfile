@@ -24,6 +24,7 @@ COPY --from=builder /go/src/github.com/forbole/bdjuno/build/bdjuno /usr/local/bi
 # Set user directory and details
 ARG HOME_DIR="/bdjuno"
 ARG USER="bdjuno"
+SHELL ["/bin/sh", "-euo", "pipefail", "-c"]
 
 # Add non-root user to use in the container
 RUN addgroup --system ${USER} \
@@ -32,10 +33,9 @@ RUN addgroup --system ${USER} \
 # Set working directory & bash defaults
 WORKDIR ${HOME_DIR}
 USER ${USER}
-SHELL ["/bin/sh", "-euo", "pipefail", "-c"]
 
 # Copy chain-specific config file from Git repo
-COPY deploy/ .bdjuno/
+COPY deploy/ {HOME_DIR}/.bdjuno/
 
 ENTRYPOINT [ "bdjuno start" ]
 CMD [ "--home /bdjuno/.bdjuno" ]
