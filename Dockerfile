@@ -35,7 +35,7 @@ WORKDIR $HOME_DIR
 USER $USER
 
 # Copy chain-specific config file from Git repo
-COPY deploy/ {HOME_DIR}/.bdjuno/
+COPY deploy/ .bdjuno/
 
 ENTRYPOINT [ "bdjuno start" ]
 CMD [ "--home /bdjuno/.bdjuno" ]
