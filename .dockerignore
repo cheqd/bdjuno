@@ -7,4 +7,4 @@ build/**
 
 # Skip Git-related folders
 .github/**
-**/.git
+.git/**
