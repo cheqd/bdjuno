@@ -1,11 +1,6 @@
 ### APP-SPECIFIC EXCLUSIONS ###
-.idea/
-build/
-
-# Configuration
-*.toml
-*.json
-config.yaml
+.bdjuno/**
+hasura/config.yaml
 
 # Coverage
 coverage.*

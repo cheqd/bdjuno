@@ -70,7 +70,7 @@ lint-fix:
 format:
 	find . -name '*.go' -type f -not -path "*.git*" | xargs gofmt -w -s
 	find . -name '*.go' -type f -not -path "*.git*" | xargs misspell -w
-	find . -name '*.go' -type f -not -path "*.git*" | xargs goimports -w -local github.com/forbole/bdjuno
+	find . -name '*.go' -type f -not -path "*.git*" | xargs goimports -w -local github.com/cheqd/bdjuno
 .PHONY: format
 
 clean:

@@ -1,0 +1,25 @@
+{
+  "name": "bdjuno",
+  "version": "1.0.0",
+  "description": "BDJuno for cheqd network",
+  "license": "Apache-2.0",
+  "author": "Cheqd Foundation Limited (https://github.com/cheqd)",
+  "homepage": "https://github.com/cheqd/bdjuno#readme",
+  "bugs": {
+    "url": "https://github.com/cheqd/bdjuno/issues"
+  },
+  "main": "./cmd/bdjuno/main.go",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cheqd/bdjuno.git"
+  },
+  "devDependencies": {
+    "@semantic-release/commit-analyzer": "^9.0.2",
+    "@semantic-release/git": "^10.0.1",
+    "conventional-changelog-conventionalcommits": "^5.0.0",
+    "semantic-release": "^19.0.3"
+  }
+}
