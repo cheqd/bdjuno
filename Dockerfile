@@ -27,12 +27,12 @@ ARG USER="bdjuno"
 SHELL ["/bin/sh", "-euo", "pipefail", "-c"]
 
 # Add non-root user to use in the container
-RUN addgroup --system ${USER} \
-    && adduser ${USER} --system --home ${HOME_DIR} --shell /bin/sh
+RUN addgroup --system $USER \
+    && adduser $USER --system --home $HOME_DIR --shell /bin/sh
 
 # Set working directory & bash defaults
-WORKDIR ${HOME_DIR}
-USER ${USER}
+WORKDIR $HOME_DIR
+USER $USER
 
 # Copy chain-specific config file from Git repo
 COPY deploy/ {HOME_DIR}/.bdjuno/
