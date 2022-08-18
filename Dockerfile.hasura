@@ -15,15 +15,15 @@ ARG HOME_DIR="/hasura"
 ARG USER="hasura"
 
 # Add non-root user to use in the container
-RUN addgroup --system ${USER} \
-    && adduser ${USER} --system --home ${HOME_DIR} --shell /bin/bash
+RUN addgroup --system $USER \
+    && adduser $USER --system --home $HOME_DIR --shell /bin/bash
 
 # Set working directory & bash defaults
-WORKDIR ${HOME_DIR}
-USER ${USER}
+WORKDIR $HOME_DIR
+USER $USER
 
 # Copy chain-specific config file from Git repo
-COPY hasura/ /hasura/
+COPY hasura/ .
 
 ENTRYPOINT [ "hasura" ]
-CMD [ "--config /hasuracli/config.yaml" ]
+CMD [ "--config /hasura/config.yaml" ]
