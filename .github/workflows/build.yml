@@ -8,29 +8,6 @@ defaults:
 
 jobs:
 
-  build-binary:
-    name: "BDJuno Binary"
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-go@v3
-        with:
-          go-version-file: ./go.mod
-          cache: true
-
-      - name: "Install Golang dependencies"
-        run: |
-          go mod tidy
-          make install
-
-      - name: "Build BDJuno binary"
-        run: make build
-      
-      - name: Test & Create coverage report
-        run: make install test-unit stop-docker-test
-
   build-docker:
     name: "BDJuno Docker Image"
     runs-on: ubuntu-latest
