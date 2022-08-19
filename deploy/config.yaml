@@ -20,7 +20,7 @@ node:
         rpc:
             client_name: cheqd
             address: RPC_ADDRESS
-            max_connections: MAX_RPC_CONNECTIONS
+            max_connections: 20
         grpc:
             address: GRPC_ADDRESS
             insecure: false

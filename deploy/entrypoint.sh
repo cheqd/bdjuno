@@ -3,7 +3,6 @@
 set -euo pipefail
 
 sed -i "s, RPC_ADDRESS, '${RPC_ADDRESS}',g" /bdjuno/.bdjuno/config.yaml
-sed -i "s, MAX_RPC_CONNECTIONS, '${MAX_RPC_CONNECTIONS}',g" /bdjuno/.bdjuno/config.yaml
 sed -i "s, GRPC_ADDRESS, '${GRPC_ADDRESS}',g" /bdjuno/.bdjuno/config.yaml
 sed -i "s, LOG_LEVEL, '${LOG_LEVEL}',g" /bdjuno/.bdjuno/config.yaml
 sed -i "s, DATABASE_NAME, '${DATABASE_NAME}',g" /bdjuno/.bdjuno/config.yaml
