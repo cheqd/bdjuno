@@ -8,7 +8,7 @@ defaults:
 
 jobs:
 
-  build-bdjuno:
+  release-bdjuno:
     name: "BDJuno Docker Image"
     runs-on: ubuntu-latest
     env:
@@ -67,7 +67,7 @@ jobs:
         run: |
           docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ steps.set-network.outputs.NETWORK_NAME }}-latest
 
-  build-hasuracli:
+  release-hasuracli:
     name: "Hasura CLI Docker Image"
     runs-on: ubuntu-latest
     env:
