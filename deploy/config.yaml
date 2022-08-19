@@ -35,7 +35,7 @@ parsing:
 database:
     name: DATABASE_NAME
     host: DATABASE_HOST
-    port: DATABASE_PORT
+    port: 25060
     user: DATABASE_USER
     password: DATABASE_PASSWORD
     ssl_mode: require
