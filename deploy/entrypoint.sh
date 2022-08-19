@@ -4,10 +4,10 @@ set -euo pipefail
 
 # Change configuration file values
 echo "${RPC_ADDRESS}"
-echo "${testnet-explorer-database.DATABASE}"
+echo "${DATABASE_NAME}"
 
-sed -i "s, DATABASE_NAME, '${testnet-explorer-database.DATABASE}',g" /bdjuno/.bdjuno/config.yaml
-sed -i "s, DATABASE_HOST, '${testnet-explorer-database.HOSTNAME}',g" /bdjuno/.bdjuno/config.yaml
-sed -i "s, DATABASE_PORT, '${testnet-explorer-database.PORT}',g" /bdjuno/.bdjuno/config.yaml
-sed -i "s, DATABASE_USER, '${testnet-explorer-database.USERNAME}',g" /bdjuno/.bdjuno/config.yaml
-sed -i "s, DATABASE_PASSWORD, '${testnet-explorer-database.PASSWORD}',g" /bdjuno/.bdjuno/config.yaml
+sed -i "s, DATABASE_NAME, '${DATABASE_NAME}',g" /bdjuno/.bdjuno/config.yaml
+sed -i "s, DATABASE_HOST, '${DATABASE_HOST}',g" /bdjuno/.bdjuno/config.yaml
+sed -i "s, DATABASE_PORT, '${DATABASE_PORT}',g" /bdjuno/.bdjuno/config.yaml
+sed -i "s, DATABASE_USER, '${DATABASE_USER}',g" /bdjuno/.bdjuno/config.yaml
+sed -i "s, DATABASE_PASSWORD, '${DATABASE_PASSWORD}',g" /bdjuno/.bdjuno/config.yaml
