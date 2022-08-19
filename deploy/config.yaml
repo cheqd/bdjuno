@@ -12,7 +12,6 @@ chain:
         - slashing
         - staking
         - distribution
-        - history
         - actions
 node:
     type: remote
