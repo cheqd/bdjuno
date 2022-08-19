@@ -38,7 +38,6 @@ USER $USER
 
 # Copy chain-specific config file from Git repo
 COPY --chown=$USER:$USER deploy/ .bdjuno/
-RUN chmod +x .bdjuno/env-vars.sh
+RUN mv .bdjuno/entrypoint.sh . && chmod +x entrypoint.sh
 
-ENTRYPOINT [ "bdjuno start" ]
-CMD [ "--home /bdjuno/.bdjuno" ]
+ENTRYPOINT [ "entrypoint.sh" ]
