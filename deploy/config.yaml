@@ -19,10 +19,10 @@ node:
     config:
         rpc:
             client_name: cheqd
-            address: https://ap-grpc.cheqd.network:443
-            max_connections: 20
+            address: RPC_ADDRESS
+            max_connections: MAX_RPC_CONNECTIONS
         grpc:
-            address: ap-grpc.cheqd.network:443
+            address: GRPC_ADDRESS
             insecure: false
 parsing:
     workers: 5
@@ -46,7 +46,7 @@ database:
     partition_batch: 1000
 logging:
     level: LOG_LEVEL
-    format: warn
+    format: json
 pricefeed:
     tokens:
         - name: cheq
