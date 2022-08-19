@@ -18,7 +18,7 @@ RUN go mod download && make build
 
 FROM alpine:3.16 AS bdjuno
 
-RUN apk update && apk add --no-cache bash
+RUN apk update && apk add --no-cache bash ca-certificates
 
 # Copy BDJuno binary
 COPY --from=builder /go/src/github.com/forbole/bdjuno/build/bdjuno /usr/local/bin/bdjuno
