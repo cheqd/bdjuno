@@ -40,4 +40,4 @@ USER $USER
 COPY --chown=$USER:$USER deploy/ .bdjuno/
 RUN mv .bdjuno/entrypoint.sh . && chmod +x entrypoint.sh
 
-ENTRYPOINT [ "./bdjuno/entrypoint.sh" ]
+ENTRYPOINT [ "/bdjuno/entrypoint.sh" ]
