@@ -57,4 +57,4 @@ pricefeed:
               exponent: 9
               price_id: cheqd-network
 actions:
-    port: 8080
+    port: 3000
