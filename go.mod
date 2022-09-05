@@ -6,7 +6,7 @@ require (
 	github.com/cheqd/cheqd-node v0.6.0
 	github.com/cosmos/cosmos-sdk v0.45.6
 	github.com/cosmos/gaia/v7 v7.0.3
-	github.com/forbole/juno/v3 v3.3.0
+	github.com/forbole/juno/v3 v3.4.0
 	github.com/go-co-op/gocron v1.16.3
 	github.com/gogo/protobuf v1.3.3
 	github.com/jmoiron/sqlx v1.3.5
