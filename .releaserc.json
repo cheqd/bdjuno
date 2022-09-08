@@ -6,8 +6,7 @@
         },
         {
             "name": "chains/cheqd/testnet",
-            "channel": "testnet",
-            "prerelease": true
+            "channel": "testnet"
         }
     ],
     "tagFormat": "v${version}",
