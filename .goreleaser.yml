@@ -1,6 +1,4 @@
-# Goreleaser configuration file
-
-project_name: cheqd-bdjuno
+project_name: bdjuno
 
 env:
   - GO111MODULE=on
@@ -8,22 +6,23 @@ env:
 before:
   hooks:
     - make clean
-    - go mod tidy
+    - go mod tidy -compat=1.17
     - go mod download
 
 builds:
   - id: bdjuno-linux
     main: ./cmd/bdjuno
     binary: bdjuno
+    env:
+      - CGO_ENABLED=1
     targets:
       - linux_amd64
+    flags:
+      - -mod=readonly
+      - -trimpath
     ldflags:
-      - -s -w
-      - -X github.com/cosmos/cosmos-sdk/version.Name=cheqd-noded 
-      - -X github.com/cosmos/cosmos-sdk/version.AppName=cheqd-noded 
-      - -X github.com/cosmos/cosmos-sdk/version.Version={{ .Version }}
-      - -X github.com/cosmos/cosmos-sdk/version.Commit={{ .Commit }}
-      - -X github.com/cosmos/cosmos-sdk/version.BuildTags=netgo,ledger,goleveldb
+      - -X github.com/forbole/juno/v3/cmd.Version={{ .Version }}
+	    - -X github.com/forbole/juno/v3/cmd.Commit={{ .Commit }}
 
 archives:
   - id: release-archives
@@ -43,7 +42,6 @@ checksum:
 
 changelog:
   use: github-native
-  sort: asc
   groups:
   - title: Features
     regexp: "^.*feat[(\\w)]*:+.*$"
@@ -62,19 +60,12 @@ changelog:
     order: 4
   - title: 'Other changes'
     order: 999
-  filters:
-    exclude:
-      - '^docs'
-      - '^test'
-      - '^ci'
-      - '^refactor'
-      - '^revert'
-      - '^style'
+
 
 release:
   github:
     owner: cheqd
-    name: cheqd-node
+    name: bdjuno
   
   draft: false
   prerelease: true

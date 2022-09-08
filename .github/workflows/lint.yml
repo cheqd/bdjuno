@@ -31,32 +31,33 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.28
-          args: --timeout 10m
+          args: --config .github/linters/.golangci.yaml
 
   super-lint:
     name: "Super Linter"
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0 # Required to fetch version
-    
-    - name: Run Super Linter
-      uses: github/super-linter/slim@v4
-      env:
-        IGNORE_GITIGNORED_FILES: true
-        DEFAULT_BRANCH: "chains/cheqd/mainnet"
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        LOG_LEVEL: WARN
-        VALIDATE_ALL_CODEBASE: true
-        MULTI_STATUS: true
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Required to fetch version
+      
+      - name: Run Super Linter
+        uses: github/super-linter/slim@v4
+        env:
+          IGNORE_GITIGNORED_FILES: true
+          DEFAULT_BRANCH: "chains/cheqd/testnet"
+          LINTER_RULES_PATH: '.github/linters'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LOG_LEVEL: WARN
+          VALIDATE_ALL_CODEBASE: true
+          MULTI_STATUS: true
 
-        VALIDATE_BASH: true
-        VALIDATE_DOCKERFILE_HADOLINT: true
-        DOCKERFILE_HADOLINT_FILE_NAME: '../linters/.hadolint.yml'
-        VALIDATE_GITHUB_ACTIONS: true
-        VALIDATE_OPENAPI: true
-        VALIDATE_PYTHON_PYLINT: true
-        VALIDATE_XML: true
-        VALIDATE_YAML: true
+          VALIDATE_BASH: true
+          VALIDATE_DOCKERFILE_HADOLINT: true
+          VALIDATE_GITHUB_ACTIONS: true
+          VALIDATE_JSONC: true
+          VALIDATE_OPENAPI: true
+          VALIDATE_PYTHON_PYLINT: true
+          VALIDATE_XML: true
+          # VALIDATE_YAML: true
