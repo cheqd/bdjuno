@@ -21,7 +21,6 @@ builds:
       - -mod=readonly
       - -trimpath
     ldflags:
-      - -s -w
       - -X github.com/forbole/juno/v3/cmd.Version={{ .Version }}
 	    - -X github.com/forbole/juno/v3/cmd.Commit={{ .Commit }}
 
