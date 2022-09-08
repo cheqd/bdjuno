@@ -1,4 +1,4 @@
-project_name: cheqd-bdjuno
+project_name: bdjuno
 
 env:
   - GO111MODULE=on
