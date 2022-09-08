@@ -52,6 +52,7 @@ jobs:
         LOG_LEVEL: WARN
         VALIDATE_ALL_CODEBASE: true
         MULTI_STATUS: true
+        FILTER_REGEX_EXCLUDE: 'CHANGELOG.md'
 
         VALIDATE_BASH: true
         VALIDATE_DOCKERFILE_HADOLINT: true
