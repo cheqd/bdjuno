@@ -1,12 +1,16 @@
 {
     "branches": [
-        "chains/cheqd/testnet",
         {
             "name": "chains/cheqd/mainnet",
             "channel": "mainnet"
+        },
+        {
+            "name": "chains/cheqd/testnet",
+            "channel": "testnet",
+            "prerelease": true
         }
     ],
-    "tagFormat": "${version}",
+    "tagFormat": "v${version}",
     "ci": true,
     "preset": "conventionalcommits",
     "plugins": [
