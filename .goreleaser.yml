@@ -13,6 +13,8 @@ builds:
   - id: bdjuno-linux
     main: ./cmd/bdjuno
     binary: bdjuno
+    env:
+      - CGO_ENABLED=1
     targets:
       - linux_amd64
     flags:
