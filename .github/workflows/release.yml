@@ -135,9 +135,7 @@ jobs:
   release-hasuracli:
     name: "Hasura CLI Docker Image"
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: ${{ github.repository }}
-      COMMIT_SHA: ${{ github.sha }}
+    needs: release-binary
 
     steps:
       - uses: actions/checkout@v3
@@ -170,9 +168,15 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: registry.digitalocean.com/cheqd/hasuracli
+          flavor: |
+            latest=auto
+            prefix=${{ steps.set-network.outputs.NETWORK_NAME }}
           tags: |
-            ${{ steps.set-network.outputs.NETWORK_NAME }}-latest
+            type=semver,pattern={{version}},value=${{ needs.release-binary.outputs.VERSION }}
           labels: |
+            org.opencontainers.image.title="Hasura CLI for BDJuno"
+            org.opencontainers.image.description="Standalone Hasura CLI for cheqd network BDJuno configuration"
+            org.opencontainers.image.source="https://github.com/cheqd/bdjuno"
             org.opencontainers.image.vendor="Cheqd Foundation Limited"
             org.opencontainers.image.created={{date 'dddd, MMMM Do YYYY, h:mm:ss a'}}
             org.opencontainers.image.documentation="https://docs.cheqd.io/node"
@@ -189,4 +193,4 @@ jobs:
 
       - name: Push Hasura CLI image
         run: |
-          docker push registry.digitalocean.com/cheqd/hasuracli:${{ steps.set-network.outputs.NETWORK_NAME }}-latest
+          docker push registry.digitalocean.com/cheqd/hasuracli:${{ steps.meta.outputs.tags }}
