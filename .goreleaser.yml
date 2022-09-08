@@ -1,5 +1,3 @@
-# Goreleaser configuration file
-
 project_name: cheqd-bdjuno
 
 env:
