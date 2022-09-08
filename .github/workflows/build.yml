@@ -8,38 +8,67 @@ defaults:
 
 jobs:
 
-  unit-tests:
-    name: "Unit Tests"
+  build-bdjuno:
+    name: "BDJuno Docker Image"
     runs-on: ubuntu-latest
+    env:
+      DOCKER_TEST_IMAGE: bdjuno:${{ github.sha }}
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Go
-        uses: actions/setup-go@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        id: buildx
         with:
-          go-version: 1.17
+          install: true
+          version: latest
 
-      - name: Test & Create coverage report
-        run: make install test-unit stop-docker-test
+      - name: Build image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          load: true
+          target: bdjuno
+          tags: ${{ env.DOCKER_TEST_IMAGE }}
+          outputs: type=docker,dest=/tmp/bdjuno-image.tar
 
-  build-binary:
-    name: "Build Binary"
+      - name: Upload Docker test image
+        uses: actions/upload-artifact@v3
+        with:
+          name: bdjuno-image.tar
+          path: /tmp/bdjuno-image.tar
+
+  build-hasuracli:
+    name: "Hasura CLI Docker Image"
     runs-on: ubuntu-latest
+    env:
+      DOCKER_TEST_IMAGE: hasuracli:${{ github.sha }}
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        id: buildx
         with:
-          fetch-depth: 0
+          install: true
+          version: latest
 
-      - uses: actions/setup-go@v3
+      - name: Build image
+        uses: docker/build-push-action@v3
         with:
-          go-version: 1.17
+          context: .
+          file: Dockerfile.hasura
+          platforms: linux/amd64
+          load: true
+          tags: ${{ env.DOCKER_TEST_IMAGE }}
+          outputs: type=docker,dest=/tmp/hasuracli-image.tar
 
-      - name: "Install Golang dependencies"
-        run: |
-          go mod tidy
-          make install
-
-      - name: "Build BDJuno binary"
-        run: make build
+      - name: Upload Docker test image
+        uses: actions/upload-artifact@v3
+        with:
+          name: hasuracli-image.tar
+          path: /tmp/hasuracli-image.tar

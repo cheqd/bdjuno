@@ -12,17 +12,16 @@ chain:
         - slashing
         - staking
         - distribution
-        - history
         - actions
 node:
     type: remote
     config:
         rpc:
             client_name: cheqd
-            address: $RPC_ADDRESS
+            address: RPC_ADDRESS
             max_connections: 20
         grpc:
-            address: $GRPC_ADDRESS
+            address: GRPC_ADDRESS
             insecure: false
 parsing:
     workers: 5
@@ -31,13 +30,13 @@ parsing:
     parse_genesis: true
     start_height: 1
     fast_sync: true
-    average_block_time: 5s
+    average_block_time: 6s
 database:
-    name: $DATABASE_NAME
-    host: $DATABASE_HOST
-    port: $DATABASE_PORT
-    user: $DATABASE_USER
-    password: $DATABASE_PASSWORD
+    name: DATABASE_NAME
+    host: DATABASE_HOST
+    port: 25060
+    user: DATABASE_USER
+    password: DATABASE_PASSWORD
     ssl_mode: require
     schema: public
     max_open_connections: 40
@@ -45,7 +44,7 @@ database:
     partition_size: 100000
     partition_batch: 1000
 logging:
-    level: $LOG_LEVEL
+    level: LOG_LEVEL
     format: json
 pricefeed:
     tokens:

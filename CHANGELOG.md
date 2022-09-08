@@ -1,7 +1,17 @@
 ## Unreleased
-### Dependencies
-- ([\#440](https://github.com/forbole/bdjuno/pull/440)) Updated Juno to `v3.3.0`
+### Changes
+#### Staking Module
+- ([\#443](https://github.com/forbole/bdjuno/pull/443)) Remove tombstone status from staking module(already stored in slashing module)
+- ([\#455](https://github.com/forbole/bdjuno/pull/455)) Added `unbonding_tokens` and `staked_not_bonded_tokens` values to staking pool table
 
+#### Gov Module
+- ([\#461](https://github.com/forbole/bdjuno/pull/461)) Parse `x/gov` genesis with `genesisDoc.InitialHeight` instead of the hard-coded height 1
+
+#### Daily refetch
+- ([\#454](https://github.com/forbole/bdjuno/pull/454)) Added `daily refetch` module to refetch missing blocks every day
+
+
+## Version v3.2.0
 ### Changes
 #### Mint module
 - ([\#432](https://github.com/forbole/bdjuno/pull/432)) Update inflation rate when mint param change proposal is passed
@@ -11,7 +21,7 @@
 - ([\#430](https://github.com/forbole/bdjuno/pull/430)) Update the proposals that have invalid status but can still be in voting or deposit periods 
 
 ### Dependencies
-- ([\#412](https://github.com/forbole/bdjuno/pull/412)) Updated Juno to `v3.2.1`
+- ([\#440](https://github.com/forbole/bdjuno/pull/440)) Updated Juno to `v3.3.0`
 
 ## Version v3.1.0
 ### Dependencies

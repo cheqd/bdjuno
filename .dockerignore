@@ -1,0 +1,10 @@
+# Skip unncecessary folders
+.bdjuno/**
+build/**
+.docs/**
+.github/**
+
+# Skip unnecessary files
+**/*.md
+Dockerfile**
+docker-compose.yml

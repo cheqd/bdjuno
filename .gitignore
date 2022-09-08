@@ -1,6 +1,5 @@
 ### APP-SPECIFIC EXCLUSIONS ###
 .bdjuno/**
-hasura/config.yaml
 
 # Coverage
 coverage.*
