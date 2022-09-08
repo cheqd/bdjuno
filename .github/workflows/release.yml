@@ -107,8 +107,8 @@ jobs:
           images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
           flavor: |
             latest=auto
+            prefix=${{ steps.set-network.outputs.NETWORK_NAME }}
           tags: |
-            ${{ steps.set-network.outputs.NETWORK_NAME }}-latest
             type=semver,pattern={{version}},value=${{ needs.release-binary.outputs.VERSION }}
           labels: |
             org.opencontainers.image.title="BDJuno for cheqd network"
@@ -130,8 +130,7 @@ jobs:
 
       - name: Push BDJuno image
         run: |
-          docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ steps.set-network.outputs.NETWORK_NAME }}-latest
-          docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ needs.release-binary.outputs.VERSION }}
+          docker push registry.digitalocean.com/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
 
   release-hasuracli:
     name: "Hasura CLI Docker Image"
