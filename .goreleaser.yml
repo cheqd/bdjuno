@@ -68,7 +68,7 @@ release:
     name: bdjuno
   
   draft: false
-  prerelease: true
+  prerelease: auto
   mode: append
   header: |
     # Release Notes for {{.ProjectName}} v{{.Version}}
