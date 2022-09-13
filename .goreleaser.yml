@@ -20,9 +20,9 @@ builds:
     flags:
       - -mod=readonly
       - -trimpath
-    # ldflags:
-    #   - -X github.com/forbole/juno/v3/cmd.Version={{ .Version }}
-	  #   - -X github.com/forbole/juno/v3/cmd.Commit={{ .Commit }}
+    ldflags:
+      - -X github.com/forbole/juno/v3/cmd.Version={{ .Version }}
+      - -X github.com/forbole/juno/v3/cmd.Commit={{ .Commit }}
 
 archives:
   - id: release-archives
