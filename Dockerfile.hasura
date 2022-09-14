@@ -10,9 +10,6 @@ SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 # Get latest Hasura CLI and install
 RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
 
-RUN hasura update-cli 
-RUN hasura plugins install cli-ext
-
 # Set user directory and details
 ARG HOME_DIR="/hasura"
 ARG USER="hasura"
