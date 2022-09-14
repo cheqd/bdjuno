@@ -80,7 +80,6 @@ jobs:
   release-hasuracli:
     name: "Hasura CLI Docker Image"
     runs-on: ubuntu-latest
-    needs: release-binary
 
     steps:
       - uses: actions/checkout@v3
