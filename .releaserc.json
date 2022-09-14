@@ -1,10 +1,7 @@
 {
     "branches": [
         "chains/cheqd/mainnet",
-        {
-            "name": "chains/cheqd/testnet",
-            "channel": "testnet"
-        }
+        "chains/cheqd/testnet"
     ],
     "tagFormat": "v${version}",
     "ci": true,
