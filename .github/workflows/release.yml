@@ -50,7 +50,6 @@ jobs:
           images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=${{ steps.set-network.outputs.NETWORK_NAME }}-latest
-            type=sha,format=long
           labels: |
             org.opencontainers.image.description="BDJuno for cheqd network"
             org.opencontainers.image.source="https://github.com/cheqd/bdjuno"
@@ -108,7 +107,6 @@ jobs:
           images: registry.digitalocean.com/cheqd/hasuracli
           tags: |
             type=raw,value=${{ steps.set-network.outputs.NETWORK_NAME }}-latest
-            type=sha,format=long
           labels: |
             org.opencontainers.image.description="Standalone Hasura CLI for cheqd network BDJuno configuration"
             org.opencontainers.image.source="https://github.com/cheqd/bdjuno"
