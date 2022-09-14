@@ -49,10 +49,8 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
-          flavor: |
-            latest=auto
-            prefix=${{ steps.set-network.outputs.NETWORK_NAME }}-,onlatest=true
           tags: |
+            type=raw,value=${{ steps.set-network.outputs.NETWORK_NAME }}-latest
             type=sha,format=long
           labels: |
             org.opencontainers.image.description="BDJuno for cheqd network"
@@ -109,10 +107,8 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: registry.digitalocean.com/cheqd/hasuracli
-          flavor: |
-            latest=auto
-            prefix=${{ steps.set-network.outputs.NETWORK_NAME }}-,onlatest=true
           tags: |
+            type=raw,value=${{ steps.set-network.outputs.NETWORK_NAME }}-latest
             type=sha,format=long
           labels: |
             org.opencontainers.image.description="Standalone Hasura CLI for cheqd network BDJuno configuration"
