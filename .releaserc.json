@@ -1,6 +1,9 @@
 {
     "branches": [
-        "chains/cheqd/mainnet",
+        {
+            "name": "chains/cheqd/mainnet",
+            "channel": "mainnet"
+        },
         {
             "name": "chains/cheqd/testnet",
             "channel": "testnet"
