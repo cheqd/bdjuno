@@ -13,12 +13,10 @@ import (
 
 type Migrator func(parseCfg *parsecmdtypes.Config) error
 
-var (
-	migrations = map[string]Migrator{
-		"v2": v2.RunMigration,
-		"v3": v3.RunMigration,
-	}
-)
+var migrations = map[string]Migrator{
+	"v2": v2.RunMigration,
+	"v3": v3.RunMigration,
+}
 
 func getVersions() []string {
 	var versions []string
