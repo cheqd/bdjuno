@@ -1,15 +1,8 @@
 name: "CodeQL"
 on:
-  pull_request_target:
+  push:
     branches:
       - chains/cheqd/**
-    types:
-      - opened
-      - reopened
-      - edited
-      - synchronize
-      - ready_for_review
-      - review_requested
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
