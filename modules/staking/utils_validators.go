@@ -122,7 +122,7 @@ func (m *Module) GetValidatorsWithStatus(height int64, status string) ([]staking
 		return nil, nil, err
 	}
 
-	var vals = make([]types.Validator, len(validators))
+	vals := make([]types.Validator, len(validators))
 	for index, val := range validators {
 		validator, err := m.convertValidator(height, val)
 		if err != nil {

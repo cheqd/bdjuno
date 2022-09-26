@@ -232,7 +232,7 @@ func (m *Module) updateProposalValidatorStatusesSnapshot(
 		return fmt.Errorf("error while getting validator statuses: %s", err)
 	}
 
-	var snapshots = make([]types.ProposalValidatorStatusSnapshot, len(validators))
+	snapshots := make([]types.ProposalValidatorStatusSnapshot, len(validators))
 	for index, validator := range validators {
 		consAddr, err := validator.GetConsAddr()
 		if err != nil {

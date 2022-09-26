@@ -67,5 +67,4 @@ func (m *Module) refetchMissingBlocks() error {
 	}
 
 	return nil
-
 }
