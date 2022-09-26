@@ -2,7 +2,6 @@ package gov
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/forbole/bdjuno/v3/types"

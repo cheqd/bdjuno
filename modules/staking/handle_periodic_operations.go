@@ -35,13 +35,11 @@ func (m *Module) updateStakingPool() error {
 	pool, err := m.GetStakingPool(height)
 	if err != nil {
 		return fmt.Errorf("error while getting staking pool: %s", err)
-
 	}
 
 	err = m.db.SaveStakingPool(pool)
 	if err != nil {
 		return fmt.Errorf("error while saving staking pool: %s", err)
-
 	}
 
 	return nil

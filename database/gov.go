@@ -18,7 +18,6 @@ import (
 
 // SaveGovParams saves the given x/gov parameters inside the database
 func (db *Db) SaveGovParams(params *types.GovParams) error {
-
 	depositParamsBz, err := json.Marshal(&params.DepositParams)
 	if err != nil {
 		return fmt.Errorf("error while marshaling deposit params: %s", err)

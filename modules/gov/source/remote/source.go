@@ -7,9 +7,7 @@ import (
 	govsource "github.com/forbole/bdjuno/v3/modules/gov/source"
 )
 
-var (
-	_ govsource.Source = &Source{}
-)
+var _ govsource.Source = &Source{}
 
 // Source implements govsource.Source using a remote node
 type Source struct {
