@@ -19,8 +19,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Set network name
         id: set-network
@@ -77,8 +75,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Set network name
         id: set-network
@@ -128,33 +124,3 @@ jobs:
 
       - name: Push Hasura CLI image
         run: docker image push --all-tags registry.digitalocean.com/cheqd/hasuracli
-
-  force-redeployment-testnet:
-    name: "Redeploy Testnet Explorer Backend"
-    runs-on: ubuntu-latest
-    if: ${{ ( github.ref_name == 'chains/cheqd/testnet' ) }}
-    environment: testnet
-
-    steps: 
-      - name: Install DigitalOcean CLI
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      
-      - name: Force Redeployment
-        run: doctl app create-deployment --force-rebuild ${{ secrets.APP_ID }}
-
-  force-redeployment-mainnet:
-    name: "Redeploy Mainnet Explorer Backend"
-    runs-on: ubuntu-latest
-    if: ${{ ( github.ref_name == 'chains/cheqd/mainnet' ) }}
-    environment: mainnet
-
-    steps: 
-      - name: Install DigitalOcean CLI
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      
-      - name: Force Redeployment
-        run: doctl app create-deployment --force-rebuild ${{ secrets.APP_ID }}
