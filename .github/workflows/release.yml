@@ -71,6 +71,7 @@ jobs:
 
   release-hasuracli:
     name: "Hasura CLI Docker Image"
+    needs: release-bdjuno
     runs-on: ubuntu-latest
 
     steps:
