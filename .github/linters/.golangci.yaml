@@ -65,3 +65,10 @@ linters-settings:
     allow-leading-space: true
     require-explanation: false
     require-specific: false
+
+  gofumpt:
+    lang-version: "1.18"
+    
+  misspell:
+    ignore-words:
+      - cheqd
