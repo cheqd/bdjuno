@@ -832,7 +832,7 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveSoftwareUpgradePlan() {
 
 	// ----------------------------------------------------------------------------------------------------------------
 	// Save software upgrade plan at height 10 with upgrade height at 100
-	plan := upgradetypes.Plan{
+	var plan = upgradetypes.Plan{
 		Name:   "name",
 		Height: 100,
 		Info:   "info",
@@ -911,7 +911,7 @@ func (suite *DbTestSuite) TestBigDipperDb_DeleteSoftwareUpgradePlan() {
 	_ = suite.getProposalRow(1)
 
 	// Save software upgrade plan at height 10 with upgrade height at 100
-	plan := upgradetypes.Plan{
+	var plan = upgradetypes.Plan{
 		Name:   "name",
 		Height: 100,
 		Info:   "info",
@@ -928,13 +928,14 @@ func (suite *DbTestSuite) TestBigDipperDb_DeleteSoftwareUpgradePlan() {
 	err = suite.database.Sqlx.Select(&rows, `SELECT * FROM software_upgrade_plan`)
 	suite.Require().NoError(err)
 	suite.Require().Len(rows, 0)
+
 }
 
 func (suite *DbTestSuite) TestBigDipperDb_CheckSoftwareUpgradePlan() {
 	_ = suite.getProposalRow(1)
 
 	// Save software upgrade plan at height 10 with upgrade height at 100
-	plan := upgradetypes.Plan{
+	var plan = upgradetypes.Plan{
 		Name: "name",
 		// the Height here is the upgrade height
 		Height: 100,
