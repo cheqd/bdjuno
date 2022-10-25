@@ -5,9 +5,9 @@ go 1.17
 require (
 	github.com/cheqd/cheqd-node v0.6.0
 	github.com/cosmos/cosmos-sdk v0.45.6
-	github.com/cosmos/gaia/v7 v7.0.3
+	github.com/cosmos/gaia/v7 v7.1.0
 	github.com/forbole/juno/v3 v3.4.0
-	github.com/go-co-op/gocron v1.17.0
+	github.com/go-co-op/gocron v1.17.1
 	github.com/gogo/protobuf v1.3.3
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/lib/pq v1.10.7
@@ -15,7 +15,7 @@ require (
 	github.com/prometheus/client_golang v1.13.0
 	github.com/proullon/ramsql v0.0.0-20181213202341-817cee58a244
 	github.com/rs/zerolog v1.28.0
-	github.com/spf13/cobra v1.5.0
+	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
 	github.com/tendermint/tendermint v0.34.19
 	google.golang.org/grpc v1.46.2
