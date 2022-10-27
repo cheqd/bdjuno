@@ -18,9 +18,9 @@ func NewToken(name string, units []TokenUnit) Token {
 // TokenUnit represents a unit of a token
 type TokenUnit struct {
 	Denom    string   `yaml:"denom"`
-	Exponent int      `yaml:"exponent"`
-	Aliases  []string `yaml:"aliases,omitempty"`
 	PriceID  string   `yaml:"price_id,omitempty"`
+	Aliases  []string `yaml:"aliases,omitempty"`
+	Exponent int      `yaml:"exponent"`
 }
 
 func NewTokenUnit(denom string, exponent int, aliases []string, priceID string) TokenUnit {
@@ -34,10 +34,10 @@ func NewTokenUnit(denom string, exponent int, aliases []string, priceID string) 
 
 // TokenPrice represents the price at a given moment in time of a token unit
 type TokenPrice struct {
+	Timestamp time.Time
 	UnitName  string
 	Price     float64
 	MarketCap int64
-	Timestamp time.Time
 }
 
 // NewTokenPrice returns a new TokenPrice instance containing the given data

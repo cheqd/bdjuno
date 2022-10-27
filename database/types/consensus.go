@@ -6,10 +6,10 @@ import (
 )
 
 type GenesisRow struct {
-	OneRowID      bool      `db:"one_row_id"`
-	ChainID       string    `db:"chain_id"`
 	Time          time.Time `db:"time"`
+	ChainID       string    `db:"chain_id"`
 	InitialHeight int64     `db:"initial_height"`
+	OneRowID      bool      `db:"one_row_id"`
 }
 
 func NewGenesisRow(chainID string, time time.Time, initialHeight int64) GenesisRow {
@@ -79,11 +79,11 @@ func (r AverageTimeRow) Equal(s AverageTimeRow) bool {
 
 // BlockRow represents a single block row stored inside the database
 type BlockRow struct {
-	Height          int64          `db:"height"`
+	Timestamp       time.Time      `db:"timestamp"`
 	Hash            string         `db:"hash"`
+	ProposerAddress sql.NullString `db:"proposer_address"`
+	Height          int64          `db:"height"`
 	TxNum           int64          `db:"num_txs"`
 	TotalGas        int64          `db:"total_gas"`
-	ProposerAddress sql.NullString `db:"proposer_address"`
 	PreCommitsNum   int64          `db:"pre_commits"`
-	Timestamp       time.Time      `db:"timestamp"`
 }

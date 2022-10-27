@@ -7,8 +7,8 @@ import (
 
 // Config contains the configuration about the actions module
 type Config struct {
-	Port uint            `yaml:"port"`
 	Node *remote.Details `yaml:"node,omitempty"`
+	Port uint            `yaml:"port"`
 }
 
 // NewConfig returns a new Config instance

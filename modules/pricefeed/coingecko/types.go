@@ -14,10 +14,10 @@ type Tokens []Token
 
 // MarketTicker contains the current market data for a single token
 type MarketTicker struct {
+	LastUpdated  time.Time `json:"last_updated"`
 	Symbol       string    `json:"symbol"`
 	CurrentPrice float64   `json:"current_price"`
 	MarketCap    float64   `json:"market_cap"`
-	LastUpdated  time.Time `json:"last_updated"`
 }
 
 // MarketTickers is an array of MarketTicker

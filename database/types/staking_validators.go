@@ -237,10 +237,10 @@ func (v ValidatorVotingPowerRow) Equal(w ValidatorVotingPowerRow) bool {
 
 // ValidatorStatusRow represents a single row of the validator_status table
 type ValidatorStatusRow struct {
-	Status      int    `db:"status"`
-	Jailed      bool   `db:"jailed"`
 	ConsAddress string `db:"validator_address"`
+	Status      int    `db:"status"`
 	Height      int64  `db:"height"`
+	Jailed      bool   `db:"jailed"`
 }
 
 // NewValidatorStatusRow builds a new ValidatorStatusRow
@@ -265,14 +265,14 @@ func (v ValidatorStatusRow) Equal(w ValidatorStatusRow) bool {
 
 // DoubleSignVoteRow represents a single row of the double_sign_vote table
 type DoubleSignVoteRow struct {
+	BlockID          string `db:"block_id"`
+	ValidatorAddress string `db:"validator_address"`
+	Signature        string `db:"signature"`
 	ID               int64  `db:"id"`
 	VoteType         int    `db:"type"`
 	Height           int64  `db:"height"`
 	Round            int    `db:"round"`
-	BlockID          string `db:"block_id"`
-	ValidatorAddress string `db:"validator_address"`
 	ValidatorIndex   int    `db:"validator_index"`
-	Signature        string `db:"signature"`
 }
 
 // NewDoubleSignVoteRow allows to build a new NewDoubleSignVoteRow

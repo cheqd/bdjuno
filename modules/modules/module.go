@@ -13,8 +13,8 @@ var (
 )
 
 type Module struct {
-	cfg config.ChainConfig
 	db  *database.Db
+	cfg config.ChainConfig
 }
 
 // NewModule returns a new Module instance
