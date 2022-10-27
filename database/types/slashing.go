@@ -4,13 +4,13 @@ import "time"
 
 // ValidatorSigningInfoRow represents a single row of the validator_signing_info table
 type ValidatorSigningInfoRow struct {
+	JailedUntil         time.Time `db:"jailed_until"`
 	ValidatorAddress    string    `db:"validator_address"`
 	StartHeight         int64     `db:"start_height"`
 	IndexOffset         int64     `db:"index_offset"`
-	JailedUntil         time.Time `db:"jailed_until"`
-	Tombstoned          bool      `db:"tombstoned"`
 	MissedBlocksCounter int64     `db:"missed_blocks_counter"`
 	Height              int64     `db:"height"`
+	Tombstoned          bool      `db:"tombstoned"`
 }
 
 // Equal tells whether v and w represent the same rows
@@ -49,9 +49,9 @@ func NewValidatorSigningInfoRow(
 
 // SlashingParamsRow represents a single row inside the slashing_params table
 type SlashingParamsRow struct {
-	OneRowID bool   `db:"one_row_id"`
 	Params   string `db:"params"`
 	Height   int64  `db:"height"`
+	OneRowID bool   `db:"one_row_id"`
 }
 
 // NewSlashingParamsRow allows to create a new instance SlashingParamsRow

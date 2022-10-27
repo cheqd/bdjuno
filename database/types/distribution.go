@@ -2,18 +2,18 @@ package types
 
 // DistributionParamsRow represents a single row inside the distribution_params table
 type DistributionParamsRow struct {
-	OneRowID bool   `db:"one_row_id"`
 	Params   string `db:"params"`
 	Height   int64  `db:"height"`
+	OneRowID bool   `db:"one_row_id"`
 }
 
 // -------------------------------------------------------------------------------------------------------------------
 
 // CommunityPoolRow represents a single row inside the total_supply table
 type CommunityPoolRow struct {
-	OneRowID bool        `db:"one_row_id"`
 	Coins    *DbDecCoins `db:"coins"`
 	Height   int64       `db:"height"`
+	OneRowID bool        `db:"one_row_id"`
 }
 
 // NewCommunityPoolRow allows to easily create a new CommunityPoolRow

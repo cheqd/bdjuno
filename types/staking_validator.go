@@ -20,12 +20,12 @@ type Validator interface {
 
 // validator allows to easily implement the Validator interface
 type validator struct {
+	MaxChangeRate       *sdk.Dec
+	MaxRate             *sdk.Dec
 	ConsensusAddr       string
 	ConsPubKey          string
 	OperatorAddr        string
 	SelfDelegateAddress string
-	MaxChangeRate       *sdk.Dec
-	MaxRate             *sdk.Dec
 	Height              int64
 }
 
@@ -103,9 +103,9 @@ func NewValidatorDescription(
 
 // ValidatorCommission contains the data of a validator commission at a given height
 type ValidatorCommission struct {
-	ValAddress        string
 	Commission        *sdk.Dec
 	MinSelfDelegation *sdk.Int
+	ValAddress        string
 	Height            int64
 }
 

@@ -33,9 +33,9 @@ type Token struct {
 
 type TokenUnit struct {
 	Denom    string   `toml:"denom"`
-	Exponent int      `toml:"exponent"`
-	Aliases  []string `toml:"aliases"`
 	PriceID  string   `toml:"price_id"`
+	Aliases  []string `toml:"aliases"`
+	Exponent int      `toml:"exponent"`
 }
 
 type DistributionConfig struct {

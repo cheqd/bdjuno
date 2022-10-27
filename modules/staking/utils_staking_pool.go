@@ -21,7 +21,6 @@ func (m *Module) GetStakingPool(height int64) (*types.Pool, error) {
 	}
 
 	unbondingTokens := sdk.NewInt(0)
-
 	for _, validator := range validatorsList {
 		// get list of all unbonding delegations for each validator
 		unbondingDelegations := m.getTotalUnbondingDelegationsFromValidator(height, validator.GetOperator())
@@ -45,7 +44,7 @@ func (m *Module) GetStakingPool(height int64) (*types.Pool, error) {
 func (m *Module) getTotalUnbondingDelegationsFromValidator(height int64, valOperatorAddress string) []stakingtypes.UnbondingDelegation {
 	var unbondingDelegations []stakingtypes.UnbondingDelegation
 	var nextKey []byte
-	stop := false
+	var stop = false
 	for !stop {
 		res, err := m.source.GetUnbondingDelegationsFromValidator(height,
 			valOperatorAddress,

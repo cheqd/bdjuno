@@ -4,8 +4,8 @@ import "time"
 
 // Genesis contains the useful information about the genesis
 type Genesis struct {
-	ChainID       string
 	Time          time.Time
+	ChainID       string
 	InitialHeight int64
 }
 
@@ -29,9 +29,9 @@ func (g *Genesis) Equal(other *Genesis) bool {
 
 // ConsensusEvent represents a consensus event
 type ConsensusEvent struct {
+	Step   string `json:"step"`
 	Height int64  `json:"height"`
 	Round  int32  `json:"round"`
-	Step   string `json:"step"`
 }
 
 // NewConsensusEvent allows to easily build a new ConsensusEvent object
