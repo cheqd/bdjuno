@@ -118,10 +118,10 @@ func (w TallyResultRow) Equals(v TallyResultRow) bool {
 
 // VoteRow represents a single row inside the vote table
 type VoteRow struct {
-	Timestamp  time.Time `db:"timestamp"`
+	ProposalID int64     `db:"proposal_id"`
 	Voter      string    `db:"voter_address"`
 	Option     string    `db:"option"`
-	ProposalID int64     `db:"proposal_id"`
+	Timestamp  time.Time `db:"timestamp"`
 	Height     int64     `db:"height"`
 }
 
@@ -153,10 +153,10 @@ func (w VoteRow) Equals(v VoteRow) bool {
 
 // DepositRow represents a single row inside the deposit table
 type DepositRow struct {
-	Timestamp  time.Time `db:"timestamp"`
+	ProposalID int64     `db:"proposal_id"`
 	Depositor  string    `db:"depositor_address"`
 	Amount     DbCoins   `db:"amount"`
-	ProposalID int64     `db:"proposal_id"`
+	Timestamp  time.Time `db:"timestamp"`
 	Height     int64     `db:"height"`
 }
 
