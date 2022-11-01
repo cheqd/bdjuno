@@ -63,6 +63,3 @@ linters-settings:
   misspell:
     ignore-words:
       - cheqd
-  govet:
-    enable:
-      - fieldalignment
