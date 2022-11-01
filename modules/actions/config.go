@@ -10,7 +10,6 @@ type Config struct {
 	Host string          `yaml:"host"`
 	Port uint            `yaml:"port"`
 	Node *remote.Details `yaml:"node,omitempty"`
-	Port uint            `yaml:"port"`
 }
 
 // NewConfig returns a new Config instance

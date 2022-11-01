@@ -183,7 +183,6 @@ func NewDeposit(
 type Vote struct {
 	Voter      string
 	ProposalID uint64
-	Height     int64
 	Option     govtypes.VoteOption
 	Timestamp  time.Time
 	Height     int64
