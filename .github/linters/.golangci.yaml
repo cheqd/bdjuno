@@ -1,27 +1,29 @@
 run:
   tests: false
 #   # timeout for analysis, e.g. 30s, 5m, default is 1m
-  timeout: 10m
+  timeout: 5m
 
 linters:
   disable-all: true
   enable:
     - bodyclose
-    - unused
+    - deadcode
     - depguard
     - dogsled
     - gocritic
     - gofmt
     - goimports
-    - revive
+    - golint
     - gosec
     - gosimple
     - govet
     - ineffassign
+    - maligned
     - misspell
     - nakedret
-    - exportloopref
+    - scopelint
     - staticcheck
+    - structcheck
     - stylecheck
     - typecheck
     - unconvert
@@ -37,10 +39,10 @@ issues:
         - gosec
     - text: "comment on exported var"
       linters:
-        - revive
+        - golint
     - text: "don't use an underscore in package name"
       linters:
-        - revive
+        - golint
     - text: "ST1003:"
       linters:
         - stylecheck
@@ -55,14 +57,14 @@ issues:
 linters-settings:
   dogsled:
     max-blank-identifiers: 3
+  maligned:
+    # print struct with more effective memory layout or not, false by default
+    suggest-new: true
   nolintlint:
     allow-unused: false
     allow-leading-space: true
     require-explanation: false
-    require-specific: false    
+    require-specific: false
   misspell:
     ignore-words:
       - cheqd
-  govet:
-    enable:
-      - fieldalignment
