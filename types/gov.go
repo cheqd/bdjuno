@@ -152,10 +152,10 @@ func NewProposalUpdate(
 
 // Deposit contains the data of a single deposit made towards a proposal
 type Deposit struct {
-	Timestamp  time.Time
+	ProposalID uint64
 	Depositor  string
 	Amount     sdk.Coins
-	ProposalID uint64
+	Timestamp  time.Time
 	Height     int64
 }
 
@@ -180,11 +180,11 @@ func NewDeposit(
 
 // Vote contains the data of a single proposal vote
 type Vote struct {
-	Timestamp  time.Time
-	Voter      string
 	ProposalID uint64
-	Height     int64
+	Voter      string
 	Option     govtypes.VoteOption
+	Timestamp  time.Time
+	Height     int64
 }
 
 // NewVote return a new Vote instance
