@@ -11,8 +11,8 @@ import (
 
 // Config represents the BDJuno configuration
 type Config struct {
-	JunoConfig    junoconfig.Config `yaml:"-,inline"`
 	ActionsConfig *actions.Config   `yaml:"actions"`
+	JunoConfig    junoconfig.Config `yaml:"-,inline"`
 }
 
 // NewConfig returns a new Config instance
