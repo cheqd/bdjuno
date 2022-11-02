@@ -11,7 +11,7 @@ permissions:
 
 jobs:
 
-  release-bdjuno:
+  deploy-bdjuno:
     name: "BDJuno Docker Image"
     runs-on: ubuntu-latest
     env:
