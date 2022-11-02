@@ -66,9 +66,6 @@ func getBasicManagers() []module.BasicManager {
 // This should be edited by custom implementations if needed.
 func getAddressesParser() messages.MessageAddressesParser {
 	return messages.JoinMessageParsers(
-		// this is needed so that bdjuno can parse our custom messages properly
-		// https://docs.bigdipper.live/cosmos-based/parser/custom-chains#optional-add-your-custom-addresses-parser
-		CheqdAddressesParser,
 		messages.CosmosMessageAddressesParser,
 	)
 }
