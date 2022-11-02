@@ -12,7 +12,7 @@ jobs:
     name: "BDJuno Docker Image"
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: registry.digitalocean.com/${{ github.repository }}
+      IMAGE_NAME: ${{ github.repository }}
 
     steps:
       - uses: actions/checkout@v3
@@ -28,7 +28,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.IMAGE_NAME }}
+          images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=branch
             type=raw,value=bdjuno-build
@@ -57,7 +57,7 @@ jobs:
     name: "Hasura CLI Docker Image"
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: registry.digitalocean.com/cheqd/hasuracli
+      IMAGE_NAME: cheqd/hasuracli
 
     steps:
       - uses: actions/checkout@v3
@@ -73,7 +73,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.IMAGE_NAME }}
+          images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=branch
             type=raw,value=hasuracli-build
