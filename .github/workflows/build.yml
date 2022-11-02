@@ -12,7 +12,7 @@ jobs:
     name: "BDJuno Docker Image"
     runs-on: ubuntu-latest
     env:
-      DOCKER_TEST_IMAGE: bdjuno:${{ github.sha }}
+      IMAGE_NAME: ${{ github.repository }}
 
     steps:
       - uses: actions/checkout@v3
@@ -23,7 +23,17 @@ jobs:
         with:
           install: true
           version: latest
-
+      
+      - name: Configure Docker image metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=raw,value=bdjuno-build
+            type=sha,format=long
+      
       - name: Build image
         uses: docker/build-push-action@v3
         with:
@@ -32,20 +42,22 @@ jobs:
           platforms: linux/amd64
           load: true
           target: bdjuno
-          tags: ${{ env.DOCKER_TEST_IMAGE }}
-          outputs: type=docker,dest=/tmp/bdjuno-image.tar
+          tags: ${{ steps.meta.outputs.tags }}
+          outputs: type=docker,dest=/tmp/bdjuno-build.tar
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Upload Docker test image
         uses: actions/upload-artifact@v3
         with:
-          name: bdjuno-image.tar
-          path: /tmp/bdjuno-image.tar
+          name: bdjuno-build.tar
+          path: /tmp/bdjuno-build.tar
 
   build-hasuracli:
     name: "Hasura CLI Docker Image"
     runs-on: ubuntu-latest
     env:
-      DOCKER_TEST_IMAGE: hasuracli:${{ github.sha }}
+      IMAGE_NAME: cheqd/hasuracli
 
     steps:
       - uses: actions/checkout@v3
@@ -57,6 +69,16 @@ jobs:
           install: true
           version: latest
 
+      - name: Configure Docker image metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=raw,value=hasuracli-build
+            type=sha,format=long
+
       - name: Build image
         uses: docker/build-push-action@v3
         with:
@@ -64,11 +86,13 @@ jobs:
           file: Dockerfile.hasura
           platforms: linux/amd64
           load: true
-          tags: ${{ env.DOCKER_TEST_IMAGE }}
-          outputs: type=docker,dest=/tmp/hasuracli-image.tar
+          tags: ${{ steps.meta.outputs.tags }}
+          outputs: type=docker,dest=/tmp/hasuracli-build.tar
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Upload Docker test image
         uses: actions/upload-artifact@v3
         with:
-          name: hasuracli-image.tar
-          path: /tmp/hasuracli-image.tar
+          name: hasuracli-build.tar
+          path: /tmp/hasuracli-build.tar

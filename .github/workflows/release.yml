@@ -4,9 +4,6 @@ on:
 defaults:
   run:
     shell: bash
-permissions:
-  contents: write
-  packages: write
 
 
 jobs:
@@ -65,14 +62,18 @@ jobs:
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Push BDJuno image
-        run: docker image push --all-tags registry.digitalocean.com/${{ env.IMAGE_NAME }}
+        run: docker image push --all-tags --all-tags registry.digitalocean.com/${{ env.IMAGE_NAME }}
 
   release-hasuracli:
     name: "Hasura CLI Docker Image"
     needs: release-bdjuno
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: cheqd/hasuracli
 
     steps:
       - uses: actions/checkout@v3
@@ -102,7 +103,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: registry.digitalocean.com/cheqd/hasuracli
+          images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=${{ steps.set-network.outputs.NETWORK_NAME }}-latest
             type=sha,format=long
@@ -122,6 +123,8 @@ jobs:
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Push Hasura CLI image
-        run: docker image push --all-tags registry.digitalocean.com/cheqd/hasuracli
+        run: docker image push --all-tags --all-tags registry.digitalocean.com/${{ env.IMAGE_NAME }}
