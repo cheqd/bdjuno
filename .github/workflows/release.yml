@@ -66,7 +66,7 @@ jobs:
           cache-to: type=gha,mode=min
 
       - name: Push BDJuno image
-        run: docker image push --all-tags --all-tags registry.digitalocean.com/${{ env.IMAGE_NAME }}
+        run: docker image push --all-tags registry.digitalocean.com/${{ env.IMAGE_NAME }}
 
   release-hasuracli:
     name: "Hasura CLI Docker Image"
@@ -127,7 +127,7 @@ jobs:
           cache-to: type=gha,mode=min
 
       - name: Push Hasura CLI image
-        run: docker image push --all-tags --all-tags registry.digitalocean.com/${{ env.IMAGE_NAME }}
+        run: docker image push --all-tags registry.digitalocean.com/${{ env.IMAGE_NAME }}
   
   cache-purge:
     name: "Purge branch Actions cache"
