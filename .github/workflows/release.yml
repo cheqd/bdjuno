@@ -63,7 +63,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min
 
       - name: Push BDJuno image
         run: docker image push --all-tags --all-tags registry.digitalocean.com/${{ env.IMAGE_NAME }}
@@ -124,7 +124,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min
 
       - name: Push Hasura CLI image
         run: docker image push --all-tags --all-tags registry.digitalocean.com/${{ env.IMAGE_NAME }}
