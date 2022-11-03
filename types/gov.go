@@ -4,7 +4,6 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 )
 
@@ -40,10 +39,10 @@ func NewVotingParams(v govtypes.VotingParams) VotingParams {
 
 // GovParams contains the data of the x/gov module parameters
 type GovParams struct {
-	DepositParams DepositParams `json:"deposit_params" yaml:"deposit_params"`
-	VotingParams  VotingParams  `json:"voting_params" yaml:"voting_params"`
 	TallyParams   TallyParams   `json:"tally_params" yaml:"tally_params"`
+	DepositParams DepositParams `json:"deposit_params" yaml:"deposit_params"`
 	Height        int64         `json:"height" ymal:"height"`
+	VotingParams  VotingParams  `json:"voting_params" yaml:"voting_params"`
 }
 
 // TallyParams contains the tally parameters of the x/gov module
@@ -76,16 +75,16 @@ func NewGovParams(votingParams VotingParams, depositParams DepositParams, tallyP
 
 // Proposal represents a single governance proposal
 type Proposal struct {
-	ProposalRoute   string
-	ProposalType    string
-	ProposalID      uint64
-	Content         govtypes.Content
-	Status          string
 	SubmitTime      time.Time
 	DepositEndTime  time.Time
 	VotingStartTime time.Time
 	VotingEndTime   time.Time
+	Content         govtypes.Content
+	ProposalRoute   string
+	ProposalType    string
+	Status          string
 	Proposer        string
+	ProposalID      uint64
 }
 
 // NewProposal return a new Proposal instance
@@ -131,10 +130,10 @@ func (p Proposal) Equal(other Proposal) bool {
 
 // ProposalUpdate contains the data that should be used when updating a governance proposal
 type ProposalUpdate struct {
-	ProposalID      uint64
-	Status          string
 	VotingStartTime time.Time
 	VotingEndTime   time.Time
+	Status          string
+	ProposalID      uint64
 }
 
 // NewProposalUpdate allows to build a new ProposalUpdate instance
@@ -156,6 +155,7 @@ type Deposit struct {
 	ProposalID uint64
 	Depositor  string
 	Amount     sdk.Coins
+	Timestamp  time.Time
 	Height     int64
 }
 
@@ -164,12 +164,14 @@ func NewDeposit(
 	proposalID uint64,
 	depositor string,
 	amount sdk.Coins,
+	timestamp time.Time,
 	height int64,
 ) Deposit {
 	return Deposit{
 		ProposalID: proposalID,
 		Depositor:  depositor,
 		Amount:     amount,
+		Timestamp:  timestamp,
 		Height:     height,
 	}
 }
@@ -181,6 +183,7 @@ type Vote struct {
 	ProposalID uint64
 	Voter      string
 	Option     govtypes.VoteOption
+	Timestamp  time.Time
 	Height     int64
 }
 
@@ -189,12 +192,14 @@ func NewVote(
 	proposalID uint64,
 	voter string,
 	option govtypes.VoteOption,
+	timestamp time.Time,
 	height int64,
 ) Vote {
 	return Vote{
 		ProposalID: proposalID,
 		Voter:      voter,
 		Option:     option,
+		Timestamp:  timestamp,
 		Height:     height,
 	}
 }
@@ -203,11 +208,11 @@ func NewVote(
 
 // TallyResult contains the data about the final results of a proposal
 type TallyResult struct {
-	ProposalID uint64
 	Yes        string
 	Abstain    string
 	No         string
 	NoWithVeto string
+	ProposalID uint64
 	Height     int64
 }
 
@@ -234,8 +239,8 @@ func NewTallyResult(
 
 // ProposalStakingPoolSnapshot contains the data about a single staking pool snapshot to be associated with a proposal
 type ProposalStakingPoolSnapshot struct {
-	ProposalID uint64
 	Pool       *Pool
+	ProposalID uint64
 }
 
 // NewProposalStakingPoolSnapshot returns a new ProposalStakingPoolSnapshot instance
@@ -251,12 +256,12 @@ func NewProposalStakingPoolSnapshot(proposalID uint64, pool *Pool) ProposalStaki
 // ProposalValidatorStatusSnapshot represents a single snapshot of the status of a validator associated
 // with a single proposal
 type ProposalValidatorStatusSnapshot struct {
-	ProposalID           uint64
 	ValidatorConsAddress string
+	ProposalID           uint64
 	ValidatorVotingPower int64
 	ValidatorStatus      int
-	ValidatorJailed      bool
 	Height               int64
+	ValidatorJailed      bool
 }
 
 // NewProposalValidatorStatusSnapshot returns a new ProposalValidatorStatusSnapshot instance

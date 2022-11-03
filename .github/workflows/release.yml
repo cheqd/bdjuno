@@ -65,6 +65,8 @@ jobs:
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=min
 
       - name: Push BDJuno image
         run: docker image push --all-tags registry.digitalocean.com/${{ env.IMAGE_NAME }}
@@ -73,6 +75,8 @@ jobs:
     name: "Hasura CLI Docker Image"
     needs: release-bdjuno
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: cheqd/hasuracli
 
     steps:
       - uses: actions/checkout@v3
@@ -102,7 +106,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: registry.digitalocean.com/cheqd/hasuracli
+          images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=${{ steps.set-network.outputs.NETWORK_NAME }}-latest
             type=sha,format=long
@@ -122,6 +126,23 @@ jobs:
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=min
 
       - name: Push Hasura CLI image
-        run: docker image push --all-tags registry.digitalocean.com/cheqd/hasuracli
+        run: docker image push --all-tags registry.digitalocean.com/${{ env.IMAGE_NAME }}
+  
+  cache-purge:
+    name: "Purge branch Actions cache"
+    needs: [release-bdjuno, release-hasuracli]
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    
+    steps:
+
+      - name: "Delete Branch Cache Action"
+        uses: snnaplab/delete-branch-cache-action@v1.0.0
+        with:
+          # Specify explicitly because the ref at the time of merging will be a branch name such as 'main', 'develop'
+          ref: refs/pull/${{ github.event.number }}/merge
+          github-token: ${{ secrets.GITHUB_TOKEN }}
