@@ -26,9 +26,9 @@ func (i InflationRow) Equal(j InflationRow) bool {
 
 // MintParamsRow represents a single row inside the mint_params table
 type MintParamsRow struct {
-	OneRowID bool   `db:"one_row_id"`
 	Params   string `db:"params"`
 	Height   int64  `db:"height"`
+	OneRowID bool   `db:"one_row_id"`
 }
 
 // NewMintParamsRow builds a new MintParamsRow instance

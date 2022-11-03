@@ -2,9 +2,9 @@ package types
 
 // SupplyRow represents a single row inside the "supply" table
 type SupplyRow struct {
-	OneRowID bool     `db:"one_row_id"`
 	Coins    *DbCoins `db:"coins"`
 	Height   int64    `db:"height"`
+	OneRowID bool     `db:"one_row_id"`
 }
 
 // NewSupplyRow allows to easily create a new NewSupplyRow
