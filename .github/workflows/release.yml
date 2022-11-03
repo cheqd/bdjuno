@@ -131,7 +131,7 @@ jobs:
   
   cache-purge:
     name: "Purge branch Actions cache"
-    needs: release-docker
+    needs: [release-bdjuno, release-hasuracli]
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     
