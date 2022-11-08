@@ -5,6 +5,7 @@ import (
 
 	"github.com/forbole/juno/v3/node"
 
+	"github.com/forbole/bdjuno/v3/database"
 	modulestypes "github.com/forbole/bdjuno/v3/modules/types"
 )
 
@@ -12,6 +13,7 @@ import (
 type Context struct {
 	node    node.Node
 	Sources *modulestypes.Sources
+	DB      *database.Db
 }
 
 // NewContext returns a new Context instance
@@ -33,6 +35,11 @@ func (c *Context) GetHeight(payload *Payload) (int64, error) {
 	}
 
 	return payload.Input.Height, nil
+}
+
+func (c *Context) WithDB(db *database.Db) *Context {
+	c.DB = db
+	return c
 }
 
 // ActionHandler represents a Hasura action request handler.

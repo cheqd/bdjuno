@@ -22,10 +22,25 @@ func (p *Payload) GetPagination() *query.PageRequest {
 	}
 }
 
+func (p *Payload) GetAnalyticsOptions() *AnalyticsOptions {
+	return &AnalyticsOptions{
+		MsgTypes:  p.Input.MsgTypes,
+		Plottable: p.Input.Plottable,
+	}
+}
+
+// All the options, passed via QraphQL Query
+type AnalyticsOptions struct {
+	MsgTypes  string `json:"msg_types"`
+	Plottable bool   `json:"plottable"`
+}
+
 type PayloadArgs struct {
 	Address    string `json:"address"`
+	MsgTypes   string `json:"msg_types"`
 	Height     int64  `json:"height"`
 	Offset     uint64 `json:"offset"`
 	Limit      uint64 `json:"limit"`
 	CountTotal bool   `json:"count_total"`
+	Plottable  bool   `json:"plottable"`
 }

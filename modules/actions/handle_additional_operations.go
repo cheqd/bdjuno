@@ -14,7 +14,7 @@ var waitGroup sync.WaitGroup
 
 func (m *Module) RunAdditionalOperations() error {
 	// Build the worker
-	context := actionstypes.NewContext(m.node, m.sources)
+	context := actionstypes.NewContext(m.node, m.sources).WithDB(m.db)
 	worker := actionstypes.NewActionsWorker(context)
 
 	// Register the endpoints
@@ -38,6 +38,10 @@ func (m *Module) RunAdditionalOperations() error {
 	worker.RegisterHandler("/validator_delegations", handlers.ValidatorDelegation)
 	worker.RegisterHandler("/validator_redelegations_from", handlers.ValidatorRedelegationsFromHandler)
 	worker.RegisterHandler("/validator_unbonding_delegations", handlers.ValidatorUnbondingDelegationsHandler)
+
+	// -- Cheqd Analytics
+	worker.RegisterHandler("/analytics/did", handlers.CheqdDIDAnalytics)
+	worker.RegisterHandler("/analytics/resource", handlers.CheqdResourceAnalytics)
 
 	// Listen for and trap any OS signal to gracefully shutdown and exit
 	m.trapSignal()

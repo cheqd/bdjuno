@@ -96,7 +96,7 @@ func (w *ActionsWorker) handleError(writer http.ResponseWriter, path string, err
 // Start starts the worker
 func (w *ActionsWorker) Start(host string, port uint) {
 	server := &http.Server{
-		Addr:              fmt.Sprintf(":%d", port),
+		Addr:              fmt.Sprintf("%s:%d", host, port),
 		Handler:           w.mux,
 		ReadTimeout:       time.Second * 30,
 		ReadHeaderTimeout: time.Second * 5,

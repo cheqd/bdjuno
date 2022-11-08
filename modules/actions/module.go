@@ -8,6 +8,7 @@ import (
 	nodeconfig "github.com/forbole/juno/v3/node/config"
 	"github.com/forbole/juno/v3/types/config"
 
+	"github.com/forbole/bdjuno/v3/database"
 	modulestypes "github.com/forbole/bdjuno/v3/modules/types"
 )
 
@@ -24,9 +25,10 @@ type Module struct {
 	cfg     *Config
 	node    node.Node
 	sources *modulestypes.Sources
+	db      *database.Db
 }
 
-func NewModule(cfg config.Config, encodingConfig *params.EncodingConfig) *Module {
+func NewModule(cfg config.Config, db *database.Db, encodingConfig *params.EncodingConfig) *Module {
 	bz, err := cfg.GetBytes()
 	if err != nil {
 		panic(err)
@@ -58,6 +60,7 @@ func NewModule(cfg config.Config, encodingConfig *params.EncodingConfig) *Module
 		cfg:     actionsCfg,
 		node:    junoNode,
 		sources: sources,
+		db:      db,
 	}
 }
 
