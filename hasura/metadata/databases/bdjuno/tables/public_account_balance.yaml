@@ -10,7 +10,7 @@ select_permissions:
     allow_aggregations: false
     columns:
     - address
-    - coins
+    - available
     - height
     filter: {}
     limit: 100

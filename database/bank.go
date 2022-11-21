@@ -50,21 +50,21 @@ func (db *Db) SaveAccountBalances(balances []types.AccountBalance) error {
 }
 
 func (db *Db) saveUpToDateBalances(paramsNumber int, balances []types.AccountBalance) error {
-	stmt := `INSERT INTO account_balance (address, coins, height) VALUES `
+	stmt := `INSERT INTO account_balance (address, available, height) VALUES `
 	var params []interface{}
 
 	for i, bal := range balances {
 		bi := i * paramsNumber
 		stmt += fmt.Sprintf("($%d, $%d, $%d),", bi+1, bi+2, bi+3)
 
-		coins := pq.Array(dbtypes.NewDbCoins(bal.Balance))
-		params = append(params, bal.Address, coins, bal.Height)
+		available := pq.Array(dbtypes.NewDbCoins(bal.Balance))
+		params = append(params, bal.Address, available, bal.Height)
 	}
 
 	stmt = stmt[:len(stmt)-1]
 	stmt += `
 ON CONFLICT (address) DO UPDATE 
-	SET coins = excluded.coins, 
+	SET available = excluded.available, 
 	    height = excluded.height 
 WHERE account_balance.height <= excluded.height`
 
