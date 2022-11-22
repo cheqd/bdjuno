@@ -2,6 +2,7 @@ package staking
 
 import (
 	"fmt"
+	"time"
 
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
@@ -24,6 +25,9 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 
 	case *stakingtypes.MsgDelegate:
 		return m.storeDelegationFromMessage(tx.Height, cosmosMsg)
+
+	case *stakingtypes.MsgBeginRedelegate:
+		return m.handleMsgBeginRedelegate(tx, index, cosmosMsg)
 
 	}
 
@@ -50,4 +54,22 @@ func (m *Module) handleEditValidator(height int64, msg *stakingtypes.MsgEditVali
 	}
 
 	return nil
+}
+
+// handleMsgBeginRedelegate handles a MsgBeginRedelegate storing the data inside the database
+func (m *Module) handleMsgBeginRedelegate(
+	tx *juno.Tx, index int, msg *stakingtypes.MsgBeginRedelegate) error {
+	redelegation, err := m.storeRedelegationFromMessage(tx, index, msg)
+	if err != nil {
+		return err
+	}
+
+	// When the time expires, update the delegations and delete this redelegation
+	time.AfterFunc(time.Until(redelegation.CompletionTime),
+		m.refreshDelegations(tx.Height, msg.DelegatorAddress))
+	time.AfterFunc(time.Until(redelegation.CompletionTime),
+		m.deleteRedelegation(*redelegation))
+
+	// Update the current delegations
+	return m.updateDelegationsAndReplaceExisting(tx.Height, msg.DelegatorAddress)
 }
