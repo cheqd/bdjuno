@@ -11,11 +11,13 @@ object_relationships:
       remote_table:
         name: vesting_account
         schema: public
-- name: account
+- name: account_balance
   using:
-    foreign_key_constraint_on:
-      column: address
-      table:
+    manual_configuration:
+      column_mapping:
+        address: address
+      insertion_order: null
+      remote_table:
         name: account_balance
         schema: public
 array_relationships:
