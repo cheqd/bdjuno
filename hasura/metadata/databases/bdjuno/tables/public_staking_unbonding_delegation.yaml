@@ -12,7 +12,7 @@ select_permissions:
     - validator_address
     - delegator_address
     - amount
-    - completion_time
+    - completion_timestamp
     - height
     filter: {}
     limit: 1

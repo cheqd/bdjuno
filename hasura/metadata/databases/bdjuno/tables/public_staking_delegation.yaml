@@ -11,7 +11,6 @@ select_permissions:
     columns:
     - validator_address
     - delegator_address
-    - not_bonded_tokens
     - amount
     - height
     filter: {}
