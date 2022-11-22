@@ -11,6 +11,13 @@ object_relationships:
       remote_table:
         name: vesting_account
         schema: public
+- name: account
+  using:
+    foreign_key_constraint_on:
+      column: address
+      table:
+        name: account_balance
+        schema: public
 array_relationships:
 - name: proposal_deposits
   using:
@@ -47,12 +54,26 @@ array_relationships:
       table:
         name: vesting_account
         schema: public
-- name: accounts
+- name: delegations
   using:
     foreign_key_constraint_on:
-      column: address
+      column: delegator_address
       table:
-        name: account_balance
+        name: delegation
+        schema: public
+- name: redelegations
+  using:
+    foreign_key_constraint_on:
+      column: delegator_address
+      table:
+        name: redelegation
+        schema: public
+- name: unbonding_delegations
+  using:
+    foreign_key_constraint_on:
+      column: delegator_address
+      table:
+        name: unbonding_delegation
         schema: public
 select_permissions:
 - permission:

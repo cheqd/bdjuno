@@ -1,0 +1,19 @@
+table:
+  name: delegation
+  schema: public
+object_relationships:
+- name: account
+  using:
+    foreign_key_constraint_on: delegator_address
+select_permissions:
+- permission:
+    allow_aggregations: true
+    columns:
+    - validator_address
+    - delegator_address
+    - not_bonded_tokens
+    - amount
+    - height
+    filter: {}
+    limit: 1
+  role: anonymous
