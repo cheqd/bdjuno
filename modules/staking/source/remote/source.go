@@ -8,6 +8,7 @@ import (
 	"github.com/forbole/juno/v3/node/remote"
 
 	stakingsource "github.com/forbole/bdjuno/v3/modules/staking/source"
+	"github.com/forbole/bdjuno/v3/utils"
 )
 
 var _ stakingsource.Source = &Source{}
@@ -87,4 +88,22 @@ func (s Source) GetParams(height int64) (stakingtypes.Params, error) {
 	}
 
 	return res.Params, nil
+}
+
+// GetDelegation implements stakingsource.Source
+func (s Source) GetDelegation(height int64, delegatorAddr string, validatorAddr string) (*stakingtypes.QueryDelegationResponse, error) {
+	ctx := utils.GetHeightRequestContext(s.Ctx, height)
+
+	res, err := s.stakingClient.Delegation(
+		ctx,
+		&stakingtypes.QueryDelegationRequest{
+			DelegatorAddr: delegatorAddr,
+			ValidatorAddr: validatorAddr,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }

@@ -21,6 +21,10 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 
 	case *stakingtypes.MsgEditValidator:
 		return m.handleEditValidator(tx.Height, cosmosMsg)
+
+	case *stakingtypes.MsgDelegate:
+		return m.storeDelegationFromMessage(tx.Height, cosmosMsg)
+
 	}
 
 	return nil

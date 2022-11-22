@@ -221,3 +221,26 @@ func (s Source) GetUnbondingDelegationsFromValidator(
 
 	return unbondingDelegations, nil
 }
+
+// GetDelegation implements stakingsource.Source
+func (s Source) GetDelegation(
+	height int64, delegatorAddr string, validatorAddr string,
+) (*stakingtypes.QueryDelegationResponse, error) {
+	ctx, err := s.LoadHeight(height)
+	if err != nil {
+		return nil, fmt.Errorf("error while loading height: %s", err)
+	}
+
+	res, err := s.q.Delegation(
+		sdk.WrapSDKContext(ctx),
+		&stakingtypes.QueryDelegationRequest{
+			DelegatorAddr: delegatorAddr,
+			ValidatorAddr: validatorAddr,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
