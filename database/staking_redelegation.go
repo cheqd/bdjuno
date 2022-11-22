@@ -59,10 +59,12 @@ VALUES `
 
 	// Insert the redelegations
 	rdQry = rdQry[:len(rdQry)-1] // Remove the trailing ","
-	rdQry += `
-ON CONFLICT ON CONSTRAINT redelegation_validator_delegator_unique 
-DO UPDATE SET amount = excluded.amount, height = excluded.height
-WHERE redelegation.height <= excluded.height`
+	rdQry += `ON CONFLICT ON CONSTRAINT redelegation_validator_delegator_unique DO UPDATE 
+	SET 
+		amount = excluded.amount,
+		height = excluded.height
+	WHERE redelegation.height <= excluded.height`
+
 	_, err = db.Sql.Exec(rdQry, rdParams...)
 	return err
 }

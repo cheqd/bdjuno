@@ -44,7 +44,7 @@ INSERT INTO delegation (validator_address, delegator_address, amount, height) VA
 
 	// Insert the accounts
 	accQry = accQry[:len(accQry)-1] // Remove the trailing ","
-	accQry += " ON CONFLICT DO NOTHING"
+	accQry += "ON CONFLICT DO NOTHING "
 	_, err := db.Sql.Exec(accQry, accParams...)
 	if err != nil {
 		return err
@@ -52,10 +52,12 @@ INSERT INTO delegation (validator_address, delegator_address, amount, height) VA
 
 	// Insert the delegations
 	delQry = delQry[:len(delQry)-1] // Remove the trailing ","
-	delQry += ` 
-ON CONFLICT ON CONSTRAINT delegation_validator_delegator_unique 
-DO UPDATE SET amount = excluded.amount, height = excluded.height
-WHERE delegation.height <= excluded.height`
+	delQry += `ON CONFLICT ON CONSTRAINT delegation_validator_delegator_unique DO UPDATE
+	SET 
+		amount = excluded.amount, 
+		height = excluded.height
+	WHERE delegation.height <= excluded.height`
+
 	_, err = db.Sql.Exec(delQry, delParams...)
 	return err
 }

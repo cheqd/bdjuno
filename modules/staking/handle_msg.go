@@ -5,6 +5,7 @@ import (
 	"time"
 
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/rs/zerolog/log"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	juno "github.com/forbole/juno/v3/types"
@@ -28,6 +29,9 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 
 	case *stakingtypes.MsgBeginRedelegate:
 		return m.handleMsgBeginRedelegate(tx, index, cosmosMsg)
+
+	case *stakingtypes.MsgUndelegate:
+		return m.handleMsgUndelegate(tx, index, cosmosMsg)
 
 	}
 
@@ -72,4 +76,40 @@ func (m *Module) handleMsgBeginRedelegate(
 
 	// Update the current delegations
 	return m.updateDelegationsAndReplaceExisting(tx.Height, msg.DelegatorAddress)
+}
+
+// handleMsgUndelegate handles a MsgUndelegate storing the data inside the database
+func (m *Module) handleMsgUndelegate(tx *juno.Tx, index int, msg *stakingtypes.MsgUndelegate) error {
+	delegation, err := m.storeUnbondingDelegationFromMessage(tx, index, msg)
+	if err != nil {
+		return err
+	}
+
+	// When timer expires update the delegations, update the user balance and remove the unbonding delegation
+	time.AfterFunc(time.Until(delegation.CompletionTimestamp),
+		m.refreshDelegations(tx.Height, msg.DelegatorAddress))
+	time.AfterFunc(time.Until(delegation.CompletionTimestamp),
+		m.updateBalances(msg.DelegatorAddress))
+	time.AfterFunc(time.Until(delegation.CompletionTimestamp),
+		m.deleteUnbondingDelegation(*delegation))
+
+	// Update the current delegations
+	return m.updateDelegationsAndReplaceExisting(tx.Height, msg.DelegatorAddress)
+}
+
+func (m *Module) updateBalances(address string) func() {
+	return func() {
+		height, err := m.db.GetLastBlockHeight()
+		if err != nil {
+			log.Error().Err(err).Str("module", "bank").
+				Str("operation", "refresh balance").Msg("error while getting latest block height")
+			return
+		}
+
+		err = m.bankModule.UpdateBalances([]string{address}, height)
+		if err != nil {
+			log.Error().Err(err).Str("module", "bank").
+				Str("operation", "refresh balance").Msg("error while updating balance")
+		}
+	}
 }

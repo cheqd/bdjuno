@@ -109,6 +109,9 @@ CREATE TABLE double_sign_evidence
 );
 CREATE INDEX double_sign_evidence_height_index ON double_sign_evidence (height);
 
+
+----------------------------- Delegations -----------------------------
+
 CREATE TABLE delegation
 (
     validator_address TEXT               NOT NULL REFERENCES validator (consensus_address),
@@ -135,3 +138,16 @@ CREATE TABLE redelegation
 CREATE INDEX redelegation_delegator_address_index ON redelegation (delegator_address);
 CREATE INDEX redelegation_src_validator_address_index ON redelegation (src_validator_address);
 CREATE INDEX redelegation_dst_validator_address_index ON redelegation (dst_validator_address);
+
+CREATE TABLE unbonding_delegation
+(
+    validator_address    TEXT                        NOT NULL REFERENCES validator (consensus_address),
+    delegator_address    TEXT                        NOT NULL REFERENCES account (address),
+    amount               COIN                        NOT NUll,
+    completion_timestamp TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    height               BIGINT                      NOT NULL REFERENCES block(height),
+    CONSTRAINT unbonding_delegation_validator_delegator_unique UNIQUE (delegator_address, validator_address,
+                                                                       completion_timestamp)
+);
+CREATE INDEX unbonding_delegation_validator_address_index ON unbonding_delegation (validator_address);
+CREATE INDEX unbonding_delegation_delegator_address_index ON unbonding_delegation (delegator_address);
