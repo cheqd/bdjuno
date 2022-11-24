@@ -3,7 +3,6 @@ package gov
 import (
 	"fmt"
 	"strings"
-	"time"
 
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	proposaltypes "github.com/cosmos/cosmos-sdk/x/params/types/proposal"
@@ -21,14 +20,11 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 )
 
-func (m *Module) UpdateProposal(height int64, blockTime time.Time, id uint64) error {
+func (m *Module) UpdateProposal(height int64, id uint64) error {
 	// Get the proposal
 	proposal, err := m.source.Proposal(height, id)
 	if err != nil {
-		// Check if proposal has reached the voting end time
-		passedVotingPeriod := blockTime.After(proposal.VotingEndTime)
-
-		if strings.Contains(err.Error(), codes.NotFound.String()) && passedVotingPeriod {
+		if strings.Contains(err.Error(), codes.NotFound.String()) {
 			// Handle case when a proposal is deleted from the chain (did not pass deposit period)
 			return m.updateDeletedProposalStatus(id)
 		}
