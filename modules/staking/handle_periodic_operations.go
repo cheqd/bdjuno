@@ -15,7 +15,7 @@ func (m *Module) RegisterPeriodicOperations(scheduler *gocron.Scheduler) error {
 
 	// Update the staking pool every 5 mins
 	if _, err := scheduler.Every(5).Minutes().Do(func() {
-		utils.WatchMethod(m.UpdateStakingPool)
+		utils.WatchMethod(m.updateStakingPool)
 	}); err != nil {
 		return fmt.Errorf("error while scheduling staking pool periodic operation: %s", err)
 	}
@@ -23,8 +23,8 @@ func (m *Module) RegisterPeriodicOperations(scheduler *gocron.Scheduler) error {
 	return nil
 }
 
-// UpdateStakingPool reads from the LCD the current staking pool and stores its value inside the database
-func (m *Module) UpdateStakingPool() error {
+// updateStakingPool reads from the LCD the current staking pool and stores its value inside the database
+func (m *Module) updateStakingPool() error {
 	height, err := m.db.GetLastBlockHeight()
 	if err != nil {
 		return fmt.Errorf("error while getting latest block height: %s", err)

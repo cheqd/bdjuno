@@ -15,7 +15,7 @@ func (m *Module) RegisterPeriodicOperations(scheduler *gocron.Scheduler) error {
 
 	// Update the community pool every 1 hour
 	if _, err := scheduler.Every(1).Hour().Do(func() {
-		utils.WatchMethod(m.GetLatestCommunityPool)
+		utils.WatchMethod(m.getLatestCommunityPool)
 	}); err != nil {
 		return fmt.Errorf("error while scheduling distribution peridic operation: %s", err)
 	}
@@ -23,8 +23,8 @@ func (m *Module) RegisterPeriodicOperations(scheduler *gocron.Scheduler) error {
 	return nil
 }
 
-// GetLatestCommunityPool gets the latest community pool from the chain and stores inside the database
-func (m *Module) GetLatestCommunityPool() error {
+// getLatestCommunityPool gets the latest community pool from the chain and stores inside the database
+func (m *Module) getLatestCommunityPool() error {
 	height, err := m.db.GetLastBlockHeight()
 	if err != nil {
 		return fmt.Errorf("error while getting latest block height: %s", err)

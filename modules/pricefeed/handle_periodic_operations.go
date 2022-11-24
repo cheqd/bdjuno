@@ -19,14 +19,14 @@ func (m *Module) RegisterPeriodicOperations(scheduler *gocron.Scheduler) error {
 
 	// Fetch the token prices every 2 mins
 	if _, err := scheduler.Every(2).Minutes().Do(func() {
-		utils.WatchMethod(m.UpdatePrice)
+		utils.WatchMethod(m.updatePrice)
 	}); err != nil {
 		return fmt.Errorf("error while setting up pricefeed period operations: %s", err)
 	}
 
 	// Update the historical token prices every 1 hour
 	if _, err := scheduler.Every(1).Hour().Do(func() {
-		utils.WatchMethod(m.UpdatePricesHistory)
+		utils.WatchMethod(m.updatePricesHistory)
 	}); err != nil {
 		return fmt.Errorf("error while setting up history period operations: %s", err)
 	}
@@ -56,8 +56,8 @@ func (m *Module) getTokenPrices() ([]types.TokenPrice, error) {
 	return prices, nil
 }
 
-// UpdatePrice fetches the total amount of coins in the system from RPC and stores it in database
-func (m *Module) UpdatePrice() error {
+// updatePrice fetch total amount of coins in the system from RPC and store it into database
+func (m *Module) updatePrice() error {
 	log.Debug().
 		Str("module", "pricefeed").
 		Str("operation", "pricefeed").
@@ -77,9 +77,9 @@ func (m *Module) UpdatePrice() error {
 	return nil
 }
 
-// UpdatePricesHistory fetches total amount of coins in the system from RPC
+// updatePricesHistory fetches total amount of coins in the system from RPC
 // and stores historical perice data inside the database
-func (m *Module) UpdatePricesHistory() error {
+func (m *Module) updatePricesHistory() error {
 	log.Debug().
 		Str("module", "pricefeed").
 		Str("operation", "pricefeed").
