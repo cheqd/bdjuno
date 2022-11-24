@@ -13,6 +13,16 @@ created using [Hasura](https://hasura.io/).
 2. Changes to workflows/pipelines
 3. Optimised Dockerfile
 
+### Configuration files
+
+1. BDJuno configuration is in `deploy` folder
+   1. `genesis.json` should be current from the published one for this specific chain (testnet/mainnet) from [cheqd-node](https://github.com/cheqd/cheqd-node).
+   2. Edit `deploy/config.yaml` if necessary.
+   3. The variables used in config file are populated from DigitalOcean secrets by the entrypoint script `deploy/entrypoint.sh`
+2. Hasura configuration is in `hasura` folder
+   1. Edit `hasura/config.yaml` if necessary.
+   2. The variables used in config file are populated from DigitalOcean secrets by the entrypoint script `deploy/entrypoint.sh`
+
 ## Developer guide
 
 This section is reproduced as-is from upstream project.
