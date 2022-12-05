@@ -20,7 +20,8 @@ func (m *Module) GetStakingPool(height int64) (*types.Pool, error) {
 		return nil, fmt.Errorf("error while getting validators list: %s", err)
 	}
 
-	unbondingTokens := sdk.NewInt(0)
+	var unbondingTokens = sdk.NewInt(0)
+
 	for _, validator := range validatorsList {
 		// get list of all unbonding delegations for each validator
 		unbondingDelegations := m.getTotalUnbondingDelegationsFromValidator(height, validator.GetOperator())

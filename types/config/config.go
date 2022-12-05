@@ -13,6 +13,7 @@ import (
 type Config struct {
 	ActionsConfig *actions.Config   `yaml:"actions"`
 	JunoConfig    junoconfig.Config `yaml:"-,inline"`
+	ActionsConfig *actions.Config   `yaml:"actions"`
 }
 
 // NewConfig returns a new Config instance

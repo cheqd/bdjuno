@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"time"
 
-	parsecmdtypes "github.com/forbole/juno/v3/cmd/parse/types"
 	"github.com/forbole/juno/v3/parser"
 	"github.com/forbole/juno/v3/types/config"
+
 	"github.com/go-co-op/gocron"
 	"github.com/rs/zerolog/log"
+
+	parsecmdtypes "github.com/forbole/juno/v3/cmd/parse/types"
 )
 
 func (m *Module) RegisterPeriodicOperations(scheduler *gocron.Scheduler) error {
@@ -38,7 +40,7 @@ func (m *Module) refetchMissingBlocks() error {
 	if err != nil {
 		return fmt.Errorf("error while getting block height from a day ago: %s", err)
 	}
-	startHeight := blockHeightDayAgo.Height
+	var startHeight int64 = blockHeightDayAgo.Height
 
 	missingBlocks := m.database.GetMissingBlocks(startHeight, latestBlock)
 
@@ -65,4 +67,8 @@ func (m *Module) refetchMissingBlocks() error {
 	}
 
 	return nil
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6823035056a955f797182700c6aeebb0f3a06864
 }

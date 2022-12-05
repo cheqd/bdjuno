@@ -1,10 +1,10 @@
 package types
 
 type SoftwareUpgradePlanRow struct {
-	PlanName      string `db:"plan_name"`
-	Info          string `db:"info"`
 	ProposalID    uint64 `db:"proposal_id"`
+	PlanName      string `db:"plan_name"`
 	UpgradeHeight int64  `db:"upgrade_height"`
+	Info          string `db:"info"`
 	Height        int64  `db:"height"`
 }
 
