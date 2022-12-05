@@ -67,8 +67,4 @@ func (m *Module) refetchMissingBlocks() error {
 	}
 
 	return nil
-<<<<<<< HEAD
-=======
-
->>>>>>> 6823035056a955f797182700c6aeebb0f3a06864
 }
