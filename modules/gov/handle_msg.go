@@ -2,9 +2,8 @@ package gov
 
 import (
 	"fmt"
-	"time"
-
 	"strconv"
+	"time"
 
 	"github.com/forbole/bdjuno/v3/types"
 
