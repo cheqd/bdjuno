@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"time"
 
-	parsecmdtypes "github.com/forbole/juno/v3/cmd/parse/types"
 	"github.com/forbole/juno/v3/parser"
 	"github.com/forbole/juno/v3/types/config"
+
 	"github.com/go-co-op/gocron"
 	"github.com/rs/zerolog/log"
+
+	parsecmdtypes "github.com/forbole/juno/v3/cmd/parse/types"
 )
 
 func (m *Module) RegisterPeriodicOperations(scheduler *gocron.Scheduler) error {
