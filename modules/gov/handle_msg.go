@@ -2,9 +2,8 @@ package gov
 
 import (
 	"fmt"
-	"time"
-
 	"strconv"
+	"time"
 
 	"github.com/forbole/bdjuno/v3/types"
 
@@ -55,6 +54,13 @@ func (m *Module) handleMsgSubmitProposal(tx *juno.Tx, index int, msg *govtypes.M
 	proposal, err := m.source.Proposal(tx.Height, proposalID)
 	if err != nil {
 		return fmt.Errorf("error while getting proposal: %s", err)
+	}
+
+	// Unpack the content
+	var content govtypes.Content
+	err = m.cdc.UnpackAny(proposal.Content, &content)
+	if err != nil {
+		return fmt.Errorf("error while unpacking proposal content: %s", err)
 	}
 
 	// Store the proposal

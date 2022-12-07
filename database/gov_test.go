@@ -223,10 +223,10 @@ func (suite *DbTestSuite) TestBigDipperDb_GetOpenProposalsIds() {
 		"proposalType1",
 		content2,
 		types.ProposalStatusInvalid,
-		time.Date(2020, 1, 2, 00, 00, 00, 000, time.UTC),
-		time.Date(2020, 1, 2, 01, 00, 00, 000, time.UTC),
-		time.Date(2020, 1, 2, 02, 00, 00, 000, time.UTC),
-		time.Date(2020, 1, 2, 03, 00, 00, 000, time.UTC),
+		time.Date(2020, 1, 2, 0o0, 0o0, 0o0, 0o00, time.UTC),
+		time.Date(2020, 1, 2, 0o1, 0o0, 0o0, 0o00, time.UTC),
+		time.Date(2020, 1, 2, 0o2, 0o0, 0o0, 0o00, time.UTC),
+		time.Date(2020, 1, 2, 0o3, 0o0, 0o0, 0o00, time.UTC),
 		proposer2.String(),
 	)
 
@@ -348,9 +348,9 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveDeposits() {
 	depositor3 := suite.getAccount("cosmos1gyds87lg3m52hex9yqta2mtwzw89pfukx3jl7g")
 	amount3 := sdk.NewCoins(sdk.NewCoin("desmos", sdk.NewInt(50000)))
 
-	timestamp1 := time.Date(2020, 1, 1, 15, 00, 00, 000, time.UTC)
-	timestamp2 := time.Date(2020, 1, 1, 16, 00, 00, 000, time.UTC)
-	timestamp3 := time.Date(2020, 1, 1, 17, 00, 00, 000, time.UTC)
+	timestamp1 := time.Date(2020, 1, 1, 15, 0o0, 0o0, 0o00, time.UTC)
+	timestamp2 := time.Date(2020, 1, 1, 16, 0o0, 0o0, 0o00, time.UTC)
+	timestamp3 := time.Date(2020, 1, 1, 17, 0o0, 0o0, 0o00, time.UTC)
 
 	deposit := []types.Deposit{
 		types.NewDeposit(proposal.ProposalID, depositor.String(), amount, timestamp1, 10),
@@ -414,7 +414,7 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveVote() {
 	proposal := suite.getProposalRow(1)
 	voter := suite.getAccount("cosmos1z4hfrxvlgl4s8u4n5ngjcw8kdqrcv43599amxs")
 
-	timestamp := time.Date(2020, 1, 1, 15, 00, 00, 000, time.UTC)
+	timestamp := time.Date(2020, 1, 1, 15, 0o0, 0o0, 0o00, time.UTC)
 
 	vote := types.NewVote(1, voter.String(), govtypes.OptionYes, timestamp, 1)
 	err := suite.database.SaveVote(vote)
@@ -838,7 +838,7 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveSoftwareUpgradePlan() {
 
 	// ----------------------------------------------------------------------------------------------------------------
 	// Save software upgrade plan at height 10 with upgrade height at 100
-	var plan = upgradetypes.Plan{
+	plan := upgradetypes.Plan{
 		Name:   "name",
 		Height: 100,
 		Info:   "info",
@@ -917,7 +917,7 @@ func (suite *DbTestSuite) TestBigDipperDb_DeleteSoftwareUpgradePlan() {
 	_ = suite.getProposalRow(1)
 
 	// Save software upgrade plan at height 10 with upgrade height at 100
-	var plan = upgradetypes.Plan{
+	plan := upgradetypes.Plan{
 		Name:   "name",
 		Height: 100,
 		Info:   "info",
@@ -934,14 +934,13 @@ func (suite *DbTestSuite) TestBigDipperDb_DeleteSoftwareUpgradePlan() {
 	err = suite.database.Sqlx.Select(&rows, `SELECT * FROM software_upgrade_plan`)
 	suite.Require().NoError(err)
 	suite.Require().Len(rows, 0)
-
 }
 
 func (suite *DbTestSuite) TestBigDipperDb_CheckSoftwareUpgradePlan() {
 	_ = suite.getProposalRow(1)
 
 	// Save software upgrade plan at height 10 with upgrade height at 100
-	var plan = upgradetypes.Plan{
+	plan := upgradetypes.Plan{
 		Name: "name",
 		// the Height here is the upgrade height
 		Height: 100,
