@@ -40,7 +40,7 @@ func (m *Module) refetchMissingBlocks() error {
 	if err != nil {
 		return fmt.Errorf("error while getting block height from a day ago: %s", err)
 	}
-	startHeight := blockHeightDayAgo.Height
+	var startHeight = blockHeightDayAgo.Height
 
 	missingBlocks := m.database.GetMissingBlocks(startHeight, latestBlock)
 
@@ -67,4 +67,5 @@ func (m *Module) refetchMissingBlocks() error {
 	}
 
 	return nil
+
 }
