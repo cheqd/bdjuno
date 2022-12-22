@@ -403,7 +403,6 @@ WHERE proposal_validator_status_snapshot.height <= excluded.height`
 
 // SaveSoftwareUpgradePlan allows to save the given software upgrade plan with its proposal id
 func (db *Db) SaveSoftwareUpgradePlan(proposalID uint64, plan upgradetypes.Plan, height int64) error {
-
 	stmt := `
 INSERT INTO software_upgrade_plan(proposal_id, plan_name, upgrade_height, info, height) 
 VALUES ($1, $2, $3, $4, $5)
