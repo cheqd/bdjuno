@@ -3,7 +3,7 @@ module github.com/forbole/bdjuno/v3
 go 1.18
 
 require (
-	github.com/cheqd/cheqd-node v0.6.9
+	github.com/cheqd/cheqd-node v0.6.10
 	github.com/cosmos/cosmos-sdk v0.45.9
 	github.com/cosmos/gaia/v7 v7.0.2
 	github.com/forbole/juno/v3 v3.4.0
