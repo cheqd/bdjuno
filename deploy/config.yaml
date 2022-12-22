@@ -28,7 +28,7 @@ parsing:
     listen_new_blocks: true
     parse_old_blocks: true
     parse_genesis: true
-    start_height: 0
+    start_height: 1
     fast_sync: true
     average_block_time: 6s
 database:
