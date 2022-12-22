@@ -3,7 +3,7 @@
 [![GitHub license](https://img.shields.io/github/license/cheqd/bdjuno?color=blue&style=flat-square)](https://github.com/cheqd/bdjuno/blob/main/LICENSE)
 [![GitHub contributors](https://img.shields.io/github/contributors/cheqd/bdjuno?label=contributors%20%E2%9D%A4%EF%B8%8F&style=flat-square)](https://github.com/cheqd/bdjuno/graphs/contributors)
 
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/cheqd/bdjuno/dispatch.yml?branch=chains/cheqd/testnet&label=workflows&style=flat-square)](https://github.com/cheqd/bdjuno/actions/workflows/dispatch.yml) [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/cheqd/bdjuno/codeql.yml?branch=chains/cheqd/testnet&label=CodeQL&style=flat-square)](https://github.com/cheqd/bdjuno/actions/workflows/codeql.yml) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/cheqd/bdjuno?style=flat-square) ![GitHub repo size](https://img.shields.io/github/repo-size/cheqd/bdjuno?style=flat-square)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/cheqd/bdjuno/dispatch.yml?label=workflows&style=flat-square)](https://github.com/cheqd/bdjuno/actions/workflows/dispatch.yml) [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/cheqd/bdjuno/codeql.yml?label=CodeQL&style=flat-square)](https://github.com/cheqd/bdjuno/actions/workflows/codeql.yml) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/cheqd/bdjuno?style=flat-square) ![GitHub repo size](https://img.shields.io/github/repo-size/cheqd/bdjuno?style=flat-square)
 
 BDJuno (shorthand for BigDipper Juno) is the [Juno](https://github.com/forbole/juno) implementation
 for [BigDipper](https://github.com/forbole/big-dipper).
