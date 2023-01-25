@@ -144,15 +144,16 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace (
-	// BDJuno doesn't support Cosmos SDK v0.46.x yet
-	github.com/cosmos/cosmos-sdk v0.46.8 => github.com/cosmos/cosmos-sdk v0.45.12
+exclude github.com/cheqd/cheqd-node/app v1.2.2
 
+replace (
+	// From cheqd/cheqd-node
 	// Fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
+
+	// From cheqd/cheqd-node
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 
-	// Forbole Tendermint fork
-	github.com/tendermint/tendermint => github.com/forbole/tendermint v0.34.13-0.20210820072129-a2a4af55563d
+	// From cheqd/cheqd-node
 	google.golang.org/grpc => google.golang.org/grpc v1.33.2
 )
