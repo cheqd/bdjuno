@@ -3,8 +3,8 @@ module github.com/forbole/bdjuno/v3
 go 1.18
 
 require (
-	github.com/cheqd/cheqd-node v0.6.10
-	github.com/cosmos/cosmos-sdk v0.45.9
+	github.com/cheqd/cheqd-node v1.2.2
+	github.com/cosmos/cosmos-sdk v0.46.8
 	github.com/cosmos/gaia/v7 v7.0.2
 	github.com/forbole/juno/v3 v3.4.0
 	github.com/go-co-op/gocron v1.18.0
@@ -17,7 +17,7 @@ require (
 	github.com/rs/zerolog v1.28.0
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
-	github.com/tendermint/tendermint v0.34.21
+	github.com/tendermint/tendermint v0.34.24
 	google.golang.org/grpc v1.51.0
 	gopkg.in/yaml.v3 v3.0.1
 )
