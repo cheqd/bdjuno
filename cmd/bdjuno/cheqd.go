@@ -1,7 +1,7 @@
 package main
 
 import (
-	didMsgs "github.com/cheqd/cheqd-node/x/did/types"
+	didMsgs "github.com/cheqd/cheqd-node/x/cheqd/types"
 	resourceMsgs "github.com/cheqd/cheqd-node/x/resource/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
