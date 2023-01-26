@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/cheqd/cheqd-node v1.2.2
 	github.com/cosmos/cosmos-sdk v0.46.8
-	github.com/cosmos/gaia/v7 v7.0.2
+	github.com/cosmos/gaia/v7 v7.1.0
 	github.com/forbole/juno/v3 v3.4.0
 	github.com/go-co-op/gocron v1.18.0
 	github.com/gogo/protobuf v1.3.3
@@ -144,9 +144,10 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-exclude github.com/cheqd/cheqd-node/app v1.2.2
-
 replace (
+	// Replace cheqd/gaia with cheqd's fork
+	github.com/cosmos/gaia/v7 => github.com/cheqd/gaia/v7 v7.1.0-bdjuno-26012023
+
 	// From cheqd/cheqd-node
 	// Fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
