@@ -30,7 +30,7 @@ parsing:
     parse_genesis: true
     start_height: 1
     fast_sync: true
-    average_block_time: 6s
+    average_block_time: 7s
 database:
     name: DATABASE_NAME
     host: DATABASE_HOST

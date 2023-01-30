@@ -8,7 +8,7 @@ import (
 	"github.com/forbole/juno/v3/modules/messages"
 )
 
-// CheqdAddressesParser represents a MessageAddressesParser for the my custom module
+// CheqdAddressesParser func represents a MessageAddressesParser for the my custom module
 // here, we're using a DID as the address
 func CheqdAddressesParser(_ codec.Codec, cosmosMsg sdk.Msg) ([]string, error) {
 	switch msg := cosmosMsg.(type) {
