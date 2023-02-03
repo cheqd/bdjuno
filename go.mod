@@ -5,10 +5,10 @@ go 1.18
 require (
 	cosmossdk.io/math v1.0.0-beta.4 // indirect
 	github.com/cheqd/cheqd-node v1.2.2
-	github.com/cosmos/cosmos-sdk v0.46.8
 	// github.com/cosmos/ibc-go/v5 v5.2.0
 	// github.com/cosmos/gaia/v7 v7.0.2
-	github.com/forbole/juno/v4 v4.0.0-20221216051417-c9fd65dc46bc
+	github.com/cheqd/juno/v4 v4.0.2-cheqd
+	github.com/cosmos/cosmos-sdk v0.46.8
 	github.com/go-co-op/gocron v1.16.1
 	github.com/gogo/protobuf v1.3.3
 	github.com/jmoiron/sqlx v1.3.5
@@ -52,7 +52,6 @@ require (
 	github.com/cosmos/gogoproto v1.4.3 // indirect
 	github.com/cosmos/gorocksdb v1.2.0 // indirect
 	github.com/cosmos/iavl v0.19.4 // indirect
-	github.com/cosmos/ibc-go/v5 v5.1.0 // indirect
 	github.com/cosmos/ibc-go/v6 v6.1.0 // indirect
 	github.com/cosmos/ledger-cosmos-go v0.12.2 // indirect
 	github.com/creachadair/taskgroup v0.3.2 // indirect
@@ -179,7 +178,8 @@ replace (
 	github.com/confio/ics23/go => github.com/cosmos/cosmos-sdk/ics23/go v0.8.0
 	github.com/cosmos/iavl v0.15.3 => github.com/cosmos/iavl v0.19.4
 
-	github.com/cosmos/ibc-go/v6 => github.com/cosmos/ibc-go/v5 v5.2.0
+	// github.com/cosmos/ibc-go/v6 => github.com/cosmos/ibc-go/v5 v5.2.0
+	github.com/forbole/juno/v4 => github.com/cheqd/juno/v4 v4.0.1-cheqd
 
 	// Fee payer support
 	// github.com/cosmos/cosmos-sdk => github.com/cheqd/cosmos-sdk v0.45.9-cheqd-tag

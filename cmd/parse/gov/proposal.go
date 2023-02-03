@@ -9,12 +9,12 @@ import (
 	modulestypes "github.com/forbole/bdjuno/v3/modules/types"
 	"github.com/rs/zerolog/log"
 
+	parsecmdtypes "github.com/cheqd/juno/v4/cmd/parse/types"
+	"github.com/cheqd/juno/v4/types/config"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
-	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
-	"github.com/forbole/juno/v4/types/config"
 	"github.com/spf13/cobra"
 
-	"github.com/forbole/juno/v4/parser"
+	"github.com/cheqd/juno/v4/parser"
 
 	"github.com/forbole/bdjuno/v3/database"
 	"github.com/forbole/bdjuno/v3/modules/distribution"

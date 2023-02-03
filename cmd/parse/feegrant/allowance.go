@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sort"
 
-	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
-	"github.com/forbole/juno/v4/types/config"
+	parsecmdtypes "github.com/cheqd/juno/v4/cmd/parse/types"
+	"github.com/cheqd/juno/v4/types/config"
 
 	"github.com/forbole/bdjuno/v3/modules/feegrant"
 	"github.com/forbole/bdjuno/v3/utils"
