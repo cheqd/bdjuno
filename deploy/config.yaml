@@ -32,13 +32,7 @@ parsing:
     fast_sync: true
     average_block_time: 7s
 database:
-    name: DATABASE_NAME
-    host: DATABASE_HOST
-    port: 25060
-    user: DATABASE_USER
-    password: DATABASE_PASSWORD
-    ssl_mode: require
-    schema: public
+    url: DATABASE_URL
     max_open_connections: 40
     max_idle_connections: 10
     partition_size: 100000

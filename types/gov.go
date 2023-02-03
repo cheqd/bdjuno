@@ -4,7 +4,10 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+
+	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 )
 
 const (
@@ -18,7 +21,15 @@ type DepositParams struct {
 }
 
 // NewDepositParam allows to build a new DepositParams
-func NewDepositParam(d govtypes.DepositParams) DepositParams {
+func NewDepositParam(d *govtypes.DepositParams) DepositParams {
+	return DepositParams{
+		MinDeposit:       d.MinDeposit,
+		MaxDepositPeriod: d.MaxDepositPeriod.Nanoseconds(),
+	}
+}
+
+// NewGenesisDepositParam allows to build a new DepositParams
+func NewGenesisDepositParam(d *govtypesv1beta1.DepositParams) DepositParams {
 	return DepositParams{
 		MinDeposit:       d.MinDeposit,
 		MaxDepositPeriod: d.MaxDepositPeriod.Nanoseconds(),
@@ -31,7 +42,14 @@ type VotingParams struct {
 }
 
 // NewVotingParams allows to build a new VotingParams instance
-func NewVotingParams(v govtypes.VotingParams) VotingParams {
+func NewVotingParams(v *govtypes.VotingParams) VotingParams {
+	return VotingParams{
+		VotingPeriod: v.VotingPeriod.Nanoseconds(),
+	}
+}
+
+// NewGenesisVotingParams allows to build a new VotingParams instance
+func NewGenesisVotingParams(v *govtypesv1beta1.VotingParams) VotingParams {
 	return VotingParams{
 		VotingPeriod: v.VotingPeriod.Nanoseconds(),
 	}
@@ -39,22 +57,46 @@ func NewVotingParams(v govtypes.VotingParams) VotingParams {
 
 // GovParams contains the data of the x/gov module parameters
 type GovParams struct {
-	TallyParams   TallyParams   `json:"tally_params" yaml:"tally_params"`
 	DepositParams DepositParams `json:"deposit_params" yaml:"deposit_params"`
-	Height        int64         `json:"height" ymal:"height"`
 	VotingParams  VotingParams  `json:"voting_params" yaml:"voting_params"`
+	TallyParams   TallyParams   `json:"tally_params" yaml:"tally_params"`
+	Height        int64         `json:"height" ymal:"height"`
+}
+
+// GenesisGovParams contains the data of the x/gov module parameters
+type GenesisGovParams struct {
+	DepositParams DepositParams      `json:"deposit_params" yaml:"deposit_params"`
+	VotingParams  VotingParams       `json:"voting_params" yaml:"voting_params"`
+	TallyParams   GenesisTallyParams `json:"tally_params" yaml:"tally_params"`
+	Height        int64              `json:"height" ymal:"height"`
 }
 
 // TallyParams contains the tally parameters of the x/gov module
 type TallyParams struct {
+	Quorum        string `json:"quorum,omitempty"`
+	Threshold     string `json:"threshold,omitempty"`
+	VetoThreshold string `json:"veto_threshold,omitempty" yaml:"veto_threshold"`
+}
+
+// GenesisTallyParams contains genesis tally parameters of the x/gov module
+type GenesisTallyParams struct {
 	Quorum        sdk.Dec `json:"quorum,omitempty"`
 	Threshold     sdk.Dec `json:"threshold,omitempty"`
 	VetoThreshold sdk.Dec `json:"veto_threshold,omitempty" yaml:"veto_threshold"`
 }
 
 // NewTallyParams allows to build a new TallyParams instance
-func NewTallyParams(t govtypes.TallyParams) TallyParams {
+func NewTallyParams(t *govtypes.TallyParams) TallyParams {
 	return TallyParams{
+		Quorum:        t.Quorum,
+		Threshold:     t.Threshold,
+		VetoThreshold: t.VetoThreshold,
+	}
+}
+
+// NewGenesisTallyParams allows to build a new GenesisTallyParams instance
+func NewGenesisTallyParams(t *govtypesv1beta1.TallyParams) GenesisTallyParams {
+	return GenesisTallyParams{
 		Quorum:        t.Quorum,
 		Threshold:     t.Threshold,
 		VetoThreshold: t.VetoThreshold,
@@ -71,20 +113,30 @@ func NewGovParams(votingParams VotingParams, depositParams DepositParams, tallyP
 	}
 }
 
+// NewGenesisGovParams allows to build a new GenesisGovParams instance
+func NewGenesisGovParams(votingParams VotingParams, depositParams DepositParams, tallyParams GenesisTallyParams, height int64) *GenesisGovParams {
+	return &GenesisGovParams{
+		DepositParams: depositParams,
+		VotingParams:  votingParams,
+		TallyParams:   tallyParams,
+		Height:        height,
+	}
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // Proposal represents a single governance proposal
 type Proposal struct {
-	SubmitTime      time.Time
-	DepositEndTime  time.Time
-	VotingStartTime time.Time
-	VotingEndTime   time.Time
-	Content         govtypes.Content
 	ProposalRoute   string
 	ProposalType    string
-	Status          string
-	Proposer        string
 	ProposalID      uint64
+	Content         govtypesv1beta1.Content
+	Status          string
+	SubmitTime      *time.Time
+	DepositEndTime  *time.Time
+	VotingStartTime *time.Time
+	VotingEndTime   *time.Time
+	Proposer        string
 }
 
 // NewProposal return a new Proposal instance
@@ -92,12 +144,12 @@ func NewProposal(
 	proposalID uint64,
 	proposalRoute string,
 	proposalType string,
-	content govtypes.Content,
+	content govtypesv1beta1.Content,
 	status string,
-	submitTime time.Time,
-	depositEndTime time.Time,
-	votingStartTime time.Time,
-	votingEndTime time.Time,
+	submitTime *time.Time,
+	depositEndTime *time.Time,
+	votingStartTime *time.Time,
+	votingEndTime *time.Time,
 	proposer string,
 ) Proposal {
 	return Proposal{
@@ -119,26 +171,26 @@ func (p Proposal) Equal(other Proposal) bool {
 	return p.ProposalRoute == other.ProposalRoute &&
 		p.ProposalType == other.ProposalType &&
 		p.ProposalID == other.ProposalID &&
-		p.Content.String() == other.Content.String() &&
+		p.Content == other.Content &&
 		p.Status == other.Status &&
-		p.SubmitTime.Equal(other.SubmitTime) &&
-		p.DepositEndTime.Equal(other.DepositEndTime) &&
-		p.VotingStartTime.Equal(other.VotingStartTime) &&
-		p.VotingEndTime.Equal(other.VotingEndTime) &&
+		p.SubmitTime == other.SubmitTime &&
+		p.DepositEndTime == other.DepositEndTime &&
+		p.VotingStartTime == other.VotingStartTime &&
+		p.VotingEndTime == other.VotingEndTime &&
 		p.Proposer == other.Proposer
 }
 
 // ProposalUpdate contains the data that should be used when updating a governance proposal
 type ProposalUpdate struct {
-	VotingStartTime time.Time
-	VotingEndTime   time.Time
-	Status          string
 	ProposalID      uint64
+	Status          string
+	VotingStartTime *time.Time
+	VotingEndTime   *time.Time
 }
 
 // NewProposalUpdate allows to build a new ProposalUpdate instance
 func NewProposalUpdate(
-	proposalID uint64, status string, votingStartTime, votingEndTime time.Time,
+	proposalID uint64, status string, votingStartTime, votingEndTime *time.Time,
 ) ProposalUpdate {
 	return ProposalUpdate{
 		ProposalID:      proposalID,
@@ -208,11 +260,11 @@ func NewVote(
 
 // TallyResult contains the data about the final results of a proposal
 type TallyResult struct {
+	ProposalID uint64
 	Yes        string
 	Abstain    string
 	No         string
 	NoWithVeto string
-	ProposalID uint64
 	Height     int64
 }
 
@@ -239,8 +291,8 @@ func NewTallyResult(
 
 // ProposalStakingPoolSnapshot contains the data about a single staking pool snapshot to be associated with a proposal
 type ProposalStakingPoolSnapshot struct {
-	Pool       *Pool
 	ProposalID uint64
+	Pool       *Pool
 }
 
 // NewProposalStakingPoolSnapshot returns a new ProposalStakingPoolSnapshot instance
@@ -256,12 +308,12 @@ func NewProposalStakingPoolSnapshot(proposalID uint64, pool *Pool) ProposalStaki
 // ProposalValidatorStatusSnapshot represents a single snapshot of the status of a validator associated
 // with a single proposal
 type ProposalValidatorStatusSnapshot struct {
-	ValidatorConsAddress string
 	ProposalID           uint64
+	ValidatorConsAddress string
 	ValidatorVotingPower int64
 	ValidatorStatus      int
-	Height               int64
 	ValidatorJailed      bool
+	Height               int64
 }
 
 // NewProposalValidatorStatusSnapshot returns a new ProposalValidatorStatusSnapshot instance
