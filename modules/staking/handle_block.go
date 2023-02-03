@@ -6,8 +6,8 @@ import (
 
 	"github.com/forbole/bdjuno/v3/types"
 
+	juno "github.com/cheqd/juno/v4/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	juno "github.com/forbole/juno/v3/types"
 
 	"github.com/rs/zerolog/log"
 	tmctypes "github.com/tendermint/tendermint/rpc/core/types"

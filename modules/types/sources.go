@@ -7,19 +7,19 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/tendermint/tendermint/libs/log"
 
+	"github.com/cheqd/juno/v4/node/remote"
 	"github.com/cosmos/cosmos-sdk/simapp/params"
-	"github.com/forbole/juno/v3/node/remote"
 
+	"github.com/cheqd/juno/v4/node/local"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/forbole/juno/v3/node/local"
 
-	nodeconfig "github.com/forbole/juno/v3/node/config"
+	nodeconfig "github.com/cheqd/juno/v4/node/config"
 
 	banksource "github.com/forbole/bdjuno/v3/modules/bank/source"
 	localbanksource "github.com/forbole/bdjuno/v3/modules/bank/source/local"
