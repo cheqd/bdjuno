@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/cheqd/cheqd-node/app"
+	"github.com/cheqd/juno/v4/cmd"
+	initcmd "github.com/cheqd/juno/v4/cmd/init"
+	parsetypes "github.com/cheqd/juno/v4/cmd/parse/types"
+	startcmd "github.com/cheqd/juno/v4/cmd/start"
+	"github.com/cheqd/juno/v4/modules/messages"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/forbole/juno/v3/cmd"
-	initcmd "github.com/forbole/juno/v3/cmd/init"
-	parsetypes "github.com/forbole/juno/v3/cmd/parse/types"
-	startcmd "github.com/forbole/juno/v3/cmd/start"
-	"github.com/forbole/juno/v3/modules/messages"
 
 	migratecmd "github.com/forbole/bdjuno/v3/cmd/migrate"
 	parsecmd "github.com/forbole/bdjuno/v3/cmd/parse"
@@ -16,8 +16,7 @@ import (
 
 	"github.com/forbole/bdjuno/v3/database"
 	"github.com/forbole/bdjuno/v3/modules"
-
-	gaiaapp "github.com/cosmos/gaia/v7/app"
+	// gaiaapp "github.com/cosmos/gaia/v7/app"
 )
 
 func main() {
@@ -56,7 +55,7 @@ func main() {
 // This should be edited by custom implementations if needed.
 func getBasicManagers() []module.BasicManager {
 	return []module.BasicManager{
-		gaiaapp.ModuleBasics,
+		// gaiaapp.ModuleBasics,
 		app.ModuleBasics,
 	}
 }
