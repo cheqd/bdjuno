@@ -3,13 +3,13 @@ module github.com/forbole/bdjuno/v3
 go 1.18
 
 require (
-	cosmossdk.io/math v1.0.0-beta.4 // indirect
+	cosmossdk.io/math v1.0.0-beta.4
 	github.com/cheqd/cheqd-node v1.2.2
 	// github.com/cosmos/ibc-go/v5 v5.2.0
 	// github.com/cosmos/gaia/v7 v7.0.2
 	github.com/cheqd/juno/v4 v4.0.2-cheqd
 	github.com/cosmos/cosmos-sdk v0.46.8
-	github.com/go-co-op/gocron v1.16.1
+	github.com/go-co-op/gocron v1.18.0
 	github.com/gogo/protobuf v1.3.3
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/lib/pq v1.10.7
