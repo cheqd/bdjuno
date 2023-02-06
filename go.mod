@@ -3,7 +3,7 @@ module github.com/forbole/bdjuno/v3
 go 1.18
 
 require (
-	cosmossdk.io/math v1.0.0-beta.4 // indirect
+	cosmossdk.io/math v1.0.0-beta.4
 	github.com/cheqd/cheqd-node v1.2.2
 	// github.com/cosmos/ibc-go/v5 v5.2.0
 	// github.com/cosmos/gaia/v7 v7.0.2
@@ -20,7 +20,7 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
 	github.com/tendermint/tendermint v0.34.24
-	google.golang.org/grpc v1.51.0
+	google.golang.org/grpc v1.52.3
 	gopkg.in/yaml.v3 v3.0.1
 )
 
