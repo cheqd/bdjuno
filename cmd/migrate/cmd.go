@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	parsecmdtypes "github.com/cheqd/juno/v4/cmd/parse/types"
+	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
 	"github.com/spf13/cobra"
 
 	v3 "github.com/forbole/bdjuno/v3/cmd/migrate/v3"
@@ -12,9 +12,11 @@ import (
 
 type Migrator func(parseCfg *parsecmdtypes.Config) error
 
-var migrations = map[string]Migrator{
-	"v3": v3.RunMigration,
-}
+var (
+	migrations = map[string]Migrator{
+		"v3": v3.RunMigration,
+	}
+)
 
 func getVersions() []string {
 	var versions []string

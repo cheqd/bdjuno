@@ -6,6 +6,7 @@ import (
 	juno "github.com/cheqd/juno/v4/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	feegranttypes "github.com/cosmos/cosmos-sdk/x/feegrant"
+	juno "github.com/forbole/juno/v4/types"
 
 	"github.com/forbole/bdjuno/v3/types"
 )
