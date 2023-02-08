@@ -18,6 +18,7 @@ import (
 	"github.com/forbole/bdjuno/v3/modules/mint"
 	"github.com/forbole/bdjuno/v3/modules/slashing"
 	"github.com/forbole/bdjuno/v3/modules/staking"
+	"github.com/forbole/bdjuno/v3/utils"
 	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
 	"github.com/forbole/juno/v4/parser"
 	"github.com/forbole/juno/v4/types/config"
