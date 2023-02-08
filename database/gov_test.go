@@ -78,10 +78,6 @@ func (suite *DbTestSuite) getProposalRow(id int) types.Proposal {
 	description := fmt.Sprintf("description%d", id)
 	proposalRoute := fmt.Sprintf("proposalRoute%d", id)
 	proposalType := fmt.Sprintf("proposalType%d", id)
-	timestamp1 := time.Date(2020, 1, 1, 00, 00, 00, 000, time.UTC)
-	timestamp2 := time.Date(2020, 1, 1, 01, 00, 00, 000, time.UTC)
-	timestamp3 := time.Date(2020, 1, 1, 02, 00, 00, 000, time.UTC)
-	timestamp4 := time.Date(2020, 1, 1, 03, 00, 00, 000, time.UTC)
 
 	proposal := types.NewProposal(
 		uint64(id),
@@ -164,10 +160,10 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveProposals() {
 			"title",
 			"description",
 			suite.encodeProposalContent(content1),
-			&timestamp1,
-			&timestamp2,
-			&timestamp3,
-			&timestamp4,
+			time.Date(2020, 1, 1, 00, 00, 00, 000, time.UTC),
+			time.Date(2020, 1, 1, 01, 00, 00, 000, time.UTC),
+			time.Date(2020, 1, 1, 02, 00, 00, 000, time.UTC),
+			time.Date(2020, 1, 1, 03, 00, 00, 000, time.UTC),
 			proposer1.String(),
 			govtypesv1.StatusDepositPeriod.String(),
 		),
@@ -178,10 +174,10 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveProposals() {
 			"title1",
 			"description1",
 			suite.encodeProposalContent(content2),
-			&timestamp5,
-			&timestamp6,
-			&timestamp7,
-			&timestamp8,
+			time.Date(2020, 1, 2, 00, 00, 00, 000, time.UTC),
+			time.Date(2020, 1, 2, 01, 00, 00, 000, time.UTC),
+			time.Date(2020, 1, 2, 02, 00, 00, 000, time.UTC),
+			time.Date(2020, 1, 2, 03, 00, 00, 000, time.UTC),
 			proposer2.String(),
 			govtypesv1.StatusPassed.String(),
 		),
@@ -194,10 +190,6 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveProposals() {
 func (suite *DbTestSuite) TestBigDipperDb_GetProposal() {
 	content := govtypesv1beta1.NewTextProposal("title", "description")
 	proposer := suite.getAccount("cosmos1z4hfrxvlgl4s8u4n5ngjcw8kdqrcv43599amxs")
-	timestamp1 := time.Date(2020, 1, 1, 00, 00, 00, 000, time.UTC)
-	timestamp2 := time.Date(2020, 1, 1, 01, 00, 00, 000, time.UTC)
-	timestamp3 := time.Date(2020, 1, 1, 02, 00, 00, 000, time.UTC)
-	timestamp4 := time.Date(2020, 1, 1, 03, 00, 00, 000, time.UTC)
 	proposal := types.NewProposal(
 		1,
 		"proposalRoute",
@@ -652,7 +644,7 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveProposalValidatorsStatusesSnapshot
 	// ----------------------------------------------------------------------------------------------------------------
 	// Save snapshots
 
-	snapshots := []types.ProposalValidatorStatusSnapshot{
+	var snapshots = []types.ProposalValidatorStatusSnapshot{
 		types.NewProposalValidatorStatusSnapshot(
 			1,
 			validator1.GetConsAddr(),
@@ -947,6 +939,7 @@ func (suite *DbTestSuite) TestBigDipperDb_DeleteSoftwareUpgradePlan() {
 	err = suite.database.Sqlx.Select(&rows, `SELECT * FROM software_upgrade_plan`)
 	suite.Require().NoError(err)
 	suite.Require().Len(rows, 0)
+
 }
 
 func (suite *DbTestSuite) TestBigDipperDb_CheckSoftwareUpgradePlan() {

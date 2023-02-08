@@ -17,10 +17,10 @@ type GovParamsRow struct {
 
 // ProposalRow represents a single row inside the proposal table
 type ProposalRow struct {
-	SubmitTime      *time.Time `db:"submit_time"`
-	DepositEndTime  *time.Time `db:"deposit_end_time"`
-	VotingStartTime *time.Time `db:"voting_start_time"`
-	VotingEndTime   *time.Time `db:"voting_end_time"`
+	SubmitTime      time.Time `db:"submit_time"`
+	DepositEndTime  time.Time `db:"deposit_end_time"`
+	VotingStartTime time.Time `db:"voting_start_time"`
+	VotingEndTime   time.Time `db:"voting_end_time"`
 	Title           string     `db:"title"`
 	Description     string     `db:"description"`
 	Content         string     `db:"content"`
@@ -39,10 +39,10 @@ func NewProposalRow(
 	title string,
 	description string,
 	content string,
-	submitTime *time.Time,
-	depositEndTime *time.Time,
-	votingStartTime *time.Time,
-	votingEndTime *time.Time,
+	submitTime time.Time,
+	depositEndTime time.Time,
+	votingStartTime time.Time,
+	votingEndTime time.Time,
 	proposer string,
 	status string,
 ) ProposalRow {

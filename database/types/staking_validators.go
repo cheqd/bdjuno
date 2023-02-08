@@ -240,9 +240,7 @@ type ValidatorStatusRow struct {
 	Status      int    `db:"status"`
 	Jailed      bool   `db:"jailed"`
 	ConsAddress string `db:"validator_address"`
-	Status      int    `db:"status"`
 	Height      int64  `db:"height"`
-	Jailed      bool   `db:"jailed"`
 }
 
 // NewValidatorStatusRow builds a new ValidatorStatusRow

@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"strconv"
-	"time"
 
 	"github.com/forbole/bdjuno/v3/types"
 
@@ -96,11 +95,6 @@ func (m *Module) handleMsgDeposit(tx *juno.Tx, msg *govtypesv1.MsgDeposit) error
 	if err != nil {
 		return fmt.Errorf("error while getting proposal deposit: %s", err)
 	}
-	txTimestamp, err := time.Parse(time.RFC3339, tx.Timestamp)
-	if err != nil {
-		return fmt.Errorf("error while parsing time: %s", err)
-	}
-
 	txTimestamp, err := time.Parse(time.RFC3339, tx.Timestamp)
 	if err != nil {
 		return fmt.Errorf("error while parsing time: %s", err)

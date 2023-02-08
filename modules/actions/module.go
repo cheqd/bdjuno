@@ -1,11 +1,6 @@
 package actions
 
 import (
-	"github.com/cheqd/juno/v4/modules"
-	"github.com/cheqd/juno/v4/node"
-	"github.com/cheqd/juno/v4/node/builder"
-	nodeconfig "github.com/cheqd/juno/v4/node/config"
-	"github.com/cheqd/juno/v4/types/config"
 	"github.com/cosmos/cosmos-sdk/simapp/params"
 	"github.com/forbole/juno/v4/modules"
 	"github.com/forbole/juno/v4/node"

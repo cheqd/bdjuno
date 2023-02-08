@@ -3,11 +3,9 @@ package local
 import (
 	"fmt"
 
-	"github.com/cheqd/juno/v4/node/local"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypesv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
-
 	"github.com/forbole/juno/v4/node/local"
 
 	govsource "github.com/forbole/bdjuno/v3/modules/gov/source"

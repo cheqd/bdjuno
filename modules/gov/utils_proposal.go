@@ -136,7 +136,7 @@ func (m *Module) handleParamChangeProposal(height int64, paramChangeProposal *pr
 func (m *Module) updateProposalStatus(proposal govtypesv1beta1.Proposal) error {
 	return m.db.UpdateProposal(
 		types.NewProposalUpdate(
-			proposal.Id,
+			proposal.ProposalId,
 			proposal.Status.String(),
 			proposal.VotingStartTime,
 			proposal.VotingEndTime,
@@ -151,7 +151,7 @@ func (m *Module) updateProposalTallyResult(proposal govtypesv1beta1.Proposal) er
 		return err
 	}
 
-	result, err := m.source.TallyResult(height, proposal.Id)
+	result, err := m.source.TallyResult(height, proposal.ProposalId)
 	if err != nil {
 		return fmt.Errorf("error while getting tally result: %s", err)
 	}

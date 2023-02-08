@@ -132,10 +132,10 @@ type Proposal struct {
 	ProposalID      uint64
 	Content         govtypesv1beta1.Content
 	Status          string
-	SubmitTime      *time.Time
-	DepositEndTime  *time.Time
-	VotingStartTime *time.Time
-	VotingEndTime   *time.Time
+	SubmitTime      time.Time
+	DepositEndTime  time.Time
+	VotingStartTime time.Time
+	VotingEndTime   time.Time
 	Proposer        string
 }
 
@@ -146,10 +146,10 @@ func NewProposal(
 	proposalType string,
 	content govtypesv1beta1.Content,
 	status string,
-	submitTime *time.Time,
-	depositEndTime *time.Time,
-	votingStartTime *time.Time,
-	votingEndTime *time.Time,
+	submitTime time.Time,
+	depositEndTime time.Time,
+	votingStartTime time.Time,
+	votingEndTime time.Time,
 	proposer string,
 ) Proposal {
 	return Proposal{
@@ -184,13 +184,13 @@ func (p Proposal) Equal(other Proposal) bool {
 type ProposalUpdate struct {
 	ProposalID      uint64
 	Status          string
-	VotingStartTime *time.Time
-	VotingEndTime   *time.Time
+	VotingStartTime time.Time
+	VotingEndTime   time.Time
 }
 
 // NewProposalUpdate allows to build a new ProposalUpdate instance
 func NewProposalUpdate(
-	proposalID uint64, status string, votingStartTime, votingEndTime *time.Time,
+	proposalID uint64, status string, votingStartTime, votingEndTime time.Time,
 ) ProposalUpdate {
 	return ProposalUpdate{
 		ProposalID:      proposalID,

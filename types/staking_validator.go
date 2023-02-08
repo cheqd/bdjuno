@@ -104,6 +104,7 @@ func NewValidatorDescription(
 
 // ValidatorCommission contains the data of a validator commission at a given height
 type ValidatorCommission struct {
+	ValAddress        string
 	Commission        *sdk.Dec
 	MinSelfDelegation *sdkmath.Int
 	Height            int64

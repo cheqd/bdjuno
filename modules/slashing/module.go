@@ -1,7 +1,6 @@
 package slashing
 
 import (
-	"github.com/cheqd/juno/v4/modules"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/forbole/juno/v4/modules"
 

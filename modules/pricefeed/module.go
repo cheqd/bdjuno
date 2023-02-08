@@ -1,7 +1,6 @@
 package pricefeed
 
 import (
-	"github.com/cheqd/juno/v4/types/config"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/forbole/juno/v4/types/config"
 

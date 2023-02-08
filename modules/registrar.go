@@ -9,9 +9,6 @@ import (
 
 	"github.com/forbole/bdjuno/v3/modules/slashing"
 
-	jmodules "github.com/cheqd/juno/v4/modules"
-	"github.com/cheqd/juno/v4/modules/messages"
-	"github.com/cheqd/juno/v4/modules/registrar"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	jmodules "github.com/forbole/juno/v4/modules"
