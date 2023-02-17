@@ -7,7 +7,6 @@ import (
 	"time"
 
 	modulestypes "github.com/forbole/bdjuno/v3/modules/types"
-	"github.com/forbole/bdjuno/v3/utils"
 	"github.com/rs/zerolog/log"
 
 	govtypesv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
