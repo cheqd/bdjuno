@@ -9,9 +9,11 @@ import (
 
 	juno "github.com/cheqd/juno/v4/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	govtypesv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+
 	gov "github.com/cosmos/cosmos-sdk/x/gov/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+	juno "github.com/forbole/juno/v4/types"
 )
 
 // HandleMsg implements modules.MessageModule
@@ -24,10 +26,10 @@ func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
 	case *govtypesv1beta1.MsgSubmitProposal:
 		return m.handleMsgSubmitProposal(tx, index, cosmosMsg)
 
-	case *govtypesv1beta1.MsgDeposit:
+	case *govtypesv1.MsgDeposit:
 		return m.handleMsgDeposit(tx, cosmosMsg)
 
-	case *govtypes.MsgVote:
+	case *govtypesv1.MsgVote:
 		return m.handleMsgVote(tx, cosmosMsg)
 	}
 
@@ -67,7 +69,7 @@ func (m *Module) handleMsgSubmitProposal(tx *juno.Tx, index int, msg *govtypesv1
 
 	// Store the proposal
 	proposalObj := types.NewProposal(
-		proposal.Id,
+		proposal.ProposalId,
 		msg.GetContent().ProposalRoute(),
 		msg.GetContent().ProposalType(),
 		msg.GetContent(),
@@ -78,6 +80,7 @@ func (m *Module) handleMsgSubmitProposal(tx *juno.Tx, index int, msg *govtypesv1
 		proposal.VotingEndTime,
 		msg.Proposer,
 	)
+
 	err = m.db.SaveProposals([]types.Proposal{proposalObj})
 	if err != nil {
 		return err
@@ -94,12 +97,11 @@ func (m *Module) handleMsgSubmitProposal(tx *juno.Tx, index int, msg *govtypesv1
 }
 
 // handleMsgDeposit allows to properly handle a handleMsgDeposit
-func (m *Module) handleMsgDeposit(tx *juno.Tx, msg *govtypesv1beta1.MsgDeposit) error {
+func (m *Module) handleMsgDeposit(tx *juno.Tx, msg *govtypesv1.MsgDeposit) error {
 	deposit, err := m.source.ProposalDeposit(tx.Height, msg.ProposalId, msg.Depositor)
 	if err != nil {
 		return fmt.Errorf("error while getting proposal deposit: %s", err)
 	}
-
 	txTimestamp, err := time.Parse(time.RFC3339, tx.Timestamp)
 	if err != nil {
 		return fmt.Errorf("error while parsing time: %s", err)
@@ -111,7 +113,7 @@ func (m *Module) handleMsgDeposit(tx *juno.Tx, msg *govtypesv1beta1.MsgDeposit) 
 }
 
 // handleMsgVote allows to properly handle a handleMsgVote
-func (m *Module) handleMsgVote(tx *juno.Tx, msg *govtypes.MsgVote) error {
+func (m *Module) handleMsgVote(tx *juno.Tx, msg *govtypesv1.MsgVote) error {
 	txTimestamp, err := time.Parse(time.RFC3339, tx.Timestamp)
 	if err != nil {
 		return fmt.Errorf("error while parsing time: %s", err)

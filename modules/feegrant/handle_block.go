@@ -7,6 +7,7 @@ import (
 
 	juno "github.com/cheqd/juno/v4/types"
 	feegranttypes "github.com/cosmos/cosmos-sdk/x/feegrant"
+	juno "github.com/forbole/juno/v4/types"
 
 	"github.com/rs/zerolog/log"
 	tmctypes "github.com/tendermint/tendermint/rpc/core/types"

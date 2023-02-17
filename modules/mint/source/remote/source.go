@@ -4,6 +4,7 @@ import (
 	"github.com/cheqd/juno/v4/node/remote"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
+	"github.com/forbole/juno/v4/node/remote"
 
 	mintsource "github.com/forbole/bdjuno/v3/modules/mint/source"
 )
