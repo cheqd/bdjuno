@@ -10,6 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp/params"
 	"github.com/forbole/juno/v4/node/remote"
 
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	govtypesv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
@@ -22,6 +23,9 @@ import (
 
 	nodeconfig "github.com/forbole/juno/v4/node/config"
 
+	authsource "github.com/forbole/bdjuno/v3/modules/auth/source"
+	localauthsource "github.com/forbole/bdjuno/v3/modules/auth/source/local"
+	remoteauthsource "github.com/forbole/bdjuno/v3/modules/auth/source/remote"
 	banksource "github.com/forbole/bdjuno/v3/modules/bank/source"
 	localbanksource "github.com/forbole/bdjuno/v3/modules/bank/source/local"
 	remotebanksource "github.com/forbole/bdjuno/v3/modules/bank/source/remote"
