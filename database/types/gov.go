@@ -22,13 +22,13 @@ type ProposalRow struct {
 	VotingStartTime *time.Time `db:"voting_start_time"`
 	VotingEndTime   *time.Time `db:"voting_end_time"`
 	Title           string     `db:"title"`
-	Description     string     `db:"description"`
-	Content         string     `db:"content"`
-	ProposalRoute   string     `db:"proposal_route"`
-	ProposalType    string     `db:"proposal_type"`
-	Proposer        string     `db:"proposer_address"`
-	Status          string     `db:"status"`
-	ProposalID      uint64     `db:"id"`
+	Description     string    `db:"description"`
+	Content         string    `db:"content"`
+	ProposalRoute   string    `db:"proposal_route"`
+	ProposalType    string    `db:"proposal_type"`
+	Proposer        string    `db:"proposer_address"`
+	Status          string    `db:"status"`
+	ProposalID      uint64    `db:"id"`
 }
 
 // NewProposalRow allows to easily create a new ProposalRow
