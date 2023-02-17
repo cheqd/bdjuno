@@ -7,9 +7,9 @@ import (
 
 	"github.com/forbole/bdjuno/v3/types"
 
-	juno "github.com/cheqd/juno/v4/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypesv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+	juno "github.com/forbole/juno/v4/types"
 
 	gov "github.com/cosmos/cosmos-sdk/x/gov/types"
 	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"

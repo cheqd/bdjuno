@@ -3,7 +3,6 @@ package local
 import (
 	"fmt"
 
-	"github.com/cheqd/juno/v4/node/local"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"

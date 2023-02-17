@@ -1,7 +1,6 @@
 package distribution
 
 import (
-	juno "github.com/cheqd/juno/v4/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	juno "github.com/forbole/juno/v4/types"
 
