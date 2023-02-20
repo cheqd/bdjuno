@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sort"
 
-	parsecmdtypes "github.com/forbole/juno/v3/cmd/parse/types"
-	"github.com/forbole/juno/v3/types/config"
+	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
+	"github.com/forbole/juno/v4/types/config"
 
 	"github.com/forbole/bdjuno/v3/modules/feegrant"
 	"github.com/forbole/bdjuno/v3/utils"
@@ -36,7 +36,7 @@ func allowanceCmd(parseConfig *parsecmdtypes.Config) *cobra.Command {
 			db := database.Cast(parseCtx.Database)
 
 			// Build feegrant module
-			feegrantModule := feegrant.NewModule(parseCtx.EncodingConfig.Marshaler, db)
+			feegrantModule := feegrant.NewModule(parseCtx.EncodingConfig.Codec, db)
 
 			// Get the accounts
 			// Collect all the transactions

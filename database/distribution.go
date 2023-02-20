@@ -21,7 +21,7 @@ ON CONFLICT (one_row_id) DO UPDATE
     SET coins = excluded.coins,
         height = excluded.height
 WHERE community_pool.height <= excluded.height`
-	_, err := db.Sql.Exec(query, pq.Array(dbtypes.NewDbDecCoins(coin)), height)
+	_, err := db.SQL.Exec(query, pq.Array(dbtypes.NewDbDecCoins(coin)), height)
 	if err != nil {
 		return fmt.Errorf("error while storing community pool: %s", err)
 	}
@@ -45,10 +45,21 @@ ON CONFLICT (one_row_id) DO UPDATE
     SET params = excluded.params,
       	height = excluded.height
 WHERE distribution_params.height <= excluded.height`
-	_, err = db.Sql.Exec(stmt, string(paramsBz), params.Height)
+	_, err = db.SQL.Exec(stmt, string(paramsBz), params.Height)
 	if err != nil {
 		return fmt.Errorf("error while storing distribution params: %s", err)
 	}
 
 	return nil
+}
+
+// GetDelegators returns the current delegators set
+func (db *Db) GetDelegators() ([]string, error) {
+	var rows []string
+	err := db.Sqlx.Select(&rows, `SELECT DISTINCT (address) FROM top_accounts `)
+	if err != nil {
+		return nil, err
+	}
+
+	return rows, nil
 }
