@@ -4,16 +4,16 @@ import (
 	"github.com/forbole/bdjuno/v3/modules/actions"
 	"github.com/forbole/bdjuno/v3/modules/types"
 
-	"github.com/cheqd/juno/v4/modules/pruning"
-	"github.com/cheqd/juno/v4/modules/telemetry"
+	"github.com/forbole/juno/v4/modules/pruning"
+	"github.com/forbole/juno/v4/modules/telemetry"
 
 	"github.com/forbole/bdjuno/v3/modules/slashing"
 
-	jmodules "github.com/cheqd/juno/v4/modules"
-	"github.com/cheqd/juno/v4/modules/messages"
-	"github.com/cheqd/juno/v4/modules/registrar"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	jmodules "github.com/forbole/juno/v4/modules"
+	"github.com/forbole/juno/v4/modules/messages"
+	"github.com/forbole/juno/v4/modules/registrar"
 
 	"github.com/forbole/bdjuno/v3/utils"
 
@@ -30,6 +30,7 @@ import (
 	"github.com/forbole/bdjuno/v3/modules/modules"
 	"github.com/forbole/bdjuno/v3/modules/pricefeed"
 	"github.com/forbole/bdjuno/v3/modules/staking"
+	topaccounts "github.com/forbole/bdjuno/v3/modules/top_accounts"
 	"github.com/forbole/bdjuno/v3/modules/upgrade"
 )
 
@@ -72,7 +73,7 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 	}
 
 	actionsModule := actions.NewModule(ctx.JunoConfig, ctx.EncodingConfig)
-	authModule := auth.NewModule(r.parser, cdc, db)
+	authModule := auth.NewModule(sources.AuthSource, r.parser, cdc, db)
 	bankModule := bank.NewModule(r.parser, sources.BankSource, cdc, db)
 	consensusModule := consensus.NewModule(db)
 	dailyRefetchModule := dailyrefetch.NewModule(ctx.Proxy, db)
@@ -102,6 +103,10 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 		pricefeed.NewModule(ctx.JunoConfig, cdc, db),
 		slashingModule,
 		stakingModule,
+		topaccounts.NewModule(bankModule,
+			distrModule,
+			stakingModule,
+			r.parser, cdc, db),
 		upgradeModule,
 	}
 }

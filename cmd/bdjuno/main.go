@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/cheqd/cheqd-node/app"
-	"github.com/cheqd/juno/v4/cmd"
-	initcmd "github.com/cheqd/juno/v4/cmd/init"
-	parsetypes "github.com/cheqd/juno/v4/cmd/parse/types"
-	startcmd "github.com/cheqd/juno/v4/cmd/start"
-	"github.com/cheqd/juno/v4/modules/messages"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	"github.com/forbole/juno/v4/cmd"
+	initcmd "github.com/forbole/juno/v4/cmd/init"
+	parsetypes "github.com/forbole/juno/v4/cmd/parse/types"
+	startcmd "github.com/forbole/juno/v4/cmd/start"
+	"github.com/forbole/juno/v4/modules/messages"
 
 	migratecmd "github.com/forbole/bdjuno/v3/cmd/migrate"
 	parsecmd "github.com/forbole/bdjuno/v3/cmd/parse"
@@ -16,7 +16,6 @@ import (
 
 	"github.com/forbole/bdjuno/v3/database"
 	"github.com/forbole/bdjuno/v3/modules"
-	// gaiaapp "github.com/cosmos/gaia/v7/app"
 )
 
 func main() {
@@ -55,7 +54,6 @@ func main() {
 // This should be edited by custom implementations if needed.
 func getBasicManagers() []module.BasicManager {
 	return []module.BasicManager{
-		// gaiaapp.ModuleBasics,
 		app.ModuleBasics,
 	}
 }
@@ -69,5 +67,6 @@ func getAddressesParser() messages.MessageAddressesParser {
 		// https://docs.bigdipper.live/cosmos-based/parser/custom-chains#optional-add-your-custom-addresses-parser
 		CheqdAddressesParser,
 		messages.CosmosMessageAddressesParser,
+		CheqdAddressesParser,
 	)
 }

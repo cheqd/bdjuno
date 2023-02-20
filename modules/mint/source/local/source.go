@@ -3,9 +3,9 @@ package local
 import (
 	"fmt"
 
-	"github.com/cheqd/juno/v4/node/local"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
+	"github.com/forbole/juno/v4/node/local"
 
 	mintsource "github.com/forbole/bdjuno/v3/modules/mint/source"
 )

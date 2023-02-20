@@ -9,28 +9,26 @@ import (
 	proposaltypes "github.com/cosmos/cosmos-sdk/x/params/types/proposal"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-
-	gov "github.com/cosmos/cosmos-sdk/x/gov/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
-	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-	tmctypes "github.com/tendermint/tendermint/rpc/core/types"
-
 	"google.golang.org/grpc/codes"
+
+	tmctypes "github.com/tendermint/tendermint/rpc/core/types"
 
 	"github.com/forbole/bdjuno/v3/types"
 
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+
+	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+
+	gov "github.com/cosmos/cosmos-sdk/x/gov/types"
 )
 
 func (m *Module) UpdateProposal(height int64, blockTime time.Time, id uint64) error {
 	// Get the proposal
 	proposal, err := m.source.Proposal(height, id)
 	if err != nil {
-		// Check if proposal has reached the voting end time
-		passedVotingPeriod := blockTime.After(*proposal.VotingEndTime)
-
-		if strings.Contains(err.Error(), codes.NotFound.String()) && passedVotingPeriod {
+		// Check if proposal exist on the chain
+		if strings.Contains(err.Error(), codes.NotFound.String()) && strings.Contains(err.Error(), "doesn't exist") {
 			// Handle case when a proposal is deleted from the chain (did not pass deposit period)
 			return m.updateDeletedProposalStatus(id)
 		}
@@ -61,15 +59,19 @@ func (m *Module) UpdateProposal(height int64, blockTime time.Time, id uint64) er
 	return nil
 }
 
-func (m *Module) UpdateProposalSnapshots(height int64, blockVals *tmctypes.ResultValidators, id uint64) error {
+func (m *Module) UpdateProposalValidatorStatusesSnapshot(height int64, blockVals *tmctypes.ResultValidators, id uint64) error {
+	err := m.updateProposalValidatorStatusesSnapshot(height, id, blockVals)
+	if err != nil {
+		return fmt.Errorf("error while updating proposal validator statuses snapshot: %s", err)
+	}
+
+	return nil
+}
+
+func (m *Module) UpdateProposalStakingPoolSnapshot(height int64, blockVals *tmctypes.ResultValidators, id uint64) error {
 	err := m.updateProposalStakingPoolSnapshot(height, id)
 	if err != nil {
 		return fmt.Errorf("error while updating proposal staking pool snapshot: %s", err)
-	}
-
-	err = m.updateProposalValidatorStatusesSnapshot(height, id, blockVals)
-	if err != nil {
-		return fmt.Errorf("error while updating proposal validator statuses snapshot: %s", err)
 	}
 
 	return nil
@@ -135,10 +137,10 @@ func (m *Module) handleParamChangeProposal(height int64, paramChangeProposal *pr
 }
 
 // updateProposalStatus updates the given proposal status
-func (m *Module) updateProposalStatus(proposal *govtypes.Proposal) error {
+func (m *Module) updateProposalStatus(proposal govtypesv1beta1.Proposal) error {
 	return m.db.UpdateProposal(
 		types.NewProposalUpdate(
-			proposal.Id,
+			proposal.ProposalId,
 			proposal.Status.String(),
 			proposal.VotingStartTime,
 			proposal.VotingEndTime,
@@ -147,20 +149,20 @@ func (m *Module) updateProposalStatus(proposal *govtypes.Proposal) error {
 }
 
 // updateProposalTallyResult updates the tally result associated with the given proposal
-func (m *Module) updateProposalTallyResult(proposal *govtypes.Proposal) error {
+func (m *Module) updateProposalTallyResult(proposal govtypesv1beta1.Proposal) error {
 	height, err := m.db.GetLastBlockHeight()
 	if err != nil {
 		return err
 	}
 
-	result, err := m.source.TallyResult(height, proposal.Id)
+	result, err := m.source.TallyResult(height, proposal.ProposalId)
 	if err != nil {
 		return fmt.Errorf("error while getting tally result: %s", err)
 	}
 
 	return m.db.SaveTallyResults([]types.TallyResult{
 		types.NewTallyResult(
-			proposal.Id,
+			proposal.ProposalId,
 			result.YesCount,
 			result.AbstainCount,
 			result.NoCount,
@@ -171,8 +173,8 @@ func (m *Module) updateProposalTallyResult(proposal *govtypes.Proposal) error {
 }
 
 // updateAccounts updates any account that might be involved in the proposal (eg. fund community recipient)
-func (m *Module) updateAccounts(proposal *govtypes.Proposal) error {
-	content, ok := proposal.Messages[0].GetCachedValue().(*distrtypes.CommunityPoolSpendProposal)
+func (m *Module) updateAccounts(proposal govtypesv1beta1.Proposal) error {
+	content, ok := proposal.Content.GetCachedValue().(*distrtypes.CommunityPoolSpendProposal)
 	if ok {
 		height, err := m.db.GetLastBlockHeight()
 		if err != nil {
@@ -194,7 +196,7 @@ func (m *Module) updateAccounts(proposal *govtypes.Proposal) error {
 // updateProposalStakingPoolSnapshot updates the staking pool snapshot associated with the gov
 // proposal having the provided id
 func (m *Module) updateProposalStakingPoolSnapshot(height int64, proposalID uint64) error {
-	pool, err := m.stakingModule.GetStakingPool(height)
+	pool, err := m.stakingModule.GetStakingPoolSnapshot(height)
 	if err != nil {
 		return fmt.Errorf("error while getting staking pool: %s", err)
 	}
@@ -272,15 +274,15 @@ func findStatus(consAddr string, statuses []types.ValidatorStatus) (types.Valida
 	return types.ValidatorStatus{}, fmt.Errorf("cannot find status for validator with consensus address %s", consAddr)
 }
 
-func (m *Module) handlePassedProposal(proposal *govtypes.Proposal, height int64) error {
-	if proposal.Status != govtypes.StatusPassed {
+func (m *Module) handlePassedProposal(proposal govtypesv1beta1.Proposal, height int64) error {
+	if proposal.Status != govtypesv1beta1.StatusPassed {
 		// If proposal status is not passed, do nothing
 		return nil
 	}
 
 	// Unpack proposal
 	var content govtypesv1beta1.Content
-	err := m.db.EncodingConfig.Codec.UnpackAny(proposal.Messages[0], &content)
+	err := m.db.EncodingConfig.Codec.UnpackAny(proposal.Content, &content)
 	if err != nil {
 		return fmt.Errorf("error while handling ParamChangeProposal: %s", err)
 	}
@@ -292,18 +294,15 @@ func (m *Module) handlePassedProposal(proposal *govtypes.Proposal, height int64)
 		if err != nil {
 			return fmt.Errorf("error while updating params from ParamChangeProposal: %s", err)
 		}
-
-	//nolint:staticcheck
 	case *upgradetypes.SoftwareUpgradeProposal:
 		// Store software upgrade plan while SoftwareUpgradeProposal passed
-		err = m.db.SaveSoftwareUpgradePlan(proposal.Id, p.Plan, height)
+		err = m.db.SaveSoftwareUpgradePlan(proposal.ProposalId, p.Plan, height)
 		if err != nil {
 			return fmt.Errorf("error while storing software upgrade plan: %s", err)
 		}
-	//nolint:staticcheck
 	case *upgradetypes.CancelSoftwareUpgradeProposal:
 		// Delete software upgrade plan while CancelSoftwareUpgradeProposal passed
-		err = m.db.DeleteSoftwareUpgradePlan(proposal.Id)
+		err = m.db.DeleteSoftwareUpgradePlan(proposal.ProposalId)
 		if err != nil {
 			return fmt.Errorf("error while deleting software upgrade plan: %s", err)
 		}
