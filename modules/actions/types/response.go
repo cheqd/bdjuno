@@ -45,8 +45,8 @@ type Balance struct {
 // ========================= Delegation Response =========================
 
 type DelegationResponse struct {
-	Pagination  *query.PageResponse `json:"pagination"`
 	Delegations []Delegation        `json:"delegations"`
+	Pagination  *query.PageResponse `json:"pagination"`
 }
 
 type Delegation struct {
@@ -58,8 +58,8 @@ type Delegation struct {
 // ========================= Delegation Reward Response =========================
 
 type DelegationReward struct {
-	ValidatorAddress string `json:"validator_address"`
 	Coins            []Coin `json:"coins"`
+	ValidatorAddress string `json:"validator_address"`
 }
 
 // ========================= Validator Commission Response =========================
@@ -71,8 +71,8 @@ type ValidatorCommissionAmount struct {
 // ========================= Unbonding Delegation Response =========================
 
 type UnbondingDelegationResponse struct {
-	Pagination           *query.PageResponse   `json:"pagination"`
 	UnbondingDelegations []UnbondingDelegation `json:"unbonding_delegations"`
+	Pagination           *query.PageResponse   `json:"pagination"`
 }
 
 type UnbondingDelegation struct {
@@ -84,8 +84,8 @@ type UnbondingDelegation struct {
 // ========================= Redelegation Response =========================
 
 type RedelegationResponse struct {
-	Pagination    *query.PageResponse `json:"pagination"`
 	Redelegations []Redelegation      `json:"redelegations"`
+	Pagination    *query.PageResponse `json:"pagination"`
 }
 
 type Redelegation struct {
