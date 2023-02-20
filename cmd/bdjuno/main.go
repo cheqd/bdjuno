@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/cheqd/cheqd-node/app"
-
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/forbole/juno/v4/cmd"
 	initcmd "github.com/forbole/juno/v4/cmd/init"

@@ -7,7 +7,6 @@ import (
 	"time"
 
 	modulestypes "github.com/forbole/bdjuno/v3/modules/types"
-	"github.com/forbole/bdjuno/v3/utils"
 	"github.com/rs/zerolog/log"
 
 	govtypesv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
@@ -18,6 +17,7 @@ import (
 	"github.com/forbole/bdjuno/v3/modules/mint"
 	"github.com/forbole/bdjuno/v3/modules/slashing"
 	"github.com/forbole/bdjuno/v3/modules/staking"
+	"github.com/forbole/bdjuno/v3/utils"
 	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
 	"github.com/forbole/juno/v4/parser"
 	"github.com/forbole/juno/v4/types/config"

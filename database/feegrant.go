@@ -43,6 +43,7 @@ WHERE fee_grant_allowance.height <= excluded.height`
 func (db *Db) DeleteFeeGrantAllowance(allowance types.GrantRemoval) error {
 	stmt := `DELETE FROM fee_grant_allowance WHERE grantee_address = $1 AND granter_address = $2 AND height <= $3`
 	_, err := db.SQL.Exec(stmt, allowance.Grantee, allowance.Granter, allowance.Height)
+
 	if err != nil {
 		return fmt.Errorf("error while deleting grant allowance: %s", err)
 	}
