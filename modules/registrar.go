@@ -4,16 +4,16 @@ import (
 	"github.com/forbole/bdjuno/v3/modules/actions"
 	"github.com/forbole/bdjuno/v3/modules/types"
 
-	"github.com/forbole/juno/v3/modules/pruning"
-	"github.com/forbole/juno/v3/modules/telemetry"
+	"github.com/forbole/juno/v4/modules/pruning"
+	"github.com/forbole/juno/v4/modules/telemetry"
 
 	"github.com/forbole/bdjuno/v3/modules/slashing"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	jmodules "github.com/forbole/juno/v3/modules"
-	"github.com/forbole/juno/v3/modules/messages"
-	"github.com/forbole/juno/v3/modules/registrar"
+	jmodules "github.com/forbole/juno/v4/modules"
+	"github.com/forbole/juno/v4/modules/messages"
+	"github.com/forbole/juno/v4/modules/registrar"
 
 	"github.com/forbole/bdjuno/v3/utils"
 
@@ -30,6 +30,7 @@ import (
 	"github.com/forbole/bdjuno/v3/modules/modules"
 	"github.com/forbole/bdjuno/v3/modules/pricefeed"
 	"github.com/forbole/bdjuno/v3/modules/staking"
+	topaccounts "github.com/forbole/bdjuno/v3/modules/top_accounts"
 	"github.com/forbole/bdjuno/v3/modules/upgrade"
 )
 
@@ -63,7 +64,7 @@ func NewRegistrar(parser messages.MessageAddressesParser) *Registrar {
 
 // BuildModules implements modules.Registrar
 func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
-	cdc := ctx.EncodingConfig.Marshaler
+	cdc := ctx.EncodingConfig.Codec
 	db := database.Cast(ctx.Database)
 
 	sources, err := types.BuildSources(ctx.JunoConfig.Node, ctx.EncodingConfig)
@@ -72,7 +73,7 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 	}
 
 	actionsModule := actions.NewModule(ctx.JunoConfig, ctx.EncodingConfig)
-	authModule := auth.NewModule(r.parser, cdc, db)
+	authModule := auth.NewModule(sources.AuthSource, r.parser, cdc, db)
 	bankModule := bank.NewModule(r.parser, sources.BankSource, cdc, db)
 	consensusModule := consensus.NewModule(db)
 	dailyRefetchModule := dailyrefetch.NewModule(ctx.Proxy, db)
@@ -102,6 +103,10 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 		pricefeed.NewModule(ctx.JunoConfig, cdc, db),
 		slashingModule,
 		stakingModule,
+		topaccounts.NewModule(bankModule,
+			distrModule,
+			stakingModule,
+			r.parser, cdc, db),
 		upgradeModule,
 	}
 }

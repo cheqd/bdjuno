@@ -69,10 +69,10 @@ func (w ProposalRow) Equals(v ProposalRow) bool {
 		w.ProposalRoute == v.ProposalRoute &&
 		w.ProposalType == v.ProposalType &&
 		w.ProposalID == v.ProposalID &&
-		w.SubmitTime.Equal(v.SubmitTime) &&
-		w.DepositEndTime.Equal(v.DepositEndTime) &&
-		w.VotingStartTime.Equal(v.VotingStartTime) &&
-		w.VotingEndTime.Equal(v.VotingEndTime) &&
+		w.SubmitTime == v.SubmitTime &&
+		w.DepositEndTime == v.DepositEndTime &&
+		w.VotingStartTime == v.VotingStartTime &&
+		w.VotingEndTime == v.VotingEndTime &&
 		w.Proposer == v.Proposer &&
 		w.Status == v.Status
 }
