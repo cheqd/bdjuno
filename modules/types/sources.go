@@ -13,14 +13,16 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	govtypesv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/forbole/juno/v4/node/local"
 
-	govtypesv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
-	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+	nodeconfig "github.com/forbole/juno/v4/node/config"
+
 	authsource "github.com/forbole/bdjuno/v3/modules/auth/source"
 	localauthsource "github.com/forbole/bdjuno/v3/modules/auth/source/local"
 	remoteauthsource "github.com/forbole/bdjuno/v3/modules/auth/source/remote"
@@ -42,7 +44,6 @@ import (
 	stakingsource "github.com/forbole/bdjuno/v3/modules/staking/source"
 	localstakingsource "github.com/forbole/bdjuno/v3/modules/staking/source/local"
 	remotestakingsource "github.com/forbole/bdjuno/v3/modules/staking/source/remote"
-	nodeconfig "github.com/forbole/juno/v4/node/config"
 )
 
 type Sources struct {
@@ -87,6 +88,7 @@ func buildLocalSources(cfg *local.Details, encodingConfig *params.EncodingConfig
 		SlashingSource: localslashingsource.NewSource(source, slashingtypes.QueryServer(app.SlashingKeeper)),
 		StakingSource:  localstakingsource.NewSource(source, stakingkeeper.Querier{Keeper: app.StakingKeeper}),
 	}
+
 	// Mount and initialize the stores
 	err = source.MountKVStores(app, "keys")
 	if err != nil {
