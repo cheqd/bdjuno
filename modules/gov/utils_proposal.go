@@ -9,9 +9,6 @@ import (
 	proposaltypes "github.com/cosmos/cosmos-sdk/x/params/types/proposal"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-
-	gov "github.com/cosmos/cosmos-sdk/x/gov/types"
-	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	"google.golang.org/grpc/codes"
 
@@ -139,7 +136,7 @@ func (m *Module) handleParamChangeProposal(height int64, paramChangeProposal *pr
 func (m *Module) updateProposalStatus(proposal govtypesv1beta1.Proposal) error {
 	return m.db.UpdateProposal(
 		types.NewProposalUpdate(
-			proposal.Id,
+			proposal.ProposalId,
 			proposal.Status.String(),
 			proposal.VotingStartTime,
 			proposal.VotingEndTime,
@@ -154,7 +151,7 @@ func (m *Module) updateProposalTallyResult(proposal govtypesv1beta1.Proposal) er
 		return err
 	}
 
-	result, err := m.source.TallyResult(height, proposal.Id)
+	result, err := m.source.TallyResult(height, proposal.ProposalId)
 	if err != nil {
 		return fmt.Errorf("error while getting tally result: %s", err)
 	}
@@ -295,13 +292,13 @@ func (m *Module) handlePassedProposal(proposal govtypesv1beta1.Proposal, height 
 		}
 	case *upgradetypes.SoftwareUpgradeProposal:
 		// Store software upgrade plan while SoftwareUpgradeProposal passed
-		err = m.db.SaveSoftwareUpgradePlan(proposal.Id, p.Plan, height)
+		err = m.db.SaveSoftwareUpgradePlan(proposal.ProposalId, p.Plan, height)
 		if err != nil {
 			return fmt.Errorf("error while storing software upgrade plan: %s", err)
 		}
 	case *upgradetypes.CancelSoftwareUpgradeProposal:
 		// Delete software upgrade plan while CancelSoftwareUpgradeProposal passed
-		err = m.db.DeleteSoftwareUpgradePlan(proposal.Id)
+		err = m.db.DeleteSoftwareUpgradePlan(proposal.ProposalId)
 		if err != nil {
 			return fmt.Errorf("error while deleting software upgrade plan: %s", err)
 		}

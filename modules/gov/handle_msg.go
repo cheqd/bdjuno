@@ -2,14 +2,14 @@ package gov
 
 import (
 	"fmt"
-	"strconv"
 	"time"
+
+	"strconv"
 
 	"github.com/forbole/bdjuno/v3/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypesv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
-	juno "github.com/forbole/juno/v4/types"
 
 	gov "github.com/cosmos/cosmos-sdk/x/gov/types"
 	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
@@ -60,13 +60,6 @@ func (m *Module) handleMsgSubmitProposal(tx *juno.Tx, index int, msg *govtypesv1
 		return fmt.Errorf("error while getting proposal: %s", err)
 	}
 
-	// Unpack the content
-	// var content govtypes.Content
-	// err = m.cdc.UnpackAny(proposal.Content, &content)
-	// if err != nil {
-	// 	return fmt.Errorf("error while unpacking proposal content: %s", err)
-	// }
-
 	// Store the proposal
 	proposalObj := types.NewProposal(
 		proposal.ProposalId,
@@ -92,7 +85,7 @@ func (m *Module) handleMsgSubmitProposal(tx *juno.Tx, index int, msg *govtypesv1
 	}
 
 	// Store the deposit
-	deposit := types.NewDeposit(proposal.Id, msg.Proposer, msg.InitialDeposit, txTimestamp, tx.Height)
+	deposit := types.NewDeposit(proposal.ProposalId, msg.Proposer, msg.InitialDeposit, txTimestamp, tx.Height)
 	return m.db.SaveDeposits([]types.Deposit{deposit})
 }
 

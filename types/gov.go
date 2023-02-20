@@ -146,10 +146,10 @@ func NewProposal(
 	proposalType string,
 	content govtypesv1beta1.Content,
 	status string,
-	submitTime *time.Time,
-	depositEndTime *time.Time,
-	votingStartTime *time.Time,
-	votingEndTime *time.Time,
+	submitTime time.Time,
+	depositEndTime time.Time,
+	votingStartTime time.Time,
+	votingEndTime time.Time,
 	proposer string,
 ) Proposal {
 	return Proposal{
@@ -190,7 +190,7 @@ type ProposalUpdate struct {
 
 // NewProposalUpdate allows to build a new ProposalUpdate instance
 func NewProposalUpdate(
-	proposalID uint64, status string, votingStartTime, votingEndTime *time.Time,
+	proposalID uint64, status string, votingStartTime, votingEndTime time.Time,
 ) ProposalUpdate {
 	return ProposalUpdate{
 		ProposalID:      proposalID,
