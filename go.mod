@@ -3,31 +3,29 @@ module github.com/forbole/bdjuno/v3
 go 1.18
 
 require (
-	cosmossdk.io/math v1.0.0-beta.4 // indirect
-	github.com/cheqd/cheqd-node v1.2.2
-	// github.com/cosmos/ibc-go/v5 v5.2.0
-	// github.com/cosmos/gaia/v7 v7.0.2
-	github.com/cheqd/juno/v4 v4.0.2-cheqd
+	cosmossdk.io/math v1.0.0-beta.3
+	github.com/cheqd/cheqd-node v1.2.5
 	github.com/cosmos/cosmos-sdk v0.46.8
-	github.com/go-co-op/gocron v1.16.1
+	github.com/forbole/juno/v4 v4.0.0-20230207053719-d0f32f8970c3
+	github.com/go-co-op/gocron v1.18.0
 	github.com/gogo/protobuf v1.3.3
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/lib/pq v1.10.7
 	github.com/pelletier/go-toml v1.9.5
 	github.com/prometheus/client_golang v1.14.0
 	github.com/proullon/ramsql v0.0.0-20181213202341-817cee58a244
-	github.com/rs/zerolog v1.28.0
+	github.com/rs/zerolog v1.29.0
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
 	github.com/tendermint/tendermint v0.34.24
-	google.golang.org/grpc v1.51.0
+	google.golang.org/grpc v1.53.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
-	cloud.google.com/go v0.105.0 // indirect
-	cloud.google.com/go/compute v1.13.0 // indirect
-	cloud.google.com/go/compute/metadata v0.2.1 // indirect
+	cloud.google.com/go v0.107.0 // indirect
+	cloud.google.com/go/compute v1.15.1 // indirect
+	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	cloud.google.com/go/iam v0.8.0 // indirect
 	cloud.google.com/go/storage v1.27.0 // indirect
 	cosmossdk.io/errors v1.0.0-beta.7 // indirect
@@ -42,7 +40,8 @@ require (
 	github.com/bgentry/speakeasy v0.1.1-0.20220910012023-760eaf8b6816 // indirect
 	github.com/btcsuite/btcd v0.22.2 // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
-	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/cespare/xxhash/v2 v2.2.0 // indirect
+	github.com/cheqd/cheqd-node/api/v2 v2.0.1 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
 	github.com/cockroachdb/apd/v2 v2.0.2 // indirect
 	github.com/confio/ics23/go v0.9.0 // indirect
@@ -95,6 +94,7 @@ require (
 	github.com/hashicorp/go-getter v1.6.1 // indirect
 	github.com/hashicorp/go-immutable-radix v1.3.1 // indirect
 	github.com/hashicorp/go-safetemp v1.0.0 // indirect
+	github.com/hashicorp/go-uuid v1.0.1 // indirect
 	github.com/hashicorp/go-version v1.6.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.5-0.20210104140557-80c98217689d // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
@@ -126,6 +126,7 @@ require (
 	github.com/multiformats/go-base32 v0.0.3 // indirect
 	github.com/multiformats/go-base36 v0.1.0 // indirect
 	github.com/multiformats/go-multibase v0.1.1 // indirect
+	github.com/onsi/ginkgo v1.16.4 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
@@ -137,6 +138,7 @@ require (
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
 	github.com/regen-network/cosmos-proto v0.3.1 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
+	github.com/rogpeppe/go-internal v1.9.0 // indirect
 	github.com/rs/cors v1.8.2 // indirect
 	github.com/sasha-s/go-deadlock v0.3.1 // indirect
 	github.com/spf13/afero v1.9.2 // indirect
@@ -156,16 +158,16 @@ require (
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/crypto v0.2.0 // indirect
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
-	golang.org/x/net v0.5.0 // indirect
-	golang.org/x/oauth2 v0.3.0 // indirect
+	golang.org/x/net v0.7.0 // indirect
+	golang.org/x/oauth2 v0.4.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/term v0.4.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/term v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/api v0.103.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20221207170731-23e4bf6bdc37 // indirect
+	google.golang.org/genproto v0.0.0-20230110181048-76db0878b65f // indirect
 	google.golang.org/protobuf v1.28.2-0.20220831092852-f930b1dc76e8 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
@@ -173,22 +175,18 @@ require (
 )
 
 replace (
+	// Keyring replacement from Cosmos SDK v0.46.8
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.1.7-0.20210622111912-ef00f8ac3d76
-	// Dragonberry fix
-	github.com/confio/ics23/go => github.com/cosmos/cosmos-sdk/ics23/go v0.8.0
-	github.com/cosmos/iavl v0.15.3 => github.com/cosmos/iavl v0.19.4
-
-	// github.com/cosmos/ibc-go/v6 => github.com/cosmos/ibc-go/v5 v5.2.0
-	github.com/forbole/juno/v4 => github.com/cheqd/juno/v4 v4.0.1-cheqd
-
-	// Fee payer support
-	// github.com/cosmos/cosmos-sdk => github.com/cheqd/cosmos-sdk v0.45.9-cheqd-tag
 
 	// Fix upstream GHSA-h395-qcrw-5vmq vulnerability.
-	// github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
+	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 
-// Forbole Tendermint fork
-// github.com/tendermint/tendermint => github.com/forbole/tendermint v0.34.13-0.20210820072129-a2a4af55563d
-// google.golang.org/grpc => google.golang.org/grpc v1.33.2
+	// From Cosmos SDK v0.46.8 upstream
+	github.com/jhump/protoreflect => github.com/jhump/protoreflect v1.9.0
+
+	// use informal system fork of tendermint
+	github.com/tendermint/tendermint => github.com/informalsystems/tendermint v0.34.24
 )
+
+exclude github.com/cheqd/cheqd-node/api/v2 v2.0.0-00010101000000-000000000000

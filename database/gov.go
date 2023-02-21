@@ -6,7 +6,7 @@ import (
 	"time"
 
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+	govtypesv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	"github.com/gogo/protobuf/proto"
 
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
@@ -138,10 +138,10 @@ func (db *Db) SaveProposals(proposals []types.Proposal) error {
 	var accounts []types.Account
 
 	proposalsQuery := `
-	INSERT INTO proposal(
-		id, title, description, content, proposer_address, proposal_route, proposal_type, status,
-	    submit_time, deposit_end_time, voting_start_time, voting_end_time
-	) VALUES`
+INSERT INTO proposal(
+	id, title, description, content, proposer_address, proposal_route, proposal_type, status,
+    submit_time, deposit_end_time, voting_start_time, voting_end_time
+) VALUES`
 	var proposalsParams []interface{}
 
 	for i, proposal := range proposals {
@@ -203,15 +203,15 @@ func (db *Db) SaveProposals(proposals []types.Proposal) error {
 }
 
 // GetProposal returns the proposal with the given id, or nil if not found
-func (db *Db) GetProposal(id uint64) (*types.Proposal, error) {
+func (db *Db) GetProposal(id uint64) (types.Proposal, error) {
 	var rows []*dbtypes.ProposalRow
 	err := db.Sqlx.Select(&rows, `SELECT * FROM proposal WHERE id = $1`, id)
 	if err != nil {
-		return nil, err
+		return types.Proposal{}, err
 	}
 
 	if len(rows) == 0 {
-		return nil, nil
+		return types.Proposal{}, nil
 	}
 
 	row := rows[0]
@@ -219,13 +219,13 @@ func (db *Db) GetProposal(id uint64) (*types.Proposal, error) {
 	var contentAny codectypes.Any
 	err = db.EncodingConfig.Codec.UnmarshalJSON([]byte(row.Content), &contentAny)
 	if err != nil {
-		return nil, err
+		return types.Proposal{}, err
 	}
 
 	var content govtypesv1beta1.Content
 	err = db.EncodingConfig.Codec.UnpackAny(&contentAny, &content)
 	if err != nil {
-		return nil, err
+		return types.Proposal{}, err
 	}
 
 	proposal := types.NewProposal(
@@ -240,14 +240,14 @@ func (db *Db) GetProposal(id uint64) (*types.Proposal, error) {
 		row.VotingEndTime,
 		row.Proposer,
 	)
-	return &proposal, nil
+	return proposal, nil
 }
 
 // GetOpenProposalsIds returns all the ids of the proposals that are in deposit or voting period at the given block time
 func (db *Db) GetOpenProposalsIds(blockTime time.Time) ([]uint64, error) {
 	var ids []uint64
 	stmt := `SELECT id FROM proposal WHERE status = $1 OR status = $2`
-	err := db.Sqlx.Select(&ids, stmt, govtypes.StatusDepositPeriod.String(), govtypes.StatusVotingPeriod.String())
+	err := db.Sqlx.Select(&ids, stmt, govtypesv1.StatusDepositPeriod.String(), govtypesv1.StatusVotingPeriod.String())
 	if err != nil {
 		return ids, err
 	}
@@ -287,7 +287,7 @@ func (db *Db) SaveDeposits(deposits []types.Deposit) error {
 
 	query := `INSERT INTO proposal_deposit (proposal_id, depositor_address, amount, timestamp, height) VALUES `
 	var param []interface{}
-
+	var accounts []types.Account
 	for i, deposit := range deposits {
 		vi := i * 5
 		query += fmt.Sprintf("($%d,$%d,$%d,$%d,$%d),", vi+1, vi+2, vi+3, vi+4, vi+5)
@@ -297,11 +297,23 @@ func (db *Db) SaveDeposits(deposits []types.Deposit) error {
 			deposit.Timestamp,
 			deposit.Height,
 		)
+		accounts = append(accounts, types.NewAccount(deposit.Depositor))
 	}
-	fmt.Printf("\n param %v \v ", param)
+
+	// Store the depositor account
+	err := db.SaveAccounts(accounts)
+	if err != nil {
+		return fmt.Errorf("error while storing depositor account: %s", err)
+	}
+
 	query = query[:len(query)-1] // Remove trailing ","
-	query += ` ON CONFLICT DO NOTHING`
-	_, err := db.SQL.Exec(query, param...)
+	query += `
+ON CONFLICT ON CONSTRAINT unique_deposit DO UPDATE
+	SET amount = excluded.amount,
+		timestamp = excluded.timestamp,
+		height = excluded.height
+WHERE proposal_deposit.height <= excluded.height`
+	_, err = db.SQL.Exec(query, param...)
 	if err != nil {
 		return fmt.Errorf("error while storing deposits: %s", err)
 	}
@@ -316,7 +328,11 @@ func (db *Db) SaveVote(vote types.Vote) error {
 	query := `
 INSERT INTO proposal_vote (proposal_id, voter_address, option, timestamp, height)
 VALUES ($1, $2, $3, $4, $5)
- ON CONFLICT DO NOTHING`
+ON CONFLICT ON CONSTRAINT unique_vote DO UPDATE
+	SET option = excluded.option,
+		timestamp = excluded.timestamp,
+		height = excluded.height
+WHERE proposal_vote.height <= excluded.height`
 
 	// Store the voter account
 	err := db.SaveAccounts([]types.Account{types.NewAccount(vote.Voter)})
@@ -433,6 +449,7 @@ WHERE proposal_validator_status_snapshot.height <= excluded.height`
 
 // SaveSoftwareUpgradePlan allows to save the given software upgrade plan with its proposal id
 func (db *Db) SaveSoftwareUpgradePlan(proposalID uint64, plan upgradetypes.Plan, height int64) error {
+
 	stmt := `
 INSERT INTO software_upgrade_plan(proposal_id, plan_name, upgrade_height, info, height)
 VALUES ($1, $2, $3, $4, $5)

@@ -237,10 +237,10 @@ func (v ValidatorVotingPowerRow) Equal(w ValidatorVotingPowerRow) bool {
 
 // ValidatorStatusRow represents a single row of the validator_status table
 type ValidatorStatusRow struct {
-	ConsAddress string `db:"validator_address"`
 	Status      int    `db:"status"`
-	Height      int64  `db:"height"`
 	Jailed      bool   `db:"jailed"`
+	ConsAddress string `db:"validator_address"`
+	Height      int64  `db:"height"`
 }
 
 // NewValidatorStatusRow builds a new ValidatorStatusRow

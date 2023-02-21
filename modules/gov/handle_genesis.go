@@ -25,7 +25,7 @@ func (m *Module) HandleGenesis(doc *tmtypes.GenesisDoc, appState map[string]json
 	}
 
 	// Save the proposals
-	err = m.saveProposals(genStatev1beta1.Proposals, doc)
+	err = m.saveGenesisProposals(genStatev1beta1.Proposals, doc)
 	if err != nil {
 		return fmt.Errorf("error while storing genesis governance proposals: %s", err)
 	}
@@ -44,8 +44,8 @@ func (m *Module) HandleGenesis(doc *tmtypes.GenesisDoc, appState map[string]json
 	return nil
 }
 
-// saveProposals save proposals from genesis file
-func (m *Module) saveProposals(slice govtypesv1beta1.Proposals, genDoc *tmtypes.GenesisDoc) error {
+// saveGenesisProposals save proposals from genesis file
+func (m *Module) saveGenesisProposals(slice govtypesv1beta1.Proposals, genDoc *tmtypes.GenesisDoc) error {
 	proposals := make([]types.Proposal, len(slice))
 	tallyResults := make([]types.TallyResult, len(slice))
 	deposits := make([]types.Deposit, len(slice))
@@ -58,10 +58,10 @@ func (m *Module) saveProposals(slice govtypesv1beta1.Proposals, genDoc *tmtypes.
 			proposal.ProposalType(),
 			proposal.GetContent(),
 			proposal.Status.String(),
-			&proposal.SubmitTime,
-			&proposal.DepositEndTime,
-			&proposal.VotingStartTime,
-			&proposal.VotingEndTime,
+			proposal.SubmitTime,
+			proposal.DepositEndTime,
+			proposal.VotingStartTime,
+			proposal.VotingEndTime,
 			"",
 		)
 

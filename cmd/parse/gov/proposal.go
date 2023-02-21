@@ -7,22 +7,21 @@ import (
 	"time"
 
 	modulestypes "github.com/forbole/bdjuno/v3/modules/types"
+	"github.com/forbole/bdjuno/v3/utils"
 	"github.com/rs/zerolog/log"
 
-	parsecmdtypes "github.com/cheqd/juno/v4/cmd/parse/types"
-	"github.com/cheqd/juno/v4/types/config"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
-	"github.com/spf13/cobra"
-
-	"github.com/cheqd/juno/v4/parser"
-
+	govtypesv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	"github.com/forbole/bdjuno/v3/database"
 	"github.com/forbole/bdjuno/v3/modules/distribution"
 	"github.com/forbole/bdjuno/v3/modules/gov"
 	"github.com/forbole/bdjuno/v3/modules/mint"
 	"github.com/forbole/bdjuno/v3/modules/slashing"
 	"github.com/forbole/bdjuno/v3/modules/staking"
-	"github.com/forbole/bdjuno/v3/utils"
+	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
+	"github.com/forbole/juno/v4/parser"
+	"github.com/forbole/juno/v4/types/config"
+	"github.com/spf13/cobra"
 )
 
 // proposalCmd returns the Cobra command allowing to fix all things related to a proposal
@@ -102,6 +101,11 @@ func refreshProposalDetails(parseCtx *parser.Context, proposalID uint64, govModu
 		return fmt.Errorf("expecting only one create proposal transaction, found %d", len(txs))
 	}
 
+	if len(txs) == 0 {
+		fmt.Printf("error: couldn't find submit proposal tx info")
+		return nil
+	}
+
 	// Get the tx details
 	tx, err := parseCtx.Node.Tx(hex.EncodeToString(txs[0].Tx.Hash()))
 	if err != nil {
@@ -110,7 +114,7 @@ func refreshProposalDetails(parseCtx *parser.Context, proposalID uint64, govModu
 
 	// Handle the MsgSubmitProposal messages
 	for index, msg := range tx.GetMsgs() {
-		if _, ok := msg.(*govtypes.MsgSubmitProposal); !ok {
+		if _, ok := msg.(*govtypesv1beta1.MsgSubmitProposal); !ok {
 			continue
 		}
 
@@ -141,7 +145,7 @@ func refreshProposalDeposits(parseCtx *parser.Context, proposalID uint64, govMod
 
 		// Handle the MsgDeposit messages
 		for index, msg := range junoTx.GetMsgs() {
-			if _, ok := msg.(*govtypes.MsgDeposit); !ok {
+			if _, ok := msg.(*govtypesv1.MsgDeposit); !ok {
 				continue
 			}
 
@@ -173,7 +177,7 @@ func refreshProposalVotes(parseCtx *parser.Context, proposalID uint64, govModule
 
 		// Handle the MsgVote messages
 		for index, msg := range junoTx.GetMsgs() {
-			if _, ok := msg.(*govtypes.MsgVote); !ok {
+			if _, ok := msg.(*govtypesv1.MsgVote); !ok {
 				continue
 			}
 

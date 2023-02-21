@@ -3,9 +3,9 @@ package main
 import (
 	didtypes "github.com/cheqd/cheqd-node/x/did/types"
 	resources "github.com/cheqd/cheqd-node/x/resource/types"
-	"github.com/cheqd/juno/v4/modules/messages"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/forbole/juno/v4/modules/messages"
 )
 
 // CheqdAddressesParser func represents a MessageAddressesParser for the my custom module
