@@ -52,7 +52,7 @@ jobs:
             org.opencontainers.image.documentation="https://docs.cheqd.io/node"
 
       - name: Build BDJuno image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: Dockerfile
@@ -111,7 +111,7 @@ jobs:
             org.opencontainers.image.documentation="https://docs.cheqd.io/node"
 
       - name: Build Hasura CLI image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: Dockerfile.hasura
