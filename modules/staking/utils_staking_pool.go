@@ -54,7 +54,7 @@ func (m *Module) GetStakingPoolSnapshot(height int64) (*types.PoolSnapshot, erro
 func (m *Module) getTotalUnbondingDelegationsFromValidator(height int64, valOperatorAddress string) []stakingtypes.UnbondingDelegation {
 	var unbondingDelegations []stakingtypes.UnbondingDelegation
 	var nextKey []byte
-	stop := false
+	var stop = false
 	for !stop {
 		res, err := m.source.GetUnbondingDelegationsFromValidator(height,
 			valOperatorAddress,

@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	cosmossdk.io/math v1.0.0-beta.3
-	github.com/cheqd/cheqd-node v1.2.2
+	github.com/cheqd/cheqd-node v1.2.5
 	github.com/cosmos/cosmos-sdk v0.46.8
 	github.com/forbole/juno/v4 v4.0.0-20230207053719-d0f32f8970c3
 	github.com/go-co-op/gocron v1.18.0
@@ -41,6 +41,7 @@ require (
 	github.com/btcsuite/btcd v0.22.2 // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/cheqd/cheqd-node/api/v2 v2.0.1 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
 	github.com/cockroachdb/apd/v2 v2.0.2 // indirect
 	github.com/confio/ics23/go v0.9.0 // indirect
@@ -187,3 +188,5 @@ replace (
 	// use informal system fork of tendermint
 	github.com/tendermint/tendermint => github.com/informalsystems/tendermint v0.34.24
 )
+
+exclude github.com/cheqd/cheqd-node/api/v2 v2.0.0-00010101000000-000000000000
