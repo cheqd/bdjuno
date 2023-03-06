@@ -7,7 +7,7 @@ require (
 	github.com/cheqd/cheqd-node v1.2.2
 	github.com/cosmos/cosmos-sdk v0.46.8
 	github.com/forbole/juno/v4 v4.0.0-20230207053719-d0f32f8970c3
-	github.com/go-co-op/gocron v1.18.0
+	github.com/go-co-op/gocron v1.18.1
 	github.com/gogo/protobuf v1.3.3
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/lib/pq v1.10.7
@@ -16,7 +16,7 @@ require (
 	github.com/proullon/ramsql v0.0.0-20181213202341-817cee58a244
 	github.com/rs/zerolog v1.29.0
 	github.com/spf13/cobra v1.6.1
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	github.com/tendermint/tendermint v0.34.24
 	google.golang.org/grpc v1.53.0
 	gopkg.in/yaml.v3 v3.0.1
