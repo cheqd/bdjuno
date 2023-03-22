@@ -6,7 +6,7 @@ require (
 	cosmossdk.io/math v1.0.0-beta.3
 	github.com/cheqd/cheqd-node v1.3.0
 	github.com/cosmos/cosmos-sdk v0.46.10
-	github.com/forbole/juno/v4 v4.0.0-20230207053719-d0f32f8970c3
+	github.com/forbole/juno/v4 v4.1.0
 	github.com/go-co-op/gocron v1.19.0
 	github.com/gogo/protobuf v1.3.3
 	github.com/jmoiron/sqlx v1.3.5
@@ -51,6 +51,7 @@ require (
 	github.com/cosmos/gogoproto v1.4.6 // indirect
 	github.com/cosmos/gorocksdb v1.2.0 // indirect
 	github.com/cosmos/iavl v0.19.5 // indirect
+	github.com/cosmos/ibc-go/v3 v3.2.0 // indirect
 	github.com/cosmos/ibc-go/v6 v6.1.0 // indirect
 	github.com/cosmos/ledger-cosmos-go v0.12.2 // indirect
 	github.com/creachadair/taskgroup v0.3.2 // indirect
