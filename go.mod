@@ -175,6 +175,7 @@ require (
 replace (
 	// Keyring replacement from Cosmos SDK v0.46.10
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
+
 	// cosmos-sdk state sync allow fast forward to latest height version
 	github.com/cosmos/cosmos-sdk => github.com/cheqd/cosmos-sdk v0.46.10-state-sync
 
