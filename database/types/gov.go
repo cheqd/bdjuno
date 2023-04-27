@@ -210,7 +210,6 @@ type ProposalValidatorVotingPowerSnapshotRow struct {
 	ValidatorAddress string `db:"validator_address"`
 	ID               int64  `db:"id"`
 	ProposalID       int64  `db:"proposal_id"`
-	ValidatorAddress string `db:"validator_address"`
 	VotingPower      string `db:"voting_power"`
 	Status           int    `db:"status"`
 	Height           int64  `db:"height"`
