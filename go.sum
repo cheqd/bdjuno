@@ -343,8 +343,8 @@ github.com/fatih/color v1.7.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5Kwzbycv
 github.com/felixge/httpsnoop v1.0.1/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
 github.com/felixge/httpsnoop v1.0.2 h1:+nS9g82KMXccJ/wp0zyRW9ZBHFETmMGtkk+2CTTrW4o=
 github.com/felixge/httpsnoop v1.0.2/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
-github.com/forbole/juno/v4 v4.0.0-20230207053719-d0f32f8970c3 h1:ZqUzQXmZFwGuv/p3Ea2UC/0iUzSSpMDNLuGn3TkRRzE=
-github.com/forbole/juno/v4 v4.0.0-20230207053719-d0f32f8970c3/go.mod h1:AK6uI11WyKqonq7VXUfhC+5/2BAWc4zLFPVvNgXv5RY=
+github.com/forbole/juno/v4 v4.1.1-0.20230321084013-8b9686163062 h1:j1zPb+p+yY23X84DuHuL8Y3yRnHfFSzRsGzdtqpYlV0=
+github.com/forbole/juno/v4 v4.1.1-0.20230321084013-8b9686163062/go.mod h1:fzxCUSnlNlKGYeOWwpF/N9DLm+hA9lc+kH26p2/3En4=
 github.com/fortytw2/leaktest v1.3.0 h1:u8491cBMTQ8ft8aeV+adlcytMZylmA5nnwwkRZjI8vw=
 github.com/frankban/quicktest v1.14.3 h1:FJKSZTDHjyhriyC81FLQ0LY93eSai0ZyR/ZIkd3ZUKE=
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=

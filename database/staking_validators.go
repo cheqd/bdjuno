@@ -3,9 +3,9 @@ package database
 import (
 	"fmt"
 
-	"github.com/forbole/bdjuno/v3/types"
+	"github.com/forbole/bdjuno/v4/types"
 
-	dbtypes "github.com/forbole/bdjuno/v3/database/types"
+	dbtypes "github.com/forbole/bdjuno/v4/database/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -377,7 +377,7 @@ func (db *Db) SaveValidatorsVotingPowers(entries []types.ValidatorVotingPower) e
 	for i, entry := range entries {
 		pi := i * 3
 		stmt += fmt.Sprintf("($%d,$%d,$%d),", pi+1, pi+2, pi+3)
-		params = append(params, entry.ConsensusAddress, entry.VotingPower, entry.Height)
+		params = append(params, entry.ConsensusAddress, entry.VotingPower.String(), entry.Height)
 	}
 
 	stmt = stmt[:len(stmt)-1]
