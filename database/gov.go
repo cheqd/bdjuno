@@ -11,9 +11,9 @@ import (
 
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 
-	"github.com/forbole/bdjuno/v3/types"
+	"github.com/forbole/bdjuno/v4/types"
 
-	dbtypes "github.com/forbole/bdjuno/v3/database/types"
+	dbtypes "github.com/forbole/bdjuno/v4/database/types"
 
 	govtypesv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	"github.com/lib/pq"
@@ -425,7 +425,7 @@ VALUES `
 
 		stmt += fmt.Sprintf("($%d,$%d,$%d,$%d,$%d,$%d),", si+1, si+2, si+3, si+4, si+5, si+6)
 		args = append(args,
-			snapshot.ProposalID, snapshot.ValidatorConsAddress, snapshot.ValidatorVotingPower,
+			snapshot.ProposalID, snapshot.ValidatorConsAddress, snapshot.ValidatorVotingPower.String(),
 			snapshot.ValidatorStatus, snapshot.ValidatorJailed, snapshot.Height)
 	}
 

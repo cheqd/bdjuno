@@ -1,12 +1,12 @@
-module github.com/forbole/bdjuno/v3
+module github.com/forbole/bdjuno/v4
 
-go 1.18
+go 1.19
 
 require (
 	cosmossdk.io/math v1.0.0-beta.3
 	github.com/cheqd/cheqd-node v1.4.0
 	github.com/cosmos/cosmos-sdk v0.46.10
-	github.com/forbole/juno/v4 v4.0.0-20230207053719-d0f32f8970c3
+	github.com/forbole/juno/v4 v4.1.1-0.20230321084013-8b9686163062 // custom version with cheqd message handler
 	github.com/go-co-op/gocron v1.19.0
 	github.com/gogo/protobuf v1.3.3
 	github.com/jmoiron/sqlx v1.3.5
@@ -175,9 +175,10 @@ require (
 replace (
 	// Keyring replacement from Cosmos SDK v0.46.10
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
-
 	// cosmos-sdk state sync allow fast forward to latest height version
 	github.com/cosmos/cosmos-sdk => github.com/cheqd/cosmos-sdk v0.46.10-state-sync
+
+	github.com/cosmos/cosmos-sdk/x/mint/types => github.com/cheqd/cosmos-sdk/x/mint/types v0.46.10-state-sync
 
 	// iavl allow pruning of uneven heights
 	github.com/cosmos/iavl => github.com/cheqd/iavl v0.19.5-cheqd

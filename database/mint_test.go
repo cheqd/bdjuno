@@ -6,14 +6,14 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 
-	"github.com/forbole/bdjuno/v3/types"
+	"github.com/forbole/bdjuno/v4/types"
 
-	dbtypes "github.com/forbole/bdjuno/v3/database/types"
+	dbtypes "github.com/forbole/bdjuno/v4/database/types"
 )
 
 func (suite *DbTestSuite) TestBigDipperDb_SaveInflation() {
 	// Save the data
-	err := suite.database.SaveInflation(sdk.NewDecWithPrec(10050, 2), 100)
+	err := suite.database.SaveInflation("0.01", 100)
 	suite.Require().NoError(err)
 
 	// Verify the data
@@ -22,13 +22,13 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveInflation() {
 	suite.Require().NoError(err)
 	suite.Require().Len(rows, 1, "no duplicated inflation rows should be inserted")
 
-	expected := dbtypes.NewInflationRow(100.50, 100)
+	expected := dbtypes.NewInflationRow(0.01, 100)
 	suite.Require().True(expected.Equal(rows[0]))
 
 	// ---------------------------------------------------------------------------------------------------------------
 
 	// Try updating with lower height
-	err = suite.database.SaveInflation(sdk.NewDecWithPrec(20000, 2), 90)
+	err = suite.database.SaveInflation("0.02", 90)
 	suite.Require().NoError(err, "double inflation insertion should return no error")
 
 	// Verify the data
@@ -37,13 +37,13 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveInflation() {
 	suite.Require().NoError(err)
 	suite.Require().Len(rows, 1, "no duplicated inflation rows should be inserted")
 
-	expected = dbtypes.NewInflationRow(100.50, 100)
+	expected = dbtypes.NewInflationRow(0.01, 100)
 	suite.Require().True(expected.Equal(rows[0]), "data should not change with lower height")
 
 	// ---------------------------------------------------------------------------------------------------------------
 
 	// Try updating with same height
-	err = suite.database.SaveInflation(sdk.NewDecWithPrec(30000, 2), 100)
+	err = suite.database.SaveInflation("0.03", 100)
 	suite.Require().NoError(err, "double inflation insertion should return no error")
 
 	// Verify the data
@@ -52,13 +52,13 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveInflation() {
 	suite.Require().NoError(err)
 	suite.Require().Len(rows, 1, "no duplicated inflation rows should be inserted")
 
-	expected = dbtypes.NewInflationRow(300.00, 100)
+	expected = dbtypes.NewInflationRow(0.03, 100)
 	suite.Require().True(expected.Equal(rows[0]), "data should change with same height")
 
 	// ---------------------------------------------------------------------------------------------------------------
 
 	// Try updating with higher height
-	err = suite.database.SaveInflation(sdk.NewDecWithPrec(40000, 2), 110)
+	err = suite.database.SaveInflation("0.04", 110)
 	suite.Require().NoError(err, "double inflation insertion should return no error")
 
 	// Verify the data
@@ -67,7 +67,7 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveInflation() {
 	suite.Require().NoError(err)
 	suite.Require().Len(rows, 1, "no duplicated inflation rows should be inserted")
 
-	expected = dbtypes.NewInflationRow(400.00, 110)
+	expected = dbtypes.NewInflationRow(0.04, 110)
 	suite.Require().True(expected.Equal(rows[0]), "data should change with higher height")
 }
 

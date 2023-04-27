@@ -5,11 +5,11 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/forbole/bdjuno/v3/types"
+	"github.com/forbole/bdjuno/v4/types"
 	"github.com/rs/zerolog/log"
 )
 
-func (m *Module) RefreshUnbondings(height int64, delegatorAddr string) error {
+func (m *Module) RefreshUnbondings(delegatorAddr string, height int64) error {
 	log.Debug().
 		Str("module", "staking").
 		Int64("height", height).Msg("updating unbonding delegations")

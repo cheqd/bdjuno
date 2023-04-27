@@ -11,7 +11,7 @@ import (
 	"github.com/forbole/juno/v4/node/local"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	source "github.com/forbole/bdjuno/v3/modules/auth/source"
+	source "github.com/forbole/bdjuno/v4/modules/auth/source"
 )
 
 var (
@@ -75,4 +75,20 @@ func (s Source) GetAllAnyAccounts(height int64) ([]*codectypes.Any, error) {
 	}
 
 	return accounts, nil
+}
+
+func (s Source) GetTotalNumberOfAccounts(height int64) (uint64, error) {
+	ctx, err := s.LoadHeight(height)
+	if err != nil {
+		return 0, fmt.Errorf("error while loading height: %s", err)
+	}
+
+	res, err := s.q.Accounts(
+		ctx,
+		&authtypes.QueryAccountsRequest{})
+	if err != nil {
+		return 0, fmt.Errorf("error while getting total number of accounts from source: %s", err)
+	}
+
+	return res.Pagination.Total, nil
 }

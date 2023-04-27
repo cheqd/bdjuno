@@ -10,12 +10,14 @@ select_permissions:
     allow_aggregations: false
     columns:
     - address
+    - type
     - available
     - delegation
     - redelegation
     - unbonding
     - reward
     - sum
+    - height
     filter: {}
     limit: 100
   role: anonymous
