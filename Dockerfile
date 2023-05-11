@@ -34,7 +34,7 @@ RUN go mod download && make build
 ###       STAGE 2: Copy chain-specific BDJuno config        ###
 ###############################################################
 
-FROM alpine:3.17 AS bdjuno
+FROM alpine:3 AS bdjuno
 
 ##################################################
 ## Enabe line below if chain supports cosmwasm  ##
