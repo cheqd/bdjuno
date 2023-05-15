@@ -7,7 +7,7 @@ require (
 	github.com/cheqd/cheqd-node v1.4.0
 	github.com/cosmos/cosmos-sdk v0.46.10
 	github.com/forbole/juno/v4 v4.1.1-0.20230321084013-8b9686163062 // custom version with cheqd message handler
-	github.com/go-co-op/gocron v1.19.0
+	github.com/go-co-op/gocron v1.27.0
 	github.com/gogo/protobuf v1.3.3
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/lib/pq v1.10.7
@@ -154,11 +154,11 @@ require (
 	github.com/zondax/ledger-go v0.14.1 // indirect
 	go.etcd.io/bbolt v1.3.6 // indirect
 	go.opencensus.io v0.24.0 // indirect
+	go.uber.org/atomic v1.10.0 // indirect
 	golang.org/x/crypto v0.5.0 // indirect
 	golang.org/x/exp v0.0.0-20230131160201-f062dba9d201 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/oauth2 v0.4.0 // indirect
-	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/term v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
