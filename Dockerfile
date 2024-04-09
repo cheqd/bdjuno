@@ -2,7 +2,7 @@
 ###        	STAGE 1: Build Callisto pre-requisites        	###
 ###############################################################
 
-FROM golang:1.18-alpine AS builder
+FROM golang:1.20-alpine AS builder
 
 RUN apk update && apk add --no-cache make git bash
 
@@ -33,7 +33,7 @@ RUN go mod download && make build
 ###       STAGE 2: Copy chain-specific Callisto config        ###
 ###############################################################
 
-FROM alpine:3.17 AS callisto
+FROM alpine:3.19 AS callisto
 
 ##################################################
 ## Enabe line below if chain supports cosmwasm  ##

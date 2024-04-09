@@ -43,15 +43,15 @@ jobs:
           load: true
           target: callisto
           tags: ${{ steps.meta.outputs.tags }}
-          outputs: type=docker,dest=/tmp/bdjuno-build.tar
+          outputs: type=docker,dest=/tmp/callisto-build.tar
           cache-from: type=gha
           cache-to: type=gha,mode=min
 
       - name: Upload Docker test image
         uses: actions/upload-artifact@v3
         with:
-          name: bdjuno-build.tar
-          path: /tmp/bdjuno-build.tar
+          name: callisto-build.tar
+          path: /tmp/callisto-build.tar
 
   build-hasuracli:
     name: "Hasura CLI Docker Image"
