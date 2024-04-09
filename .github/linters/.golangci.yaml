@@ -4,32 +4,29 @@ run:
   timeout: 5m
 
 linters:
-  disable-all: true
   enable:
     - bodyclose
-    - deadcode
+    - depguard
     - dogsled
+    - errcheck
+    - exportloopref
+    - goconst
     - gocritic
+    - gofumpt
     - gofmt
     - goimports
-    - golint
-    - gosec
     - gosimple
     - govet
     - ineffassign
-    - maligned
     - misspell
     - nakedret
-    - scopelint
+    - nestif
+    - nolintlint
     - staticcheck
-    - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unused
-    - unparam
-    - misspell
-    - nolintlint
 
 issues:
   exclude-rules:
