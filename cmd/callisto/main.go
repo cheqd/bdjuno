@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/cheqd/cheqd-node/app"
+
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/forbole/juno/v5/cmd"
 	initcmd "github.com/forbole/juno/v5/cmd/init"
@@ -63,9 +64,6 @@ func getBasicManagers() []module.BasicManager {
 // This should be edited by custom implementations if needed.
 func getAddressesParser() messages.MessageAddressesParser {
 	return messages.JoinMessageParsers(
-		// this is needed so that bdjuno can parse our custom messages properly
-		// https://docs.bigdipper.live/cosmos-based/parser/custom-chains#optional-add-your-custom-addresses-parser
-		CheqdAddressesParser,
 		messages.CosmosMessageAddressesParser,
 	)
 }

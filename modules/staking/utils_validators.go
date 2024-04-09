@@ -6,6 +6,7 @@ import (
 	tmctypes "github.com/cometbft/cometbft/rpc/core/types"
 	"github.com/forbole/callisto/v4/modules/staking/keybase"
 	"github.com/forbole/callisto/v4/types"
+	juno "github.com/forbole/juno/v5/types"
 
 	"github.com/rs/zerolog/log"
 
@@ -139,7 +140,7 @@ func (m *Module) GetValidatorsWithStatus(height int64, status string) ([]staking
 		return nil, nil, err
 	}
 
-	vals := make([]types.Validator, len(validators))
+	var vals = make([]types.Validator, len(validators))
 	for index, val := range validators {
 		validator, err := m.convertValidator(height, val)
 		if err != nil {
@@ -332,6 +333,15 @@ func (m *Module) GetValidatorsVotingPowers(height int64, vals *tmctypes.ResultVa
 		consAddr, err := validator.GetConsAddr()
 		if err != nil {
 			return nil, err
+		}
+
+		// Find the voting power of this validator
+		var votingPower int64 = 0
+		for _, blockVal := range vals.Validators {
+			blockValConsAddr := juno.ConvertValidatorAddressToBech32String(blockVal.Address)
+			if blockValConsAddr == consAddr.String() {
+				votingPower = blockVal.VotingPower
+			}
 		}
 
 		if found, _ := m.db.HasValidator(consAddr.String()); !found {

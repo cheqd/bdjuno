@@ -211,7 +211,6 @@ func NewProposalStakingPoolSnapshotRow(proposalID uint64, bondedTokens, notBonde
 // --------------------------------------------------------------------------------------------------------------------
 
 type ProposalValidatorVotingPowerSnapshotRow struct {
-	ValidatorAddress string `db:"validator_address"`
 	ID               int64  `db:"id"`
 	ProposalID       int64  `db:"proposal_id"`
 	ValidatorAddress string `db:"validator_address"`

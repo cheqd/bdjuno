@@ -1,12 +1,12 @@
 ###############################################################
-###        	STAGE 1: Build BDJuno pre-requisites        	###
+###        	STAGE 1: Build Callisto pre-requisites        	###
 ###############################################################
 
 FROM golang:1.18-alpine AS builder
 
 RUN apk update && apk add --no-cache make git bash
 
-WORKDIR /go/src/github.com/forbole/bdjuno
+WORKDIR /go/src/github.com/forbole/callisto
 COPY . ./
 
 ######################################################
@@ -33,7 +33,7 @@ RUN go mod download && make build
 ###       STAGE 2: Copy chain-specific BDJuno config        ###
 ###############################################################
 
-FROM alpine:3.17 AS bdjuno
+FROM alpine:3.17 AS callisto
 
 ##################################################
 ## Enabe line below if chain supports cosmwasm  ##
@@ -42,12 +42,12 @@ FROM alpine:3.17 AS bdjuno
 #RUN apk update && apk add --no-cache ca-certificates build-base
 RUN apk update && apk add --no-cache bash ca-certificates curl
 
-# Copy BDJuno binary
-COPY --from=builder /go/src/github.com/forbole/bdjuno/build/bdjuno /usr/local/bin/bdjuno
+# Copy Callisto binary
+COPY --from=builder /go/src/github.com/forbole/callisto/build/callisto /usr/local/bin/callisto
 
 # Set user directory and details
-ARG HOME_DIR="/bdjuno"
-ARG USER="bdjuno"
+ARG HOME_DIR="/callisto"
+ARG USER="callisto"
 SHELL ["/bin/sh", "-euo", "pipefail", "-c"]
 
 # Add non-root user to use in the container
@@ -59,7 +59,7 @@ WORKDIR $HOME_DIR
 USER $USER
 
 # Copy chain-specific config file from Git repo
-COPY --chown=$USER:$USER deploy/ .bdjuno/
-RUN mv .bdjuno/entrypoint.sh . && chmod +x entrypoint.sh
+COPY --chown=$USER:$USER deploy/ .callisto/
+RUN mv .callisto/entrypoint.sh . && chmod +x entrypoint.sh
 
-ENTRYPOINT [ "/bdjuno/entrypoint.sh" ]
+ENTRYPOINT [ "/callisto/entrypoint.sh" ]
