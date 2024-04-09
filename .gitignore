@@ -1,5 +1,11 @@
-### APP-SPECIFIC EXCLUSIONS ###
-.bdjuno/**
+.idea/
+build/
+vendor/
+
+# Configuration
+*.toml
+*.json
+config.yaml
 
 # Coverage
 coverage.*
