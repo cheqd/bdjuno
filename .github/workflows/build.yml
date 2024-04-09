@@ -41,7 +41,7 @@ jobs:
           file: Dockerfile
           platforms: linux/amd64
           load: true
-          target: bdjuno
+          target: callisto
           tags: ${{ steps.meta.outputs.tags }}
           outputs: type=docker,dest=/tmp/bdjuno-build.tar
           cache-from: type=gha

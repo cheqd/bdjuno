@@ -30,7 +30,7 @@ RUN go mod download && make build
 
 
 ###############################################################
-###       STAGE 2: Copy chain-specific BDJuno config        ###
+###       STAGE 2: Copy chain-specific Callisto config        ###
 ###############################################################
 
 FROM alpine:3.17 AS callisto
