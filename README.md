@@ -1,40 +1,20 @@
-# BDJuno
+# Callisto
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/forbole/callisto/Tests)](https://github.com/forbole/callisto/actions?query=workflow%3ATests)
+[![Go Report Card](https://goreportcard.com/badge/github.com/forbole/callisto)](https://goreportcard.com/report/github.com/forbole/callisto)
+![Codecov branch](https://img.shields.io/codecov/c/github/forbole/callisto/cosmos/v0.40.x)
 
-[![GitHub license](https://img.shields.io/github/license/cheqd/bdjuno?color=blue&style=flat-square)](https://github.com/cheqd/bdjuno/blob/main/LICENSE)
-[![GitHub contributors](https://img.shields.io/github/contributors/cheqd/bdjuno?label=contributors%20%E2%9D%A4%EF%B8%8F&style=flat-square)](https://github.com/cheqd/bdjuno/graphs/contributors)
+Callisto (shorthand for BigDipper Juno) is the [Juno](https://github.com/forbole/juno) implementation
+for [Big Dipper](https://github.com/forbole/big-dipper).
 
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/cheqd/bdjuno/dispatch.yml?label=workflows&style=flat-square)](https://github.com/cheqd/bdjuno/actions/workflows/dispatch.yml) [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/cheqd/bdjuno/codeql.yml?label=CodeQL&style=flat-square)](https://github.com/cheqd/bdjuno/actions/workflows/codeql.yml) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/cheqd/bdjuno?style=flat-square) ![GitHub repo size](https://img.shields.io/github/repo-size/cheqd/bdjuno?style=flat-square)
-
-BDJuno (shorthand for BigDipper Juno) is the [Juno](https://github.com/forbole/juno) implementation
-for [BigDipper](https://github.com/forbole/big-dipper).
+It extends the custom Juno behavior by adding different handlers and custom operations to make it easier for Big Dipper
+showing the data inside the UI.
 
 All the chains' data that are queried from the RPC and gRPC endpoints are stored inside
 a [PostgreSQL](https://www.postgresql.org/) database on top of which [GraphQL](https://graphql.org/) APIs can then be
 created using [Hasura](https://hasura.io/).
 
-## Features specific to cheqd
-
-1. Indexing for [cheqd network] DIDs and Resources
-2. Changes to workflows/pipelines
-3. Optimised Dockerfile
-
-### Configuration files
-
-1. BDJuno configuration is in `deploy` folder
-   1. `genesis.json` should be current from the published one for this specific chain (testnet/mainnet) from [cheqd-node](https://github.com/cheqd/cheqd-node).
-   2. Edit `deploy/config.yaml` if necessary.
-   3. The variables used in config file are populated from DigitalOcean secrets by the entrypoint script `deploy/entrypoint.sh`
-2. Hasura configuration is in `hasura` folder
-   1. Edit `hasura/config.yaml` if necessary.
-   2. The variables used in config file are populated from DigitalOcean secrets by the entrypoint script `deploy/entrypoint.sh`
-
-## Developer guide
-
-This section is reproduced as-is from upstream project.
-
-### Usage
-
-To know how to setup and run BDJuno, please refer to
+## Usage
+To know how to setup and run Callisto, please refer to
 the [docs website](https://docs.bigdipper.live/cosmos-based/parser/overview/).
 
 ## Testing

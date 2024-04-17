@@ -1,7 +1,7 @@
 package top_accounts
 
 import (
-	"github.com/forbole/bdjuno/v4/types"
+	"github.com/forbole/callisto/v4/types"
 )
 
 type AuthModule interface {
@@ -23,6 +23,5 @@ type DistrModule interface {
 
 type StakingModule interface {
 	RefreshDelegations(delegatorAddr string, height int64) error
-	RefreshRedelegations(delegatorAddr string, height int64) error
 	RefreshUnbondings(delegatorAddr string, height int64) error
 }

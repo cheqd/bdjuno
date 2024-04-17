@@ -45,13 +45,13 @@ jobs:
             type=raw,value=${{ steps.set-network.outputs.NETWORK_NAME }}-latest
             type=sha,format=long
           labels: |
-            org.opencontainers.image.description="BDJuno for cheqd network"
+            org.opencontainers.image.description="Callisto for cheqd network"
             org.opencontainers.image.source="https://github.com/cheqd/bdjuno"
             org.opencontainers.image.vendor="Cheqd Foundation Limited"
             org.opencontainers.image.created={{date 'dddd, MMMM Do YYYY, h:mm:ss a'}}
             org.opencontainers.image.documentation="https://docs.cheqd.io/node"
 
-      - name: Build BDJuno image
+      - name: Build Callisto image
         uses: docker/build-push-action@v4
         with:
           context: .
