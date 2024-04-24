@@ -86,6 +86,7 @@ func buildLocalSources(cfg *local.Details, encodingConfig params.EncodingConfig)
 		SlashingSource: localslashingsource.NewSource(source, slashingtypes.QueryServer(app.SlashingKeeper)),
 		StakingSource:  localstakingsource.NewSource(source, stakingkeeper.Querier{Keeper: app.StakingKeeper}),
 	}
+
 	// Mount and initialize the stores
 	err = source.MountKVStores(app, "keys")
 	if err != nil {

@@ -27,16 +27,6 @@ func NewGovParams(params *govtypesv1.Params, height int64) *GovParams {
 	}
 }
 
-// NewGenesisGovParams allows to build a new GenesisGovParams instance
-func NewGenesisGovParams(votingParams VotingParams, depositParams DepositParams, tallyParams GenesisTallyParams, height int64) *GenesisGovParams {
-	return &GenesisGovParams{
-		DepositParams: depositParams,
-		VotingParams:  votingParams,
-		TallyParams:   tallyParams,
-		Height:        height,
-	}
-}
-
 // --------------------------------------------------------------------------------------------------------------------
 
 // Proposal represents a single governance proposal

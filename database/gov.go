@@ -37,41 +37,6 @@ WHERE gov_params.height <= excluded.height`
 	return nil
 }
 
-// SaveGenesisGovParams saves the genesis x/gov parameters inside the database
-func (db *Db) SaveGenesisGovParams(params *types.GenesisGovParams) error {
-
-	depositParamsBz, err := json.Marshal(&params.DepositParams)
-	if err != nil {
-		return fmt.Errorf("error while marshaling genesis deposit params: %s", err)
-	}
-
-	votingParamsBz, err := json.Marshal(&params.VotingParams)
-	if err != nil {
-		return fmt.Errorf("error while marshaling genesis voting params: %s", err)
-	}
-
-	tallyingParams, err := json.Marshal(&params.TallyParams)
-	if err != nil {
-		return fmt.Errorf("error while marshaling genesis tally params: %s", err)
-	}
-
-	stmt := `
-INSERT INTO gov_params(deposit_params, voting_params, tally_params, height)
-VALUES ($1, $2, $3, $4)
-ON CONFLICT (one_row_id) DO UPDATE
-	SET deposit_params = excluded.deposit_params,
-  		voting_params = excluded.voting_params,
-		tally_params = excluded.tally_params,
-		height = excluded.height
-WHERE gov_params.height <= excluded.height`
-	_, err = db.SQL.Exec(stmt, string(depositParamsBz), string(votingParamsBz), string(tallyingParams), params.Height)
-	if err != nil {
-		return fmt.Errorf("error while storing genesis gov params: %s", err)
-	}
-
-	return nil
-}
-
 // GetGovParams returns the most recent governance parameters
 func (db *Db) GetGovParams() (*types.GovParams, error) {
 	var rows []dbtypes.GovParamsRow
@@ -275,13 +240,6 @@ func (db *Db) SaveDeposits(deposits []types.Deposit) error {
 			deposit.TransactionHash,
 			deposit.Height,
 		)
-		accounts = append(accounts, types.NewAccount(deposit.Depositor))
-	}
-
-	// Store the depositor account
-	err := db.SaveAccounts(accounts)
-	if err != nil {
-		return fmt.Errorf("error while storing depositor account: %s", err)
 	}
 
 	// Store depositors accounts

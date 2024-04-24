@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	cosmossdk.io/math v1.3.0
-	github.com/cheqd/cheqd-node v2.0.0-develop.10+incompatible
+	github.com/cheqd/cheqd-node v2.0.1+incompatible
 	github.com/cometbft/cometbft v0.37.4
 	github.com/cosmos/cosmos-sdk v0.47.10
 	github.com/cosmos/gogoproto v1.4.11
