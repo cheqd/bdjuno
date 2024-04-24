@@ -6,7 +6,7 @@ import (
 	"github.com/go-co-op/gocron"
 	"github.com/rs/zerolog/log"
 
-	"github.com/forbole/bdjuno/v3/modules/utils"
+	"github.com/forbole/callisto/v4/modules/utils"
 )
 
 // RegisterPeriodicOperations implements modules.Module
@@ -27,7 +27,7 @@ func (m *Module) UpdateSupply() error {
 	log.Trace().Str("module", "bank").Str("operation", "total supply").
 		Msg("updating total supply")
 
-	height, err := m.db.GetLastBlockHeight()
+	block, err := m.db.GetLastBlockHeightAndTimestamp()
 	if err != nil {
 		return fmt.Errorf("error while getting latest block height: %s", err)
 	}

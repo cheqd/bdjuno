@@ -1,43 +1,45 @@
 package modules
 
 import (
-	"github.com/forbole/bdjuno/v3/modules/actions"
-	"github.com/forbole/bdjuno/v3/modules/types"
+	"github.com/forbole/callisto/v4/modules/actions"
+	"github.com/forbole/callisto/v4/modules/did"
+	"github.com/forbole/callisto/v4/modules/types"
 
-	"github.com/forbole/juno/v4/modules/pruning"
-	"github.com/forbole/juno/v4/modules/telemetry"
+	"github.com/forbole/juno/v5/modules/pruning"
+	"github.com/forbole/juno/v5/modules/telemetry"
 
-	"github.com/forbole/bdjuno/v3/modules/slashing"
+	"github.com/forbole/callisto/v4/modules/slashing"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	jmodules "github.com/forbole/juno/v4/modules"
-	"github.com/forbole/juno/v4/modules/messages"
-	"github.com/forbole/juno/v4/modules/registrar"
+	jmodules "github.com/forbole/juno/v5/modules"
+	"github.com/forbole/juno/v5/modules/messages"
+	"github.com/forbole/juno/v5/modules/registrar"
 
-	"github.com/forbole/bdjuno/v3/utils"
+	"github.com/forbole/callisto/v4/utils"
 
-	"github.com/forbole/bdjuno/v3/database"
-	"github.com/forbole/bdjuno/v3/modules/auth"
-	"github.com/forbole/bdjuno/v3/modules/bank"
-	"github.com/forbole/bdjuno/v3/modules/consensus"
-	"github.com/forbole/bdjuno/v3/modules/distribution"
-	"github.com/forbole/bdjuno/v3/modules/feegrant"
+	"github.com/forbole/callisto/v4/database"
+	"github.com/forbole/callisto/v4/modules/auth"
+	"github.com/forbole/callisto/v4/modules/bank"
+	"github.com/forbole/callisto/v4/modules/consensus"
+	"github.com/forbole/callisto/v4/modules/distribution"
+	"github.com/forbole/callisto/v4/modules/feegrant"
 
-	dailyrefetch "github.com/forbole/bdjuno/v3/modules/daily_refetch"
-	"github.com/forbole/bdjuno/v3/modules/gov"
-	"github.com/forbole/bdjuno/v3/modules/mint"
-	"github.com/forbole/bdjuno/v3/modules/modules"
-	"github.com/forbole/bdjuno/v3/modules/pricefeed"
-	"github.com/forbole/bdjuno/v3/modules/staking"
-	topaccounts "github.com/forbole/bdjuno/v3/modules/top_accounts"
-	"github.com/forbole/bdjuno/v3/modules/upgrade"
+	dailyrefetch "github.com/forbole/callisto/v4/modules/daily_refetch"
+	"github.com/forbole/callisto/v4/modules/gov"
+	messagetype "github.com/forbole/callisto/v4/modules/message_type"
+	"github.com/forbole/callisto/v4/modules/mint"
+	"github.com/forbole/callisto/v4/modules/modules"
+	"github.com/forbole/callisto/v4/modules/pricefeed"
+	"github.com/forbole/callisto/v4/modules/resource"
+	"github.com/forbole/callisto/v4/modules/staking"
+	topaccounts "github.com/forbole/callisto/v4/modules/top_accounts"
+	"github.com/forbole/callisto/v4/modules/upgrade"
+	juno "github.com/forbole/juno/v5/types"
 )
 
 // UniqueAddressesParser returns a wrapper around the given parser that removes all duplicated addresses
 func UniqueAddressesParser(parser messages.MessageAddressesParser) messages.MessageAddressesParser {
-	return func(cdc codec.Codec, msg sdk.Msg) ([]string, error) {
-		addresses, err := parser(cdc, msg)
+	return func(tx *juno.Tx) ([]string, error) {
+		addresses, err := parser(tx)
 		if err != nil {
 			return nil, err
 		}
@@ -77,13 +79,17 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 	bankModule := bank.NewModule(r.parser, sources.BankSource, cdc, db)
 	consensusModule := consensus.NewModule(db)
 	dailyRefetchModule := dailyrefetch.NewModule(ctx.Proxy, db)
+	didModule := did.NewModule(r.parser, cdc, db)
 	distrModule := distribution.NewModule(sources.DistrSource, cdc, db)
 	feegrantModule := feegrant.NewModule(cdc, db)
+	messagetypeModule := messagetype.NewModule(r.parser, cdc, db)
 	mintModule := mint.NewModule(sources.MintSource, cdc, db)
+	resourceModule := resource.NewModule(r.parser, cdc, db)
 	slashingModule := slashing.NewModule(sources.SlashingSource, cdc, db)
 	stakingModule := staking.NewModule(sources.StakingSource, cdc, db)
-	govModule := gov.NewModule(sources.GovSource, authModule, distrModule, mintModule, slashingModule, stakingModule, cdc, db)
+	govModule := gov.NewModule(sources.GovSource, distrModule, mintModule, slashingModule, stakingModule, cdc, db)
 	upgradeModule := upgrade.NewModule(db, stakingModule)
+	topAccountsModule := topaccounts.NewModule(authModule, sources.AuthSource, bankModule, distrModule, stakingModule, r.parser, cdc, ctx.Proxy, db)
 
 	return []jmodules.Module{
 		messages.NewModule(r.parser, cdc, ctx.Database),
@@ -95,18 +101,18 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 		bankModule,
 		consensusModule,
 		dailyRefetchModule,
+		didModule,
 		distrModule,
 		feegrantModule,
 		govModule,
 		mintModule,
+		messagetypeModule,
 		modules.NewModule(ctx.JunoConfig.Chain, db),
 		pricefeed.NewModule(ctx.JunoConfig, cdc, db),
+		resourceModule,
 		slashingModule,
 		stakingModule,
-		topaccounts.NewModule(bankModule,
-			distrModule,
-			stakingModule,
-			r.parser, cdc, db),
+		topAccountsModule,
 		upgradeModule,
 	}
 }

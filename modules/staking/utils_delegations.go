@@ -5,12 +5,12 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/forbole/bdjuno/v3/modules/pricefeed"
-	"github.com/forbole/bdjuno/v3/types"
+	"github.com/forbole/callisto/v4/modules/pricefeed"
+	"github.com/forbole/callisto/v4/types"
 	"github.com/rs/zerolog/log"
 )
 
-func (m *Module) RefreshDelegations(height int64, delegatorAddr string) error {
+func (m *Module) RefreshDelegations(delegatorAddr string, height int64) error {
 	log.Debug().
 		Str("module", "staking").
 		Int64("height", height).Msg("updating delegations")

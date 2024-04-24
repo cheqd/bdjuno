@@ -7,21 +7,21 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/forbole/bdjuno/v3/modules/bank"
-	"github.com/forbole/bdjuno/v3/modules/distribution"
-	"github.com/forbole/bdjuno/v3/modules/staking"
-	topaccounts "github.com/forbole/bdjuno/v3/modules/top_accounts"
-	modulestypes "github.com/forbole/bdjuno/v3/modules/types"
-	"github.com/forbole/bdjuno/v3/types"
+	"github.com/forbole/callisto/v4/modules/bank"
+	"github.com/forbole/callisto/v4/modules/distribution"
+	"github.com/forbole/callisto/v4/modules/staking"
+	topaccounts "github.com/forbole/callisto/v4/modules/top_accounts"
+	modulestypes "github.com/forbole/callisto/v4/modules/types"
+	"github.com/forbole/callisto/v4/types"
 	"github.com/rs/zerolog/log"
 
-	parsecmdtypes "github.com/forbole/juno/v4/cmd/parse/types"
-	"github.com/forbole/juno/v4/parser"
-	"github.com/forbole/juno/v4/types/config"
+	parsecmdtypes "github.com/forbole/juno/v5/cmd/parse/types"
+	"github.com/forbole/juno/v5/parser"
+	"github.com/forbole/juno/v5/types/config"
 	"github.com/spf13/cobra"
 
-	"github.com/forbole/bdjuno/v3/database"
-	"github.com/forbole/bdjuno/v3/modules/auth"
+	"github.com/forbole/callisto/v4/database"
+	"github.com/forbole/callisto/v4/modules/auth"
 )
 
 var (
@@ -54,7 +54,7 @@ func allCmd(parseConfig *parsecmdtypes.Config) *cobra.Command {
 			bankModule := bank.NewModule(nil, sources.BankSource, parseCtx.EncodingConfig.Codec, db)
 			distriModule := distribution.NewModule(sources.DistrSource, parseCtx.EncodingConfig.Codec, db)
 			stakingModule := staking.NewModule(sources.StakingSource, parseCtx.EncodingConfig.Codec, db)
-			topaccountsModule := topaccounts.NewModule(bankModule, distriModule, stakingModule, nil, parseCtx.EncodingConfig.Codec, db)
+			topaccountsModule := topaccounts.NewModule(authModule, sources.AuthSource, bankModule, distriModule, stakingModule, nil, parseCtx.EncodingConfig.Codec, parseCtx.Node, db)
 
 			// Get workers
 			exportQueue := NewQueue(5)
@@ -66,17 +66,20 @@ func allCmd(parseConfig *parsecmdtypes.Config) *cobra.Command {
 
 			waitGroup.Add(1)
 
-			// Get all base accounts, height set to 0 for querying the latest data on chain
-			accounts, err := authModule.GetAllBaseAccounts(0)
+			// Query the latest chain height
+			latestHeight, err := parseCtx.Node.LatestHeight()
 			if err != nil {
-				return fmt.Errorf("error while getting base accounts: %s", err)
+				return fmt.Errorf("error while getting chain latest block height: %s", err)
 			}
 
-			log.Debug().Int("total", len(accounts)).Msg("saving accounts...")
-			// Store accounts
-			err = db.SaveAccounts(accounts)
+			// Set the height 5 blocks lower to avoid error
+			// codespace sdk code 26: invalid height: cannot query with height in the future
+			height := latestHeight - 5
+
+			// Store all addresses in database
+			accounts, err := authModule.RefreshTopAccountsList(height)
 			if err != nil {
-				return err
+				return fmt.Errorf("error while unpacking accounts: %s", err)
 			}
 
 			for i, w := range workers {

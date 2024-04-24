@@ -27,13 +27,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+<<<<<<< HEAD
       - uses: actions/setup-go@v4
+=======
+      - uses: actions/setup-go@v5
+>>>>>>> de4cfddd071cda233430244cf8be66765e102114
         with:
           go-version-file: ./go.mod
-          cache: true
+          cache: false # temporarily off, as golangci-lint doesn't align 100% with cached setup-go@v4, see: https://github.com/golangci/golangci-lint-action/issues/807
       
       - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v4
         with:
           version: latest
           args: --config .github/linters/.golangci.yaml
