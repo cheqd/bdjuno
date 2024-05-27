@@ -7,22 +7,20 @@ linters:
   disable-all: true
   enable:
     - bodyclose
-    - deadcode
     - dogsled
+    - exportloopref
+    - fieldalignment
     - gocritic
     - gofmt
     - goimports
-    - golint
     - gosec
     - gosimple
     - govet
     - ineffassign
-    - maligned
     - misspell
     - nakedret
-    - scopelint
+    - revive
     - staticcheck
-    - structcheck
     - stylecheck
     - typecheck
     - unconvert
@@ -60,12 +58,8 @@ issues:
 linters-settings:
   dogsled:
     max-blank-identifiers: 3
-  maligned:
-    # print struct with more effective memory layout or not, false by default
-    suggest-new: true
   nolintlint:
     allow-unused: false
-    allow-leading-space: true
     require-explanation: false
     require-specific: false
   misspell:
