@@ -9,7 +9,6 @@ linters:
     - bodyclose
     - dogsled
     - exportloopref
-    - fieldalignment
     - gocritic
     - gofmt
     - goimports
