@@ -55,7 +55,7 @@ func (m *Module) RefreshTotalAccounts() error {
 		return fmt.Errorf("error while getting total number of accounts: %s", err)
 	}
 
-	err = m.db.SaveTotalAccounts(int64(totalAccountsNumber), height)
+	err = m.db.SaveTotalAccounts(int64(totalAccountsNumber), height) // #nosec G115
 	if err != nil {
 		return fmt.Errorf("error while storing total number of accounts: %s", err)
 	}
