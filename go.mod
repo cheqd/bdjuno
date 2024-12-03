@@ -1,10 +1,12 @@
 module github.com/forbole/callisto/v4
 
-go 1.20
+go 1.21
+
+toolchain go1.21.5
 
 require (
 	cosmossdk.io/math v1.3.0
-	github.com/cheqd/cheqd-node v3.0.0+incompatible
+	github.com/cheqd/cheqd-node v3.0.1+incompatible
 	github.com/cometbft/cometbft v0.37.4
 	github.com/cosmos/cosmos-sdk v0.47.10
 	github.com/cosmos/gogoproto v1.4.11
@@ -348,6 +350,5 @@ require (
 // This is to avoid warnings while running the binary
 // See here: https://github.com/desmos-labs/desmos/pull/1131#discussion_r1194090419
 replace (
-	github.com/cheqd/cheqd-node => github.com/cheqd/cheqd-node v1.4.6-0.20240328121051-0293663c21d6
 	github.com/cosmos/gogoproto => github.com/cosmos/gogoproto v1.4.10
 )
