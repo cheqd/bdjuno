@@ -1,6 +1,8 @@
 module github.com/forbole/callisto/v4
 
-go 1.23
+go 1.22.6
+
+toolchain go1.23.4
 
 require (
 	cosmossdk.io/math v1.3.0
