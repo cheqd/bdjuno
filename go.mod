@@ -2,8 +2,6 @@ module github.com/forbole/callisto/v4
 
 go 1.22.6
 
-toolchain go1.22.9
-
 require (
 	cosmossdk.io/math v1.3.0
 	github.com/cheqd/cheqd-node v1.4.6-0.20241125115111-fb1428f83ed8
