@@ -356,4 +356,5 @@ replace (
 	github.com/cheqd/cheqd-node => github.com/cheqd/cheqd-node v1.4.6-pseudo-version-3.0.1
 	github.com/cosmos/cosmos-sdk => github.com/cheqd/cosmos-sdk v0.47.10-height-mismatch
 	github.com/cosmos/iavl => github.com/cheqd/iavl v0.20.1-uneven-heights
+	github.com/cosmos/gogoproto v1.5.0 => github.com/cosmos/gogoproto v1.4.10
 )
