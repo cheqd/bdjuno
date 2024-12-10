@@ -2,7 +2,7 @@
 ###        	STAGE 1: Build Callisto pre-requisites        	###
 ###############################################################
 
-FROM golang:1.20-alpine AS builder
+FROM golang:1.23-alpine AS builder
 
 RUN apk update && apk add --no-cache make git bash
 
