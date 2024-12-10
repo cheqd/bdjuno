@@ -355,5 +355,6 @@ replace (
 	github.com/cosmos/cosmos-sdk => github.com/cheqd/cosmos-sdk v0.47.10-height-mismatch
 	// github.com/cosmos/gogoproto v1.5.0 => github.com/cosmos/gogoproto v1.4.10
 	github.com/cosmos/iavl => github.com/cheqd/iavl v0.20.1-uneven-heights
+	golang.org/x/exp => golang.org/x/exp v0.0.0-20230425010034-47ecfdc1ba53
 	google.golang.org/genproto/googleapis/api => google.golang.org/genproto/googleapis/api v0.0.0-20240610135401-a8a62080eff3
 )
