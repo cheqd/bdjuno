@@ -366,7 +366,7 @@ func (m *Module) updateProposalValidatorStatusesSnapshot(
 			proposalID,
 			consAddr.String(),
 			votingPower.VotingPower.Int64(),
-			stakingtypes.BondStatus(status.Status),
+			stakingtypes.BondStatus(status.Status), // #nosec G115
 			status.Jailed,
 			height,
 		)
