@@ -336,16 +336,16 @@ func (m *Module) updateNonMatchingValidatorStatuses(height int64, validators []s
 		}
 		validatorSet[consAddr.String()] = true
 	}
-	// Fetch all validators in the database
-	dbValidators, err := m.db.GetValidators()
+	// Fetch all validators in the database that have status == Bonded
+	dbValidators, err := m.db.GetAllValidatorsWithStatus(int(stakingtypes.Bonded))
 	if err != nil {
 		return fmt.Errorf("error fetching validators with status != 1: %w", err)
 	}
 	// Identify non-matching validators
 	nonMatchingValidators := []string{}
 	for _, dbValidator := range dbValidators {
-		if _, exists := validatorSet[dbValidator.GetConsAddr()]; !exists {
-			nonMatchingValidators = append(nonMatchingValidators, dbValidator.GetConsAddr())
+		if _, exists := validatorSet[dbValidator]; !exists {
+			nonMatchingValidators = append(nonMatchingValidators, dbValidator)
 		}
 	}
 
