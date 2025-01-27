@@ -223,6 +223,11 @@ func (m *Module) UpdateValidatorStatuses() error {
 		return fmt.Errorf("error while updating validators status and voting power: %s", err)
 	}
 
+	// update non-matching validators statuses to Unbonded
+	err = m.updateNonMatchingValidatorStatuses(block.Height, validators, int(stakingtypes.Unbonded))
+	if err != nil {
+		return fmt.Errorf("error while updating non-matching validators status: %s", err)
+	}
 	// get all active proposals IDs from db
 	ids, err := m.db.GetOpenProposalsIds(block.BlockTimestamp)
 	if err != nil {
@@ -316,6 +321,41 @@ func (m *Module) updateValidatorStatusAndVP(height int64, validators []stakingty
 		log.Error().Str("module", "staking").Err(err).
 			Int64("height", height).
 			Msg("error while saving validators statuses")
+	}
+
+	return nil
+}
+
+func (m *Module) updateNonMatchingValidatorStatuses(height int64, validators []stakingtypes.Validator, defaultStatus int) error {
+	// Create a map of validator consensus addresses from the input list
+	validatorSet := make(map[string]bool, len(validators))
+	for _, validator := range validators {
+		consAddr, err := validator.GetConsAddr()
+		if err != nil {
+			return fmt.Errorf("error getting consensus address: %w", err)
+		}
+		validatorSet[consAddr.String()] = true
+	}
+	// Fetch all validators in the database that have status == Bonded
+	dbValidators, err := m.db.GetAllValidatorsWithStatus(int(stakingtypes.Bonded))
+	if err != nil {
+		return fmt.Errorf("error fetching validators with status != 1: %w", err)
+	}
+	// Identify non-matching validators
+	nonMatchingValidators := []string{}
+	for _, dbValidator := range dbValidators {
+		if _, exists := validatorSet[dbValidator]; !exists {
+			nonMatchingValidators = append(nonMatchingValidators, dbValidator)
+		}
+	}
+
+	// Update the status of non-matching validators
+	if len(nonMatchingValidators) > 0 {
+		err := m.db.UpdateValidators(nonMatchingValidators, defaultStatus, height)
+		if err != nil {
+			return fmt.Errorf("error updating non-matching validators: %w", err)
+		}
+		log.Debug().Int("count", len(nonMatchingValidators)).Msg("Updated non-matching validator statuses")
 	}
 
 	return nil
