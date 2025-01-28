@@ -23,7 +23,7 @@ jobs:
 
     steps:             
       - name: Setup CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           languages: 'go'
           queries: security-and-quality
