@@ -20,6 +20,7 @@ COPY . ./
 #RUN sha256sum /lib/libwasmvm_muslc.x86_64.a | grep 6e4de7ba9bad4ae9679c7f9ecf7e283dd0160e71567c6a7be6ae47c81ebe7f32
 ## Copy the library you want to the final location that will be found by the linker flag `-lwasmvm_muslc`
 #RUN cp /lib/libwasmvm_muslc.$(uname -m).a /lib/libwasmvm_muslc.a
+
 RUN go mod download && make build
 
 ##################################################
