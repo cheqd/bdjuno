@@ -6,6 +6,7 @@ select_permissions:
     allow_aggregations: false
     columns:
     - params
+    - one_row_id
     - height
     filter: {}
     limit: 1
