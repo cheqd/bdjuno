@@ -1,0 +1,14 @@
+table:
+  name: message_type
+  schema: public
+select_permissions:
+- permission:
+    allow_aggregations: false
+    columns:
+    - height
+    - label
+    - module
+    - type
+    filter: {}
+    limit: 100
+  role: anonymous
