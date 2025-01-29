@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/forbole/callisto/v4/types"
+	"github.com/lib/pq"
 
 	dbtypes "github.com/forbole/callisto/v4/database/types"
 
@@ -420,7 +421,7 @@ func (db *Db) SaveValidatorsStatuses(statuses []types.ValidatorStatus) error {
 	}
 
 	validatorStmt = validatorStmt[:len(validatorStmt)-1]
-	validatorStmt += "ON CONFLICT DO NOTHING"
+	validatorStmt += " ON CONFLICT DO NOTHING"
 	_, err := db.SQL.Exec(validatorStmt, valParams...)
 	if err != nil {
 		return fmt.Errorf("error while storing validators: %s", err)
@@ -439,6 +440,36 @@ WHERE validator_status.height <= excluded.height`
 	}
 
 	return nil
+}
+
+// GetAllValidatorsWithStatus returns the list of validators having the given status.
+func (db *Db) GetAllValidatorsWithStatus(status int) ([]string, error) {
+	query := `SELECT validator_address FROM validator_status WHERE status = $1`
+	rows, err := db.SQL.Query(query, status)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var addresses []string
+	for rows.Next() {
+		var address string
+		if err := rows.Scan(&address); err != nil {
+			return nil, err
+		}
+		addresses = append(addresses, address)
+	}
+	return addresses, nil
+}
+
+// UpdateValidators updates the given status of the validators having the given addresses
+func (db *Db) UpdateValidators(addresses []string, status int, height int64) error {
+	query := `
+		UPDATE validator_status
+		SET status = $1, jailed = true
+		WHERE validator_address = ANY($3) AND height <= $2`
+	_, err := db.SQL.Exec(query, status, height, pq.Array(addresses))
+	return err
 }
 
 // saveDoubleSignVote saves the given vote inside the database, returning the row id
