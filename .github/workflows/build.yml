@@ -48,7 +48,7 @@ jobs:
           cache-to: type=gha,mode=min
 
       - name: Upload Docker test image
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: callisto-build.tar
           path: /tmp/callisto-build.tar
@@ -92,7 +92,7 @@ jobs:
           cache-to: type=gha,mode=min
 
       - name: Upload Docker test image
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: hasuracli-build.tar
           path: /tmp/hasuracli-build.tar
