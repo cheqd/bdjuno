@@ -1,13 +1,14 @@
 table:
-  name: gov_params
+  name: message_type
   schema: public
 select_permissions:
 - permission:
     allow_aggregations: false
     columns:
-    - params
-    - one_row_id
     - height
+    - label
+    - module
+    - type
     filter: {}
-    limit: 1
+    limit: 100
   role: anonymous

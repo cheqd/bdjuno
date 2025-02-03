@@ -14,6 +14,7 @@
 - "!include public_gov_params.yaml"
 - "!include public_inflation.yaml"
 - "!include public_message.yaml"
+- "!include public_message_type.yaml"
 - "!include public_mint_params.yaml"
 - "!include public_modules.yaml"
 - "!include public_pre_commit.yaml"
