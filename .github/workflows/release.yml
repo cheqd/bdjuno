@@ -15,14 +15,14 @@ jobs:
       IMAGE_NAME: ${{ github.repository }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set network name
         id: set-network
         run: echo NETWORK_NAME="${GITHUB_REF##*/}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
         id: buildx
         with:
           install: true
@@ -38,7 +38,7 @@ jobs:
 
       - name: Configure Docker image metadata
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
           tags: |
@@ -52,7 +52,7 @@ jobs:
             org.opencontainers.image.documentation="https://docs.cheqd.io/node"
 
       - name: Build Callisto image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile
@@ -74,14 +74,14 @@ jobs:
       IMAGE_NAME: cheqd/hasuracli
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set network name
         id: set-network
         run: echo NETWORK_NAME="${GITHUB_REF##*/}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
         id: buildx
         with:
           install: true
@@ -97,7 +97,7 @@ jobs:
 
       - name: Configure Docker image metadata
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: registry.digitalocean.com/${{ env.IMAGE_NAME }}
           tags: |
@@ -111,7 +111,7 @@ jobs:
             org.opencontainers.image.documentation="https://docs.cheqd.io/node"
 
       - name: Build Hasura CLI image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile.hasura
