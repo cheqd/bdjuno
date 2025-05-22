@@ -6,7 +6,7 @@ import (
 	tmctypes "github.com/cometbft/cometbft/rpc/core/types"
 	"github.com/forbole/callisto/v4/modules/staking/keybase"
 	"github.com/forbole/callisto/v4/types"
-	juno "github.com/forbole/juno/v5/types"
+	juno "github.com/forbole/juno/v6/types"
 
 	"github.com/rs/zerolog/log"
 
@@ -140,7 +140,7 @@ func (m *Module) GetValidatorsWithStatus(height int64, status string) ([]staking
 		return nil, nil, err
 	}
 
-	var vals = make([]types.Validator, len(validators))
+	vals := make([]types.Validator, len(validators))
 	for index, val := range validators {
 		validator, err := m.convertValidator(height, val)
 		if err != nil {
@@ -250,11 +250,12 @@ func (m *Module) UpdateValidatorStatuses() error {
 // updateProposalValidatorStatusSnapshot updates validators snapshot for
 // the proposal having the given id
 func (m *Module) updateProposalValidatorStatusSnapshot(
-	height int64, proposalID uint64, validators []stakingtypes.Validator) error {
+	height int64, proposalID uint64, validators []stakingtypes.Validator,
+) error {
 	snapshots := make([]types.ProposalValidatorStatusSnapshot, len(validators))
 
 	for index, validator := range validators {
-		consAddr, err := validator.GetConsAddr()
+		consAddr, err := m.getValidatorConsAddr(validator)
 		if err != nil {
 			return err
 		}
@@ -281,7 +282,7 @@ func (m *Module) updateValidatorStatusAndVP(height int64, validators []stakingty
 	statuses := make([]types.ValidatorStatus, len(validators))
 
 	for index, validator := range validators {
-		consAddr, err := validator.GetConsAddr()
+		consAddr, err := m.getValidatorConsAddr(validator)
 		if err != nil {
 			return err
 		}

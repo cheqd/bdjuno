@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/forbole/callisto/v4/types"
-	juno "github.com/forbole/juno/v5/types"
+	juno "github.com/forbole/juno/v6/types"
 )
 
 // HandleMsg implements MessageModule
@@ -42,7 +42,6 @@ func (m *Module) handleMsgUpdateDidDoc(height int64, msg *didtypes.MsgUpdateDidD
 		msg.Payload.AssertionMethod, msg.Payload.CapabilityInvocation,
 		msg.Payload.CapabilityDelegation, msg.Payload.KeyAgreement,
 		msg.Payload.Service, msg.Payload.AlsoKnownAs, msg.Payload.VersionId, feePayer, height))
-
 }
 
 func (m *Module) handleMsgDeactivateDidDoc(msg *didtypes.MsgDeactivateDidDoc) error {

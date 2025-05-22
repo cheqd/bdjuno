@@ -8,15 +8,13 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/rs/zerolog/log"
 
-	"github.com/forbole/juno/v5/node/local"
+	"github.com/forbole/juno/v6/node/local"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	source "github.com/forbole/callisto/v4/modules/auth/source"
 )
 
-var (
-	_ source.Source = &Source{}
-)
+var _ source.Source = &Source{}
 
 // Source implements authsource.Source by using a local node
 type Source struct {
@@ -41,7 +39,7 @@ func (s Source) GetAllAnyAccounts(height int64) ([]*codectypes.Any, error) {
 
 	var accounts []*codectypes.Any
 	var nextKey []byte
-	var stop = false
+	stop := false
 	var counter uint64
 	var totalCounts uint64
 

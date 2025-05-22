@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	v6db "github.com/forbole/callisto/v4/database/migrate/v6"
-	parse "github.com/forbole/juno/v5/cmd/parse/types"
-	"github.com/forbole/juno/v5/database"
-	"github.com/forbole/juno/v5/database/postgresql"
-	"github.com/forbole/juno/v5/types/config"
+	parse "github.com/forbole/juno/v6/cmd/parse/types"
+	"github.com/forbole/juno/v6/database"
+	"github.com/forbole/juno/v6/database/postgresql"
+	"github.com/forbole/juno/v6/types/config"
 )
 
 // RunMigration runs the migrations to v5

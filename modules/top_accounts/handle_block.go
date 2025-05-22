@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/forbole/juno/v5/types"
+	"github.com/forbole/juno/v6/types"
 
 	eventsutil "github.com/forbole/callisto/v4/utils/events"
 )

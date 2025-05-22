@@ -15,18 +15,16 @@ import (
 	"github.com/forbole/callisto/v4/types"
 	"github.com/rs/zerolog/log"
 
-	parsecmdtypes "github.com/forbole/juno/v5/cmd/parse/types"
-	"github.com/forbole/juno/v5/parser"
-	"github.com/forbole/juno/v5/types/config"
+	parsecmdtypes "github.com/forbole/juno/v6/cmd/parse/types"
+	"github.com/forbole/juno/v6/parser"
+	"github.com/forbole/juno/v6/types/config"
 	"github.com/spf13/cobra"
 
 	"github.com/forbole/callisto/v4/database"
 	"github.com/forbole/callisto/v4/modules/auth"
 )
 
-var (
-	waitGroup sync.WaitGroup
-)
+var waitGroup sync.WaitGroup
 
 const (
 	flagWorker = "worker"
@@ -110,7 +108,7 @@ func enqueueAddresses(exportQueue AddressQueue, accounts []types.Account) {
 // trapSignal will listen for any OS signal and invoke Done on the main
 // WaitGroup allowing the main process to gracefully exit.
 func trapSignal(ctx *parser.Context) {
-	var sigCh = make(chan os.Signal, 1)
+	sigCh := make(chan os.Signal, 1)
 
 	signal.Notify(sigCh, syscall.SIGTERM)
 	signal.Notify(sigCh, syscall.SIGINT)

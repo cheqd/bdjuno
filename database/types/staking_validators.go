@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"strconv"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -60,7 +61,7 @@ func (v ValidatorData) GetMaxChangeRate() *sdk.Dec {
 	if err != nil {
 		panic(err)
 	}
-	result := sdk.NewDec(n)
+	result := math.LegacyNewDec(n)
 	return &result
 }
 
@@ -70,7 +71,7 @@ func (v ValidatorData) GetMaxRate() *sdk.Dec {
 	if err != nil {
 		panic(err)
 	}
-	result := sdk.NewDec(n)
+	result := math.LegacyNewDec(n)
 	return &result
 }
 
