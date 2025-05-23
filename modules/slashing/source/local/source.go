@@ -39,7 +39,7 @@ func (s Source) GetSigningInfos(height int64) ([]slashingtypes.ValidatorSigningI
 	stop := false
 	for !stop {
 		res, err := s.querier.SigningInfos(
-			sdk.WrapSDKContext(ctx),
+			ctx,
 			&slashingtypes.QuerySigningInfosRequest{
 				Pagination: &query.PageRequest{
 					Key:   nextKey,
@@ -66,7 +66,7 @@ func (s Source) GetParams(height int64) (slashingtypes.Params, error) {
 		return slashingtypes.Params{}, fmt.Errorf("error while loading height: %s", err)
 	}
 
-	res, err := s.querier.Params(sdk.WrapSDKContext(ctx), &slashingtypes.QueryParamsRequest{})
+	res, err := s.querier.Params(ctx, &slashingtypes.QueryParamsRequest{})
 	if err != nil {
 		return slashingtypes.Params{}, nil
 	}
@@ -82,7 +82,7 @@ func (s Source) GetSigningInfo(height int64, consAddr sdk.ConsAddress) (slashing
 	}
 
 	res, err := s.querier.SigningInfo(
-		sdk.WrapSDKContext(ctx),
+		ctx,
 		&slashingtypes.QuerySigningInfoRequest{
 			ConsAddress: consAddr.String(),
 		},

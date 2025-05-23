@@ -10,7 +10,6 @@ import (
 
 	"github.com/forbole/juno/v6/node/local"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	source "github.com/forbole/callisto/v4/modules/auth/source"
 )
 
@@ -49,7 +48,7 @@ func (s Source) GetAllAnyAccounts(height int64) ([]*codectypes.Any, error) {
 	for !stop {
 		// Get accounts
 		res, err := s.q.Accounts(
-			sdk.WrapSDKContext(ctx),
+			ctx,
 			&authtypes.QueryAccountsRequest{
 				Pagination: &query.PageRequest{
 					Key:        nextKey,

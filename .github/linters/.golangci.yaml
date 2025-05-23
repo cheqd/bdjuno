@@ -1,14 +1,14 @@
 run:
   tests: false
 #   # timeout for analysis, e.g. 30s, 5m, default is 1m
-  timeout: 5m
+  # timeout: 5m
 
 linters:
   disable-all: true
   enable:
     - bodyclose
+    - copyloopvar
     - dogsled
-    - exportloopref
     - gocritic
     - gofmt
     - goimports
@@ -60,6 +60,9 @@ linters-settings:
     allow-unused: false
     require-explanation: false
     require-specific: false
+  gosec:
+    excludes:
+      - G115 # G115: integer overflow conversion
   misspell:
     ignore-words:
       - cheqd

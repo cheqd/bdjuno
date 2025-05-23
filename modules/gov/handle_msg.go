@@ -98,7 +98,7 @@ func (m *Module) handleSubmitProposalEvent(tx *juno.Transaction, proposer string
 			if err != nil {
 				return fmt.Errorf("error while getting latest block height: %s", err)
 			}
-			proposal, err = m.source.Proposal(int64(block.Height), proposalID)
+			proposal, err = m.source.Proposal(block.Height, proposalID)
 			if err != nil {
 				return fmt.Errorf("error while getting proposal: %s", err)
 			}

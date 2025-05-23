@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"cosmossdk.io/math"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/forbole/juno/v6/node/local"
 
@@ -34,7 +33,7 @@ func (s Source) GetInflation(height int64) (math.LegacyDec, error) {
 		return math.LegacyDec{}, fmt.Errorf("error while loading height: %s", err)
 	}
 
-	res, err := s.querier.Inflation(sdk.WrapSDKContext(ctx), &minttypes.QueryInflationRequest{})
+	res, err := s.querier.Inflation(ctx, &minttypes.QueryInflationRequest{})
 	if err != nil {
 		return math.LegacyDec{}, err
 	}
@@ -49,7 +48,7 @@ func (s Source) Params(height int64) (minttypes.Params, error) {
 		return minttypes.Params{}, fmt.Errorf("error while loading height: %s", err)
 	}
 
-	res, err := s.querier.Params(sdk.WrapSDKContext(ctx), &minttypes.QueryParamsRequest{})
+	res, err := s.querier.Params(ctx, &minttypes.QueryParamsRequest{})
 	if err != nil {
 		return minttypes.Params{}, err
 	}
