@@ -3,6 +3,7 @@ package staking
 import (
 	"fmt"
 
+	"cosmossdk.io/math"
 	tmctypes "github.com/cometbft/cometbft/rpc/core/types"
 	"github.com/forbole/callisto/v4/modules/staking/keybase"
 	"github.com/forbole/callisto/v4/types"
@@ -331,7 +332,7 @@ func (m *Module) updateNonMatchingValidatorStatuses(height int64, validators []s
 	// Create a map of validator consensus addresses from the input list
 	validatorSet := make(map[string]bool, len(validators))
 	for _, validator := range validators {
-		consAddr, err := validator.GetConsAddr()
+		consAddr, err := m.getValidatorConsAddr(validator)
 		if err != nil {
 			return fmt.Errorf("error getting consensus address: %w", err)
 		}
@@ -371,7 +372,7 @@ func (m *Module) GetValidatorsVotingPowers(height int64, vals *tmctypes.ResultVa
 	votingPowers := make([]types.ValidatorVotingPower, len(stakingVals))
 	for index, validator := range stakingVals {
 		// Get the validator consensus address
-		consAddr, err := validator.GetConsAddr()
+		consAddr, err := m.getValidatorConsAddr(validator)
 		if err != nil {
 			return nil, err
 		}
@@ -389,7 +390,7 @@ func (m *Module) GetValidatorsVotingPowers(height int64, vals *tmctypes.ResultVa
 			continue
 		}
 
-		votingPowers[index] = types.NewValidatorVotingPower(consAddr.String(), sdk.NewInt(votingPower), height)
+		votingPowers[index] = types.NewValidatorVotingPower(consAddr.String(), math.NewInt(votingPower), height)
 	}
 
 	return votingPowers, nil

@@ -1,7 +1,7 @@
 package database_test
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"cosmossdk.io/math"
 	dbtypes "github.com/forbole/callisto/v4/database/types"
 	"github.com/forbole/callisto/v4/types"
 )
@@ -12,7 +12,7 @@ func (suite *DbTestSuite) TestSaveTopAccountsBalance() {
 	// Test saving balances
 	amount := types.NewNativeTokenAmount(
 		"cosmos1z4hfrxvlgl4s8u4n5ngjcw8kdqrcv43599amxs",
-		sdk.NewInt(100),
+		math.NewInt(100),
 		100,
 	)
 
@@ -51,7 +51,7 @@ func (suite *DbTestSuite) TestSaveTopAccountsBalance() {
 	// Test saving higher values
 	newAmount := types.NewNativeTokenAmount(
 		"cosmos1z4hfrxvlgl4s8u4n5ngjcw8kdqrcv43599amxs",
-		sdk.NewInt(200),
+		math.NewInt(200),
 		300,
 	)
 
@@ -79,7 +79,6 @@ func (suite *DbTestSuite) TestSaveTopAccountsBalance() {
 	suite.Require().NoError(err)
 	suite.Require().Len(rows, 1)
 	suite.Require().True(expected.Equals(rows[0]))
-
 }
 
 func (suite *DbTestSuite) TestGetAccountBalanceSum() {
@@ -88,7 +87,7 @@ func (suite *DbTestSuite) TestGetAccountBalanceSum() {
 	// Store balances
 	amount := types.NewNativeTokenAmount(
 		"cosmos1z4hfrxvlgl4s8u4n5ngjcw8kdqrcv43599amxs",
-		sdk.NewInt(100),
+		math.NewInt(100),
 		10,
 	)
 

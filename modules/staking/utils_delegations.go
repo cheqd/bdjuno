@@ -3,6 +3,7 @@ package staking
 import (
 	"fmt"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/forbole/callisto/v4/modules/pricefeed"
@@ -15,12 +16,12 @@ func (m *Module) RefreshDelegations(delegatorAddr string, height int64) error {
 		Str("module", "staking").
 		Int64("height", height).Msg("updating delegations")
 
-	var coin = sdk.Coin{
+	coin := sdk.Coin{
 		Denom:  pricefeed.GetDenom(),
-		Amount: sdk.NewInt(0),
+		Amount: math.NewInt(0),
 	}
 	var nextKey []byte
-	var stop = false
+	stop := false
 	for !stop {
 		res, err := m.source.GetDelegationsWithPagination(
 			height,

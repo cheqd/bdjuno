@@ -89,7 +89,7 @@ func (m *Module) handleSubmitProposalEvent(tx *juno.Transaction, proposer string
 	}
 
 	// Get the proposal
-	proposal, err := m.source.Proposal(tx.Height, proposalID)
+	proposal, err := m.source.Proposal(int64(tx.Height), proposalID)
 	if err != nil {
 		if strings.Contains(err.Error(), codes.NotFound.String()) {
 			// query the proposal details using the latest height stored in db
@@ -215,5 +215,5 @@ func (m *Module) handleVoteEvent(tx *juno.Transaction, voter string, events sdk.
 		return err
 	}
 
-	return m.UpdateProposalStakingPoolSnapshot(tx.Height, proposalID)
+	return m.UpdateProposalStakingPoolSnapshot(int64(tx.Height), proposalID)
 }

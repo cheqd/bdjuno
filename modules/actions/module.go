@@ -3,7 +3,7 @@ package actions
 import (
 	"time"
 
-	"cosmossdk.io/core/codec"
+	"github.com/cosmos/cosmos-sdk/codec"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	"github.com/forbole/juno/v6/modules"
 	"github.com/forbole/juno/v6/node"

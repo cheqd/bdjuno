@@ -13,6 +13,7 @@ import (
 	topaccounts "github.com/forbole/callisto/v4/modules/top_accounts"
 	modulestypes "github.com/forbole/callisto/v4/modules/types"
 	"github.com/forbole/callisto/v4/types"
+	"github.com/forbole/callisto/v4/utils"
 	"github.com/rs/zerolog/log"
 
 	parsecmdtypes "github.com/forbole/juno/v6/cmd/parse/types"
@@ -39,7 +40,9 @@ func allCmd(parseConfig *parsecmdtypes.Config) *cobra.Command {
 				return err
 			}
 
-			sources, err := modulestypes.BuildSources(config.Cfg.Node, parseCtx.EncodingConfig)
+			cdc := utils.GetCodec()
+
+			sources, err := modulestypes.BuildSources(config.Cfg.Node, cdc)
 			if err != nil {
 				return err
 			}
@@ -48,11 +51,11 @@ func allCmd(parseConfig *parsecmdtypes.Config) *cobra.Command {
 			db := database.Cast(parseCtx.Database)
 
 			// Build modules
-			authModule := auth.NewModule(sources.AuthSource, nil, parseCtx.EncodingConfig.Codec, db)
-			bankModule := bank.NewModule(nil, sources.BankSource, parseCtx.EncodingConfig.Codec, db)
-			distriModule := distribution.NewModule(sources.DistrSource, parseCtx.EncodingConfig.Codec, db)
-			stakingModule := staking.NewModule(sources.StakingSource, parseCtx.EncodingConfig.Codec, db)
-			topaccountsModule := topaccounts.NewModule(authModule, sources.AuthSource, bankModule, distriModule, stakingModule, nil, parseCtx.EncodingConfig.Codec, parseCtx.Node, db)
+			authModule := auth.NewModule(sources.AuthSource, nil, cdc, db)
+			bankModule := bank.NewModule(nil, sources.BankSource, cdc, db)
+			distriModule := distribution.NewModule(sources.DistrSource, cdc, db)
+			stakingModule := staking.NewModule(sources.StakingSource, cdc, db)
+			topaccountsModule := topaccounts.NewModule(authModule, sources.AuthSource, bankModule, distriModule, stakingModule, nil, cdc, parseCtx.Node, db)
 
 			// Get workers
 			exportQueue := NewQueue(5)

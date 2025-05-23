@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"os"
 
+	"cosmossdk.io/log"
 	"github.com/cheqd/cheqd-node/app"
-	"github.com/cometbft/cometbft/libs/log"
 	"github.com/forbole/juno/v6/node/remote"
 
 	"github.com/cosmos/cosmos-sdk/codec"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distrtkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
@@ -76,11 +77,11 @@ func buildLocalSources(cfg *local.Details, cdc codec.Codec) (*Sources, error) {
 	}
 
 	app := app.New(
-		log.NewTMLogger(log.NewSyncWriter(os.Stdout)), source.StoreDB, nil, true, nil, nil,
+		log.NewLogger(os.Stdout), source.StoreDB, nil, true, nil, nil,
 	)
 
 	sources := &Sources{
-		AuthSource:     localauthsource.NewSource(source, authtypes.QueryServer(app.AccountKeeper)),
+		AuthSource:     localauthsource.NewSource(source, authkeeper.NewQueryServer(app.AccountKeeper)),
 		BankSource:     localbanksource.NewSource(source, banktypes.QueryServer(app.BankKeeper)),
 		DistrSource:    localdistrsource.NewSource(source, distrtkeeper.NewQuerier(app.DistrKeeper)),
 		GovSource:      localgovsource.NewSource(source, govkeeper.NewQueryServer(&app.GovKeeper)),

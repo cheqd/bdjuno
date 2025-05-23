@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	utils "command-line-arguments/home/vitwit/go/src/github.com/cheqd/bdjuno/utils/codec.go"
+	"github.com/forbole/callisto/v4/utils"
 
 	"cosmossdk.io/math"
 
