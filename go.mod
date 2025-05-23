@@ -371,7 +371,7 @@ require (
 // This is to avoid warnings while running the binary
 // See here: https://github.com/desmos-labs/desmos/pull/1131#discussion_r1194090419
 replace (
-	github.com/cheqd/cheqd-node => github.com/cheqd/cheqd-node v1.4.6-pseudo-version-3.1.5.0.20250521081311-8e2db0a29d7d
+	github.com/cheqd/cheqd-node => github.com/cheqd/cheqd-node v1.4.6-pseudo-version-4.0.0
 	github.com/cosmos/cosmos-sdk => github.com/cheqd/cosmos-sdk v0.50.13-height-mismatch-patched
 	// replace iavl v1.2.2
 	// https://github.com/cheqd/iavl/tree/cheqd-v1.2.2-uneven-heights

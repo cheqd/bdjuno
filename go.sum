@@ -362,8 +362,8 @@ github.com/charithe/durationcheck v0.0.10/go.mod h1:bCWXb7gYRysD1CU3C+u4ceO49LoG
 github.com/chavacava/garif v0.1.0 h1:2JHa3hbYf5D9dsgseMKAmc/MZ109otzgNFk5s87H9Pc=
 github.com/chavacava/garif v0.1.0/go.mod h1:XMyYCkEL58DF0oyW4qDjjnPWONs2HBqYKI+UIPD+Gww=
 github.com/cheggaaa/pb v1.0.27/go.mod h1:pQciLPpbU0oxA0h+VJYYLxO+XeDQb5pZijXscXHm81s=
-github.com/cheqd/cheqd-node v1.4.6-pseudo-version-3.1.5.0.20250521081311-8e2db0a29d7d h1:eFzP1dYhwQ8DWXZEMTqIwt239gNeui8Hj3shjC9jSKo=
-github.com/cheqd/cheqd-node v1.4.6-pseudo-version-3.1.5.0.20250521081311-8e2db0a29d7d/go.mod h1:Wc1QLKI3g++1x+ge0bMhEMqeufkMHGGeUyB8YkKJIss=
+github.com/cheqd/cheqd-node v1.4.6-pseudo-version-4.0.0 h1:6Tm+gk3Lz7Pj4GqE1Hm9zvLfXw5IgXjEvj0Eia0Stao=
+github.com/cheqd/cheqd-node v1.4.6-pseudo-version-4.0.0/go.mod h1:Wc1QLKI3g++1x+ge0bMhEMqeufkMHGGeUyB8YkKJIss=
 github.com/cheqd/cheqd-node/api/v2 v2.3.5-0.20250514151055-c7d12358336f h1:iWB2avtLJXKfngvJMkwAr+yeTPQcv4Y5t4aveDijCBY=
 github.com/cheqd/cheqd-node/api/v2 v2.3.5-0.20250514151055-c7d12358336f/go.mod h1:W+TxXSle2MqueJBciatIHfHecJUF9GnNScpUwBqVrco=
 github.com/cheqd/cosmos-sdk v0.50.13-height-mismatch-patched h1:Bakt/tLtxobTXCCHDPfNlMUsuBjPXNgD1zRMOsijhUE=
