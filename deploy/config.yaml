@@ -23,6 +23,8 @@ node:
         grpc:
             address: GRPC_ADDRESS
             insecure: false
+        api:
+            address: REST_ADDRESS
 parsing:
     workers: 5
     listen_new_blocks: true

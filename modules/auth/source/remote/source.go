@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/forbole/juno/v5/node/remote"
+	"github.com/forbole/juno/v6/node/remote"
 	"github.com/rs/zerolog/log"
 
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -12,9 +12,7 @@ import (
 	source "github.com/forbole/callisto/v4/modules/auth/source"
 )
 
-var (
-	_ source.Source = &Source{}
-)
+var _ source.Source = &Source{}
 
 type Source struct {
 	*remote.Source
@@ -35,7 +33,7 @@ func (s Source) GetAllAnyAccounts(height int64) ([]*codectypes.Any, error) {
 
 	var accounts []*codectypes.Any
 	var nextKey []byte
-	var stop = false
+	stop := false
 	var counter uint64
 	var totalCounts uint64
 

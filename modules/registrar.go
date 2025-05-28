@@ -1,18 +1,19 @@
 package modules
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/forbole/callisto/v4/modules/actions"
 	"github.com/forbole/callisto/v4/modules/did"
 	"github.com/forbole/callisto/v4/modules/types"
 
-	"github.com/forbole/juno/v5/modules/pruning"
-	"github.com/forbole/juno/v5/modules/telemetry"
+	"github.com/forbole/juno/v6/modules/pruning"
+	"github.com/forbole/juno/v6/modules/telemetry"
 
 	"github.com/forbole/callisto/v4/modules/slashing"
 
-	jmodules "github.com/forbole/juno/v5/modules"
-	"github.com/forbole/juno/v5/modules/messages"
-	"github.com/forbole/juno/v5/modules/registrar"
+	jmodules "github.com/forbole/juno/v6/modules"
+	"github.com/forbole/juno/v6/modules/messages"
+	"github.com/forbole/juno/v6/modules/registrar"
 
 	"github.com/forbole/callisto/v4/utils"
 
@@ -33,12 +34,12 @@ import (
 	"github.com/forbole/callisto/v4/modules/staking"
 	topaccounts "github.com/forbole/callisto/v4/modules/top_accounts"
 	"github.com/forbole/callisto/v4/modules/upgrade"
-	juno "github.com/forbole/juno/v5/types"
+	juno "github.com/forbole/juno/v6/types"
 )
 
 // UniqueAddressesParser returns a wrapper around the given parser that removes all duplicated addresses
 func UniqueAddressesParser(parser messages.MessageAddressesParser) messages.MessageAddressesParser {
-	return func(tx *juno.Tx) ([]string, error) {
+	return func(tx *juno.Transaction) ([]string, error) {
 		addresses, err := parser(tx)
 		if err != nil {
 			return nil, err
@@ -55,44 +56,45 @@ var _ registrar.Registrar = &Registrar{}
 // Registrar represents the modules.Registrar that allows to register all modules that are supported by BigDipper
 type Registrar struct {
 	parser messages.MessageAddressesParser
+	cdc    codec.Codec
 }
 
 // NewRegistrar allows to build a new Registrar instance
-func NewRegistrar(parser messages.MessageAddressesParser) *Registrar {
+func NewRegistrar(parser messages.MessageAddressesParser, cdc codec.Codec) *Registrar {
 	return &Registrar{
 		parser: UniqueAddressesParser(parser),
+		cdc:    cdc,
 	}
 }
 
 // BuildModules implements modules.Registrar
 func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
-	cdc := ctx.EncodingConfig.Codec
 	db := database.Cast(ctx.Database)
 
-	sources, err := types.BuildSources(ctx.JunoConfig.Node, ctx.EncodingConfig)
+	sources, err := types.BuildSources(ctx.JunoConfig.Node, r.cdc)
 	if err != nil {
 		panic(err)
 	}
 
-	actionsModule := actions.NewModule(ctx.JunoConfig, ctx.EncodingConfig)
-	authModule := auth.NewModule(sources.AuthSource, r.parser, cdc, db)
-	bankModule := bank.NewModule(r.parser, sources.BankSource, cdc, db)
+	actionsModule := actions.NewModule(ctx.JunoConfig, r.cdc, sources)
+	authModule := auth.NewModule(sources.AuthSource, r.parser, r.cdc, db)
+	bankModule := bank.NewModule(r.parser, sources.BankSource, r.cdc, db)
 	consensusModule := consensus.NewModule(db)
 	dailyRefetchModule := dailyrefetch.NewModule(ctx.Proxy, db)
-	didModule := did.NewModule(r.parser, cdc, db)
-	distrModule := distribution.NewModule(sources.DistrSource, cdc, db)
-	feegrantModule := feegrant.NewModule(cdc, db)
-	messagetypeModule := messagetype.NewModule(r.parser, cdc, db)
-	mintModule := mint.NewModule(sources.MintSource, cdc, db)
-	resourceModule := resource.NewModule(r.parser, cdc, db)
-	slashingModule := slashing.NewModule(sources.SlashingSource, cdc, db)
-	stakingModule := staking.NewModule(sources.StakingSource, cdc, db)
-	govModule := gov.NewModule(sources.GovSource, distrModule, mintModule, slashingModule, stakingModule, cdc, db)
+	didModule := did.NewModule(r.parser, r.cdc, db)
+	distrModule := distribution.NewModule(sources.DistrSource, r.cdc, db)
+	feegrantModule := feegrant.NewModule(r.cdc, db)
+	messagetypeModule := messagetype.NewModule(r.parser, r.cdc, db)
+	mintModule := mint.NewModule(sources.MintSource, r.cdc, db)
+	resourceModule := resource.NewModule(r.parser, r.cdc, db)
+	slashingModule := slashing.NewModule(sources.SlashingSource, r.cdc, db)
+	stakingModule := staking.NewModule(sources.StakingSource, r.cdc, db)
+	govModule := gov.NewModule(sources.GovSource, distrModule, mintModule, slashingModule, stakingModule, r.cdc, db)
 	upgradeModule := upgrade.NewModule(db, stakingModule)
-	topAccountsModule := topaccounts.NewModule(authModule, sources.AuthSource, bankModule, distrModule, stakingModule, r.parser, cdc, ctx.Proxy, db)
+	topAccountsModule := topaccounts.NewModule(authModule, sources.AuthSource, bankModule, distrModule, stakingModule, r.parser, r.cdc, ctx.Proxy, db)
 
 	return []jmodules.Module{
-		messages.NewModule(r.parser, cdc, ctx.Database),
+		messages.NewModule(r.parser, ctx.Database),
 		telemetry.NewModule(ctx.JunoConfig),
 		pruning.NewModule(ctx.JunoConfig, db, ctx.Logger),
 
@@ -108,7 +110,7 @@ func (r *Registrar) BuildModules(ctx registrar.Context) jmodules.Modules {
 		mintModule,
 		messagetypeModule,
 		modules.NewModule(ctx.JunoConfig.Chain, db),
-		pricefeed.NewModule(ctx.JunoConfig, cdc, db),
+		pricefeed.NewModule(ctx.JunoConfig, r.cdc, db),
 		resourceModule,
 		slashingModule,
 		stakingModule,

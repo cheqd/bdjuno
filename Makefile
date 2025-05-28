@@ -13,8 +13,8 @@ all: lint build test-unit
 ###                                Build flags                              ###
 ###############################################################################
 
-LD_FLAGS = -X github.com/forbole/juno/v5/cmd.Version=$(VERSION) \
-	-X github.com/forbole/juno/v5/cmd.Commit=$(COMMIT)
+LD_FLAGS = -X github.com/forbole/juno/v6/cmd.Version=$(VERSION) \
+	-X github.com/forbole/juno/v6/cmd.Commit=$(COMMIT)
 BUILD_FLAGS :=  -ldflags '$(LD_FLAGS)'
 
 ifeq ($(LINK_STATICALLY),true)
@@ -71,15 +71,15 @@ test-unit: start-docker-test
 ###############################################################################
 ###                                Linting                                  ###
 ###############################################################################
-golangci_lint_cmd=github.com/golangci/golangci-lint/cmd/golangci-lint@v1.55.1
+golangci_lint_cmd=github.com/golangci/golangci-lint/cmd/golangci-lint
 
 lint:
 	@echo "--> Running linter"
-	@go run $(golangci_lint_cmd) run --timeout=10m
+	@go run $(golangci_lint_cmd) run --timeout=10m --config ./.github/linters/.golangci.yaml
 
 lint-fix:
 	@echo "--> Running linter"
-	@go run $(golangci_lint_cmd) run --fix --out-format=tab --issues-exit-code=0
+	@go run $(golangci_lint_cmd) run --config ./.github/linters/.golangci.yaml --fix --out-format=tab --issues-exit-code=0
 
 .PHONY: lint lint-fix
 

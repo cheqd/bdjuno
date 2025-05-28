@@ -3,7 +3,7 @@ package staking
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/forbole/callisto/v4/types"
 	"github.com/rs/zerolog/log"
@@ -14,9 +14,9 @@ func (m *Module) RefreshUnbondings(delegatorAddr string, height int64) error {
 		Str("module", "staking").
 		Int64("height", height).Msg("updating unbonding delegations")
 
-	coin := sdk.NewInt(0)
+	coin := math.NewInt(0)
 	var nextKey []byte
-	var stop = false
+	stop := false
 	for !stop {
 		res, err := m.source.GetUnbondingDelegations(
 			height,

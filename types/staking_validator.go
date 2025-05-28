@@ -1,8 +1,7 @@
 package types
 
 import (
-	sdkmath "cosmossdk.io/math"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"cosmossdk.io/math"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
@@ -14,15 +13,15 @@ type Validator interface {
 	GetConsPubKey() string
 	GetOperator() string
 	GetSelfDelegateAddress() string
-	GetMaxChangeRate() *sdk.Dec
-	GetMaxRate() *sdk.Dec
+	GetMaxChangeRate() *math.LegacyDec
+	GetMaxRate() *math.LegacyDec
 	GetHeight() int64
 }
 
 // validator allows to easily implement the Validator interface
 type validator struct {
-	MaxChangeRate       *sdk.Dec
-	MaxRate             *sdk.Dec
+	MaxChangeRate       *math.LegacyDec
+	MaxRate             *math.LegacyDec
 	ConsensusAddr       string
 	ConsPubKey          string
 	OperatorAddr        string
@@ -33,8 +32,8 @@ type validator struct {
 // NewValidator allows to build a new Validator implementation having the given data
 func NewValidator(
 	consAddr string, opAddr string, consPubKey string,
-	selfDelegateAddress string, maxChangeRate *sdk.Dec,
-	maxRate *sdk.Dec, height int64,
+	selfDelegateAddress string, maxChangeRate *math.LegacyDec,
+	maxRate *math.LegacyDec, height int64,
 ) Validator {
 	return validator{
 		ConsensusAddr:       consAddr,
@@ -65,11 +64,11 @@ func (v validator) GetSelfDelegateAddress() string {
 	return v.SelfDelegateAddress
 }
 
-func (v validator) GetMaxChangeRate() *sdk.Dec {
+func (v validator) GetMaxChangeRate() *math.LegacyDec {
 	return v.MaxChangeRate
 }
 
-func (v validator) GetMaxRate() *sdk.Dec {
+func (v validator) GetMaxRate() *math.LegacyDec {
 	return v.MaxRate
 }
 
@@ -105,14 +104,14 @@ func NewValidatorDescription(
 // ValidatorCommission contains the data of a validator commission at a given height
 type ValidatorCommission struct {
 	ValAddress        string
-	Commission        *sdk.Dec
-	MinSelfDelegation *sdkmath.Int
+	Commission        *math.LegacyDec
+	MinSelfDelegation *math.Int
 	Height            int64
 }
 
 // NewValidatorCommission return a new validator commission instance
 func NewValidatorCommission(
-	valAddress string, rate *sdk.Dec, minSelfDelegation *sdkmath.Int, height int64,
+	valAddress string, rate *math.LegacyDec, minSelfDelegation *math.Int, height int64,
 ) ValidatorCommission {
 	return ValidatorCommission{
 		ValAddress:        valAddress,
@@ -127,12 +126,12 @@ func NewValidatorCommission(
 // ValidatorVotingPower represents the voting power of a validator at a specific block height
 type ValidatorVotingPower struct {
 	ConsensusAddress string
-	VotingPower      sdkmath.Int
+	VotingPower      math.Int
 	Height           int64
 }
 
 // NewValidatorVotingPower creates a new ValidatorVotingPower
-func NewValidatorVotingPower(address string, votingPower sdkmath.Int, height int64) ValidatorVotingPower {
+func NewValidatorVotingPower(address string, votingPower math.Int, height int64) ValidatorVotingPower {
 	return ValidatorVotingPower{
 		ConsensusAddress: address,
 		VotingPower:      votingPower,
