@@ -47,11 +47,21 @@ func (m *Module) convertValidator(height int64, validator stakingtypes.Validator
 		return nil, fmt.Errorf("error while getting validator consensus pub key: %s", err)
 	}
 
+	operatorAddrBytes, err := m.cdc.InterfaceRegistry().SigningContext().ValidatorAddressCodec().StringToBytes(validator.GetOperator())
+	if err != nil {
+		return nil, fmt.Errorf("error while converting operator address to bytes: %s", err)
+	}
+
+	selfDelegatorAddr, err := m.cdc.InterfaceRegistry().SigningContext().AddressCodec().BytesToString(operatorAddrBytes)
+	if err != nil {
+		return nil, fmt.Errorf("error while converting address bytes to string: %s", err)
+	}
+
 	return types.NewValidator(
 		consAddr.String(),
 		validator.OperatorAddress,
 		consPubKey.String(),
-		sdk.AccAddress(validator.GetOperator()).String(),
+		selfDelegatorAddr,
 		&validator.Commission.MaxChangeRate,
 		&validator.Commission.MaxRate,
 		height,
