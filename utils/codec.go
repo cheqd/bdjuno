@@ -6,10 +6,13 @@ import (
 	"cosmossdk.io/x/circuit"
 	"cosmossdk.io/x/evidence"
 	feegrantmodule "cosmossdk.io/x/feegrant/module"
+	"cosmossdk.io/x/tx/signing"
 	"cosmossdk.io/x/upgrade"
+	app "github.com/cheqd/cheqd-node/app"
 	did "github.com/cheqd/cheqd-node/x/did"
 	"github.com/cheqd/cheqd-node/x/resource"
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/codec/address"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/std"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -50,7 +53,20 @@ var (
 
 func GetCodec() codec.Codec {
 	once.Do(func() {
-		interfaceRegistry := codectypes.NewInterfaceRegistry()
+		signopts := signing.Options{
+			AddressCodec: address.Bech32Codec{
+				Bech32Prefix: app.AccountAddressPrefix,
+			},
+			ValidatorAddressCodec: address.Bech32Codec{
+				Bech32Prefix: app.ValidatorAddressPrefix,
+			},
+		}
+		interfaceRegistry, _ := codectypes.NewInterfaceRegistryWithOptions(
+			codectypes.InterfaceRegistryOptions{
+				ProtoFiles:     proto.HybridResolver,
+				SigningOptions: signopts,
+			},
+		)
 		getBasicManagers().RegisterInterfaces(interfaceRegistry)
 		std.RegisterInterfaces(interfaceRegistry)
 		cdc = codec.NewProtoCodec(interfaceRegistry)
