@@ -1,29 +1,43 @@
 package resource
 
 import (
+	"fmt"
+
 	resourcetypes "github.com/cheqd/cheqd-node/x/resource/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/forbole/callisto/v4/types"
-	juno "github.com/forbole/juno/v5/types"
+	"github.com/forbole/callisto/v4/utils"
+	juno "github.com/forbole/juno/v6/types"
+	"github.com/rs/zerolog/log"
 )
 
+var msgFilter = map[string]bool{
+	"/cheqd.resource.v2.MsgCreateResource": true,
+}
+
 // HandleMsg implements MessageModule
-func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
-	if len(tx.Logs) == 0 {
+func (m *Module) HandleMsg(index int, msg juno.Message, tx *juno.Transaction) error {
+	if _, ok := msgFilter[msg.GetType()]; !ok {
 		return nil
 	}
 
-	switch cosmosMsg := msg.(type) {
-	case *resourcetypes.MsgCreateResource:
-		return m.handleMsgCreateResource(tx.Height, cosmosMsg, tx.FeePayer().String())
+	log.Debug().Str("module", "resource").Str("hash", tx.TxHash).Uint64("height", tx.Height).Msg(fmt.Sprintf("handling resource message %s", msg.GetType()))
+
+	switch msg.GetType() {
+	case "/cheqd.resource.v2.MsgCreateResource":
+		cosmosMsg := utils.UnpackMessage(m.cdc, msg.GetBytes(), &resourcetypes.MsgCreateResource{})
+		return m.handleMsgCreateResource(int64(tx.Height), cosmosMsg, tx.FeePayer(m.cdc))
 	default:
 		return nil
 	}
-
 }
 
-func (m *Module) handleMsgCreateResource(height int64, msg *resourcetypes.MsgCreateResource, feePayer string) error {
+func (m *Module) handleMsgCreateResource(height int64, msg *resourcetypes.MsgCreateResource, feePayer []byte) error {
+	feePayerAddr, err := m.cdc.InterfaceRegistry().SigningContext().AddressCodec().BytesToString(feePayer)
+	if err != nil {
+		return err
+	}
+
 	return m.db.SaveResource(types.NewResource(msg.Payload.Id, msg.Payload.CollectionId,
 		msg.Payload.Data, msg.Payload.Name, msg.Payload.Version,
-		msg.Payload.ResourceType, msg.Payload.AlsoKnownAs, feePayer, height))
+		msg.Payload.ResourceType, msg.Payload.AlsoKnownAs, feePayerAddr, height))
 }

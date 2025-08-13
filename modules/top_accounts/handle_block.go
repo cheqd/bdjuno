@@ -7,15 +7,15 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/forbole/juno/v5/types"
+	juno "github.com/forbole/juno/v6/types"
 
 	eventsutil "github.com/forbole/callisto/v4/utils/events"
 )
 
 // HandleMsg implements BlockModule
-func (m *Module) HandleBlock(block *tmctypes.ResultBlock, results *tmctypes.ResultBlockResults, txs []*types.Tx, vals *tmctypes.ResultValidators) error {
+func (m *Module) HandleBlock(block *tmctypes.ResultBlock, results *tmctypes.ResultBlockResults, txs []*juno.Transaction, vals *tmctypes.ResultValidators) error {
 	// handle complete unbonding event
-	events := sdk.StringifyEvents(results.EndBlockEvents)
+	events := sdk.StringifyEvents(results.FinalizeBlockEvents)
 	height := block.Block.Height
 
 	completeUnbondingEvents := eventsutil.FilterEvents(events, stakingtypes.EventTypeCompleteUnbonding)

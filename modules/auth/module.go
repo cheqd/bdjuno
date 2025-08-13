@@ -6,14 +6,15 @@ import (
 	"github.com/forbole/callisto/v4/database"
 	"github.com/forbole/callisto/v4/modules/auth/source"
 
-	"github.com/forbole/juno/v5/modules"
-	"github.com/forbole/juno/v5/modules/messages"
+	"github.com/forbole/juno/v6/modules"
+	"github.com/forbole/juno/v6/modules/messages"
 )
 
 var (
-	_ modules.Module        = &Module{}
-	_ modules.GenesisModule = &Module{}
-	_ modules.MessageModule = &Module{}
+	_ modules.Module             = &Module{}
+	_ modules.GenesisModule      = &Module{}
+	_ modules.MessageModule      = &Module{}
+	_ modules.AuthzMessageModule = &Module{}
 )
 
 // Module represents the x/auth module

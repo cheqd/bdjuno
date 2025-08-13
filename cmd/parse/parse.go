@@ -1,12 +1,12 @@
 package parse
 
 import (
-	parse "github.com/forbole/juno/v5/cmd/parse/types"
+	parse "github.com/forbole/juno/v6/cmd/parse/types"
 	"github.com/spf13/cobra"
 
-	parseblocks "github.com/forbole/juno/v5/cmd/parse/blocks"
+	parseblocks "github.com/forbole/juno/v6/cmd/parse/blocks"
 
-	parsegenesis "github.com/forbole/juno/v5/cmd/parse/genesis"
+	parsegenesis "github.com/forbole/juno/v6/cmd/parse/genesis"
 
 	parseauth "github.com/forbole/callisto/v4/cmd/parse/auth"
 	parsebank "github.com/forbole/callisto/v4/cmd/parse/bank"
@@ -17,7 +17,7 @@ import (
 	parsepricefeed "github.com/forbole/callisto/v4/cmd/parse/pricefeed"
 	parsestaking "github.com/forbole/callisto/v4/cmd/parse/staking"
 	parsetopaccounts "github.com/forbole/callisto/v4/cmd/parse/top_accounts"
-	parsetransaction "github.com/forbole/juno/v5/cmd/parse/transactions"
+	parsetransaction "github.com/forbole/juno/v6/cmd/parse/transactions"
 )
 
 // NewParseCmd returns the Cobra command allowing to parse some chain data without having to re-sync the whole database

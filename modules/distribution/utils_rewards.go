@@ -3,7 +3,7 @@ package distribution
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"cosmossdk.io/math"
 	"github.com/forbole/callisto/v4/modules/pricefeed"
 	"github.com/forbole/callisto/v4/types"
 	"github.com/rs/zerolog/log"
@@ -21,7 +21,7 @@ func (m *Module) RefreshDelegatorRewards(delegators []string, height int64) erro
 			return fmt.Errorf("error while getting delegator rewards: %s", err)
 		}
 
-		amount := sdk.NewDec(0)
+		amount := math.LegacyNewDec(0)
 		for _, r := range rews {
 			decCoinAmount := r.Reward.AmountOf(pricefeed.GetDenom())
 			amount = amount.Add(decCoinAmount)

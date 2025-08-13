@@ -3,10 +3,11 @@ package staking
 import (
 	"fmt"
 
+	"cosmossdk.io/math"
 	tmctypes "github.com/cometbft/cometbft/rpc/core/types"
 	"github.com/forbole/callisto/v4/modules/staking/keybase"
 	"github.com/forbole/callisto/v4/types"
-	juno "github.com/forbole/juno/v5/types"
+	juno "github.com/forbole/juno/v6/types"
 
 	"github.com/rs/zerolog/log"
 
@@ -46,11 +47,21 @@ func (m *Module) convertValidator(height int64, validator stakingtypes.Validator
 		return nil, fmt.Errorf("error while getting validator consensus pub key: %s", err)
 	}
 
+	operatorAddrBytes, err := m.cdc.InterfaceRegistry().SigningContext().ValidatorAddressCodec().StringToBytes(validator.GetOperator())
+	if err != nil {
+		return nil, fmt.Errorf("error while converting operator address to bytes: %s", err)
+	}
+
+	selfDelegatorAddr, err := m.cdc.InterfaceRegistry().SigningContext().AddressCodec().BytesToString(operatorAddrBytes)
+	if err != nil {
+		return nil, fmt.Errorf("error while converting address bytes to string: %s", err)
+	}
+
 	return types.NewValidator(
 		consAddr.String(),
 		validator.OperatorAddress,
 		consPubKey.String(),
-		sdk.AccAddress(validator.GetOperator()).String(),
+		selfDelegatorAddr,
 		&validator.Commission.MaxChangeRate,
 		&validator.Commission.MaxRate,
 		height,
@@ -140,7 +151,7 @@ func (m *Module) GetValidatorsWithStatus(height int64, status string) ([]staking
 		return nil, nil, err
 	}
 
-	var vals = make([]types.Validator, len(validators))
+	vals := make([]types.Validator, len(validators))
 	for index, val := range validators {
 		validator, err := m.convertValidator(height, val)
 		if err != nil {
@@ -250,11 +261,12 @@ func (m *Module) UpdateValidatorStatuses() error {
 // updateProposalValidatorStatusSnapshot updates validators snapshot for
 // the proposal having the given id
 func (m *Module) updateProposalValidatorStatusSnapshot(
-	height int64, proposalID uint64, validators []stakingtypes.Validator) error {
+	height int64, proposalID uint64, validators []stakingtypes.Validator,
+) error {
 	snapshots := make([]types.ProposalValidatorStatusSnapshot, len(validators))
 
 	for index, validator := range validators {
-		consAddr, err := validator.GetConsAddr()
+		consAddr, err := m.getValidatorConsAddr(validator)
 		if err != nil {
 			return err
 		}
@@ -281,7 +293,7 @@ func (m *Module) updateValidatorStatusAndVP(height int64, validators []stakingty
 	statuses := make([]types.ValidatorStatus, len(validators))
 
 	for index, validator := range validators {
-		consAddr, err := validator.GetConsAddr()
+		consAddr, err := m.getValidatorConsAddr(validator)
 		if err != nil {
 			return err
 		}
@@ -330,7 +342,7 @@ func (m *Module) updateNonMatchingValidatorStatuses(height int64, validators []s
 	// Create a map of validator consensus addresses from the input list
 	validatorSet := make(map[string]bool, len(validators))
 	for _, validator := range validators {
-		consAddr, err := validator.GetConsAddr()
+		consAddr, err := m.getValidatorConsAddr(validator)
 		if err != nil {
 			return fmt.Errorf("error getting consensus address: %w", err)
 		}
@@ -370,7 +382,7 @@ func (m *Module) GetValidatorsVotingPowers(height int64, vals *tmctypes.ResultVa
 	votingPowers := make([]types.ValidatorVotingPower, len(stakingVals))
 	for index, validator := range stakingVals {
 		// Get the validator consensus address
-		consAddr, err := validator.GetConsAddr()
+		consAddr, err := m.getValidatorConsAddr(validator)
 		if err != nil {
 			return nil, err
 		}
@@ -388,7 +400,7 @@ func (m *Module) GetValidatorsVotingPowers(height int64, vals *tmctypes.ResultVa
 			continue
 		}
 
-		votingPowers[index] = types.NewValidatorVotingPower(consAddr.String(), sdk.NewInt(votingPower), height)
+		votingPowers[index] = types.NewValidatorVotingPower(consAddr.String(), math.NewInt(votingPower), height)
 	}
 
 	return votingPowers, nil

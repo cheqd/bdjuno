@@ -3,52 +3,65 @@ package top_accounts
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	distritypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/forbole/callisto/v4/modules/utils"
-	juno "github.com/forbole/juno/v5/types"
-	"github.com/gogo/protobuf/proto"
+	modulesutils "github.com/forbole/callisto/v4/modules/utils"
+	"github.com/forbole/callisto/v4/utils"
+	juno "github.com/forbole/juno/v6/types"
+	"github.com/rs/zerolog/log"
 )
 
+var msgFilter = map[string]bool{
+	"/cosmos.staking.v1beta1.MsgDelegate":                     true,
+	"/cosmos.staking.v1beta1.MsgUndelegate":                   true,
+	"/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation":    true,
+	"/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward": true,
+}
+
 // HandleMsg implements MessageModule
-func (m *Module) HandleMsg(index int, msg sdk.Msg, tx *juno.Tx) error {
-	if len(tx.Logs) == 0 {
+func (m *Module) HandleMsg(index int, msg juno.Message, tx *juno.Transaction) error {
+	if _, ok := msgFilter[msg.GetType()]; !ok {
 		return nil
 	}
+
+	log.Debug().Str("module", "top_accounts").Str("hash", tx.TxHash).Uint64("height", tx.Height).Msg(fmt.Sprintf("handling top_accounts message %s", msg.GetType()))
 
 	// Refresh x/bank available account balances
 	addresses, err := m.messageParser(tx)
 	if err != nil {
-		return fmt.Errorf("error while parsing account addresses of message type %s: %s", proto.MessageName(msg), err)
+		return fmt.Errorf("error while parsing account addresses of message type %s: %s", msg.GetType(), err)
 	}
 
-	addresses = utils.FilterNonAccountAddresses(addresses)
-	err = m.bankModule.UpdateBalances(addresses, tx.Height)
+	addresses = modulesutils.FilterNonAccountAddresses(addresses)
+	err = m.bankModule.UpdateBalances(addresses, int64(tx.Height))
 	if err != nil {
 		return fmt.Errorf("error while updating account available balances: %s", err)
 	}
 
-	err = m.refreshTopAccountsSum(addresses, tx.Height)
+	err = m.refreshTopAccountsSum(addresses, int64(tx.Height))
 	if err != nil {
 		return fmt.Errorf("error while refreshing top accounts sum while refreshing balance: %s", err)
 	}
 
 	// Handle x/staking delegations and unbondings
-	switch cosmosMsg := msg.(type) {
+	switch msg.GetType() {
 
-	case *stakingtypes.MsgDelegate:
-		return m.handleMsgDelegate(cosmosMsg.DelegatorAddress, tx.Height)
+	case "/cosmos.staking.v1beta1.MsgDelegate":
+		cosmosMsg := utils.UnpackMessage(m.cdc, msg.GetBytes(), &stakingtypes.MsgDelegate{})
+		return m.handleMsgDelegate(cosmosMsg.DelegatorAddress, int64(tx.Height))
 
-	case *stakingtypes.MsgUndelegate:
-		return m.handleMsgUndelegate(cosmosMsg.DelegatorAddress, tx.Height)
+	case "/cosmos.staking.v1beta1.MsgUndelegate":
+		cosmosMsg := utils.UnpackMessage(m.cdc, msg.GetBytes(), &stakingtypes.MsgUndelegate{})
+		return m.handleMsgUndelegate(cosmosMsg.DelegatorAddress, int64(tx.Height))
 
-	case *stakingtypes.MsgCancelUnbondingDelegation:
-		return m.handleMsgCancelUnbondingDelegation(cosmosMsg.DelegatorAddress, tx.Height)
+	case "/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation":
+		cosmosMsg := utils.UnpackMessage(m.cdc, msg.GetBytes(), &stakingtypes.MsgCancelUnbondingDelegation{})
+		return m.handleMsgCancelUnbondingDelegation(cosmosMsg.DelegatorAddress, int64(tx.Height))
 
 	// Handle x/distribution delegator rewards
-	case *distritypes.MsgWithdrawDelegatorReward:
-		return m.handleMsgWithdrawDelegatorReward(cosmosMsg.DelegatorAddress, tx.Height)
+	case "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward":
+		cosmosMsg := utils.UnpackMessage(m.cdc, msg.GetBytes(), &distritypes.MsgWithdrawDelegatorReward{})
+		return m.handleMsgWithdrawDelegatorReward(cosmosMsg.DelegatorAddress, int64(tx.Height))
 
 	}
 

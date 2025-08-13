@@ -11,17 +11,35 @@ import (
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/rs/zerolog/log"
 
+	upgradetypes "cosmossdk.io/x/upgrade/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	proposaltypes "github.com/cosmos/cosmos-sdk/x/params/types/proposal"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	"google.golang.org/grpc/codes"
 
 	"github.com/forbole/callisto/v4/types"
 
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	gov "github.com/cosmos/cosmos-sdk/x/gov/types"
 )
+
+// getValidatorConsPubKey returns the consensus public key of the given validator
+func (m *Module) getValidatorConsPubKey(validator stakingtypes.Validator) (cryptotypes.PubKey, error) {
+	var pubKey cryptotypes.PubKey
+	err := m.cdc.UnpackAny(validator.ConsensusPubkey, &pubKey)
+	return pubKey, err
+}
+
+// getValidatorConsAddr returns the consensus address of the given validator
+func (m *Module) getValidatorConsAddr(validator stakingtypes.Validator) (sdk.ConsAddress, error) {
+	pubKey, err := m.getValidatorConsPubKey(validator)
+	if err != nil {
+		return nil, fmt.Errorf("error while getting validator consensus pub key: %s", err)
+	}
+
+	return sdk.ConsAddress(pubKey.Address()), err
+}
 
 // UpdateProposalStatus queries the latest details of given proposal ID, updates it's status
 // in database and handles changes if the proposal has been passed.
@@ -347,7 +365,7 @@ func (m *Module) updateProposalValidatorStatusesSnapshot(
 
 	snapshots := make([]types.ProposalValidatorStatusSnapshot, len(validators))
 	for index, validator := range validators {
-		consAddr, err := validator.GetConsAddr()
+		consAddr, err := m.getValidatorConsAddr(validator)
 		if err != nil {
 			return err
 		}

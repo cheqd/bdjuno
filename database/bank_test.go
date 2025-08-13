@@ -1,6 +1,7 @@
 package database_test
 
 import (
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	dbtypes "github.com/forbole/callisto/v4/database/types"
@@ -9,8 +10,8 @@ import (
 func (suite *DbTestSuite) TestBigDipperDb_SaveSupply() {
 	// Save the data
 	original := sdk.NewCoins(
-		sdk.NewCoin("desmos", sdk.NewInt(10000)),
-		sdk.NewCoin("uatom", sdk.NewInt(15)),
+		sdk.NewCoin("desmos", math.NewInt(10000)),
+		sdk.NewCoin("uatom", math.NewInt(15)),
 	)
 	err := suite.database.SaveSupply(original, 10)
 	suite.Require().NoError(err)
@@ -28,8 +29,8 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveSupply() {
 
 	// Try updating with a lower height
 	coins := sdk.NewCoins(
-		sdk.NewCoin("desmos", sdk.NewInt(10000)),
-		sdk.NewCoin("uatom", sdk.NewInt(15)),
+		sdk.NewCoin("desmos", math.NewInt(10000)),
+		sdk.NewCoin("uatom", math.NewInt(15)),
 	)
 	err = suite.database.SaveSupply(coins, 9)
 	suite.Require().NoError(err)
@@ -44,7 +45,7 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveSupply() {
 	// ----------------------------------------------------------------------------------------------------------------
 
 	// Try updating with same height
-	coins = sdk.NewCoins(sdk.NewCoin("uakash", sdk.NewInt(10)))
+	coins = sdk.NewCoins(sdk.NewCoin("uakash", math.NewInt(10)))
 	err = suite.database.SaveSupply(coins, 10)
 	suite.Require().NoError(err)
 
@@ -60,7 +61,7 @@ func (suite *DbTestSuite) TestBigDipperDb_SaveSupply() {
 	// ----------------------------------------------------------------------------------------------------------------
 
 	// Try updating with higher height
-	coins = sdk.NewCoins(sdk.NewCoin("btc", sdk.NewInt(10)))
+	coins = sdk.NewCoins(sdk.NewCoin("btc", math.NewInt(10)))
 	err = suite.database.SaveSupply(coins, 20)
 	suite.Require().NoError(err)
 

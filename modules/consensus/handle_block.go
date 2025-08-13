@@ -3,7 +3,7 @@ package consensus
 import (
 	"fmt"
 
-	"github.com/forbole/juno/v5/types"
+	juno "github.com/forbole/juno/v6/types"
 
 	"github.com/rs/zerolog/log"
 
@@ -12,7 +12,7 @@ import (
 
 // HandleBlock implements modules.Module
 func (m *Module) HandleBlock(
-	b *tmctypes.ResultBlock, _ *tmctypes.ResultBlockResults, _ []*types.Tx, _ *tmctypes.ResultValidators,
+	b *tmctypes.ResultBlock, _ *tmctypes.ResultBlockResults, _ []*juno.Transaction, _ *tmctypes.ResultValidators,
 ) error {
 	err := m.updateBlockTimeFromGenesis(b)
 	if err != nil {
@@ -34,11 +34,6 @@ func (m *Module) updateBlockTimeFromGenesis(block *tmctypes.ResultBlock) error {
 	}
 	if genesis == nil {
 		return fmt.Errorf("genesis table is empty")
-	}
-
-	// Skip if the genesis does not exist
-	if genesis == nil {
-		return nil
 	}
 
 	newBlockTime := block.Block.Time.Sub(genesis.Time).Seconds() / float64(block.Block.Height-genesis.InitialHeight)

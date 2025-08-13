@@ -1,5 +1,5 @@
 # hadolint global ignore=DL3018,DL4006,SC2046,DL3059,DL3007
-FROM golang:1.20-alpine AS builder
+FROM golang:1.23-alpine AS builder
 RUN apk update && apk add --no-cache make git
 WORKDIR /go/src/github.com/forbole/callisto
 COPY . ./

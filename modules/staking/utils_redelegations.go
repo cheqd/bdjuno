@@ -3,7 +3,7 @@ package staking
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/forbole/callisto/v4/types"
@@ -15,9 +15,9 @@ func (m *Module) RefreshRedelegations(delegatorAddr string, height int64) error 
 		Str("module", "staking").
 		Int64("height", height).Msg("updating redelegations")
 
-	coin := sdk.NewInt(0)
+	coin := math.NewInt(0)
 	var nextKey []byte
-	var stop = false
+	stop := false
 	for !stop {
 		res, err := m.source.GetRedelegations(
 			height,

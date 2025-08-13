@@ -3,10 +3,9 @@ package local
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/forbole/juno/v5/node/local"
+	"github.com/forbole/juno/v6/node/local"
 
 	stakingsource "github.com/forbole/callisto/v4/modules/staking/source"
 )
@@ -34,7 +33,7 @@ func (s Source) GetValidator(height int64, valOper string) (stakingtypes.Validat
 		return stakingtypes.Validator{}, fmt.Errorf("error while loading height: %s", err)
 	}
 
-	res, err := s.q.Validator(sdk.WrapSDKContext(ctx), &stakingtypes.QueryValidatorRequest{ValidatorAddr: valOper})
+	res, err := s.q.Validator(ctx, &stakingtypes.QueryValidatorRequest{ValidatorAddr: valOper})
 	if err != nil {
 		return stakingtypes.Validator{}, fmt.Errorf("error while reading validator: %s", err)
 	}
@@ -50,7 +49,7 @@ func (s Source) GetDelegationsWithPagination(height int64, delegator string, pag
 	}
 
 	res, err := s.q.DelegatorDelegations(
-		sdk.WrapSDKContext(ctx),
+		ctx,
 		&stakingtypes.QueryDelegatorDelegationsRequest{
 			DelegatorAddr: delegator,
 			Pagination: &query.PageRequest{
@@ -74,7 +73,7 @@ func (s Source) GetRedelegations(height int64, request *stakingtypes.QueryRedele
 		return nil, fmt.Errorf("error while loading height: %s", err)
 	}
 
-	redelegations, err := s.q.Redelegations(sdk.WrapSDKContext(ctx), request)
+	redelegations, err := s.q.Redelegations(ctx, request)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +93,7 @@ func (s Source) GetValidatorsWithStatus(height int64, status string) ([]stakingt
 	stop := false
 	for !stop {
 		res, err := s.q.Validators(
-			sdk.WrapSDKContext(ctx),
+			ctx,
 			&stakingtypes.QueryValidatorsRequest{
 				Status: status,
 				Pagination: &query.PageRequest{
@@ -123,7 +122,7 @@ func (s Source) GetPool(height int64) (stakingtypes.Pool, error) {
 	}
 
 	res, err := s.q.Pool(
-		sdk.WrapSDKContext(ctx),
+		ctx,
 		&stakingtypes.QueryPoolRequest{},
 	)
 	if err != nil {
@@ -141,7 +140,7 @@ func (s Source) GetParams(height int64) (stakingtypes.Params, error) {
 	}
 
 	res, err := s.q.Params(
-		sdk.WrapSDKContext(ctx),
+		ctx,
 		&stakingtypes.QueryParamsRequest{},
 	)
 	if err != nil {
@@ -159,7 +158,7 @@ func (s Source) GetUnbondingDelegations(height int64, delegator string, paginati
 	}
 
 	unbondingDelegations, err := s.q.DelegatorUnbondingDelegations(
-		sdk.WrapSDKContext(ctx),
+		ctx,
 		&stakingtypes.QueryDelegatorUnbondingDelegationsRequest{
 			DelegatorAddr: delegator,
 			Pagination: &query.PageRequest{
@@ -186,7 +185,7 @@ func (s Source) GetValidatorDelegationsWithPagination(
 	}
 
 	res, err := s.q.ValidatorDelegations(
-		sdk.WrapSDKContext(ctx),
+		ctx,
 		&stakingtypes.QueryValidatorDelegationsRequest{
 			ValidatorAddr: validator,
 			Pagination:    pagination,
@@ -209,7 +208,7 @@ func (s Source) GetUnbondingDelegationsFromValidator(
 	}
 
 	unbondingDelegations, err := s.q.ValidatorUnbondingDelegations(
-		sdk.WrapSDKContext(ctx),
+		ctx,
 		&stakingtypes.QueryValidatorUnbondingDelegationsRequest{
 			ValidatorAddr: validator,
 			Pagination:    pagination,
