@@ -1,7 +1,12 @@
 package local
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
 
 	"cosmossdk.io/math"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
@@ -17,6 +22,11 @@ type Source struct {
 	*local.Source
 	querier minttypes.QueryServer
 }
+type InflationResponse struct {
+	Inflation string `json:"inflation"`
+}
+
+var out = &InflationResponse{}
 
 // NewSource returns a new Source instance
 func NewSource(source *local.Source, querier minttypes.QueryServer) *Source {
@@ -28,17 +38,38 @@ func NewSource(source *local.Source, querier minttypes.QueryServer) *Source {
 
 // GetInflation implements mintsource.Source
 func (s Source) GetInflation(height int64) (math.LegacyDec, error) {
-	ctx, err := s.LoadHeight(height)
-	if err != nil {
-		return math.LegacyDec{}, fmt.Errorf("error while loading height: %s", err)
+	restAddr := strings.TrimRight(os.Getenv("REST_ADDRESS"), "/")
+	if restAddr == "" {
+		return math.LegacyDec{}, fmt.Errorf("REST_ADDRESS not set")
 	}
 
-	res, err := s.querier.Inflation(ctx, &minttypes.QueryInflationRequest{})
+	url := restAddr + "/cosmos/mint/v1beta1/inflation"
+	resp, err := http.Get(url)
 	if err != nil {
 		return math.LegacyDec{}, err
 	}
+	defer resp.Body.Close()
 
-	return res.Inflation, nil
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return math.LegacyDec{}, fmt.Errorf("inflation REST query failed: %s - %s", resp.Status, string(body))
+	}
+
+	var out struct {
+		Inflation string `json:"inflation"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+		return math.LegacyDec{}, err
+	}
+	if out.Inflation == "" {
+		return math.LegacyDec{}, fmt.Errorf("empty inflation from REST")
+	}
+
+	dec, err := math.LegacyNewDecFromStr(out.Inflation)
+	if err != nil {
+		return math.LegacyDec{}, err
+	}
+	return dec, nil
 }
 
 // Params implements mintsource.Source

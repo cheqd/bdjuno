@@ -11,8 +11,8 @@ import (
 func (m *Module) RegisterPeriodicOperations(scheduler *gocron.Scheduler) error {
 	log.Debug().Str("module", "mint").Msg("setting up periodic tasks")
 
-	// Setup a cron job to run every midnight
-	if _, err := scheduler.Every(1).Day().At("00:00").Do(func() {
+	// Setup a cron job to run every 1 second (testing)
+	if _, err := scheduler.Every(1).Second().Do(func() {
 		utils.WatchMethod(m.UpdateInflation)
 	}); err != nil {
 		return err
@@ -39,6 +39,13 @@ func (m *Module) UpdateInflation() error {
 	if err != nil {
 		return err
 	}
+
+	log.Debug().
+		Str("module", "mint").
+		Str("operation", "inflation").
+		Int64("height", block.Height).
+		Str("inflation", inflation.String()).
+		Msg("storing inflation")
 
 	return m.db.SaveInflation(inflation.String(), block.Height)
 }
