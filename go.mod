@@ -86,6 +86,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/charithe/durationcheck v0.0.10 // indirect
 	github.com/chavacava/garif v0.1.0 // indirect
+	github.com/cheqd/bdjuno v0.0.0-00010101000000-000000000000 // indirect
 	github.com/cheqd/cheqd-node/api/v2 v2.3.5-0.20250514151055-c7d12358336f // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/ckaznocha/intrange v0.1.2 // indirect
@@ -371,6 +372,8 @@ require (
 // This is to avoid warnings while running the binary
 // See here: https://github.com/desmos-labs/desmos/pull/1131#discussion_r1194090419
 replace (
+	// Allow proto imports to use cheqd/bdjuno path
+	github.com/cheqd/bdjuno => ./
 	github.com/cheqd/cheqd-node => github.com/cheqd/cheqd-node v1.4.6-pseudo-version-4.0.0
 	github.com/cosmos/cosmos-sdk => github.com/cheqd/cosmos-sdk v0.50.13-height-mismatch-patched
 	// replace iavl v1.2.2
