@@ -4,8 +4,8 @@ import (
 	"context"
 	"io"
 
-	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/cosmos/cosmos-sdk/codec"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	gogoproto "github.com/cosmos/gogoproto/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/encoding"
