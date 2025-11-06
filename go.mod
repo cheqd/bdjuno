@@ -8,6 +8,7 @@ require (
 	cosmossdk.io/x/circuit v0.1.1
 	cosmossdk.io/x/evidence v0.1.1
 	cosmossdk.io/x/feegrant v0.1.1
+	cosmossdk.io/x/tx v0.13.7
 	cosmossdk.io/x/upgrade v0.1.4
 	github.com/cheqd/cheqd-node v1.4.6-pseudo-version-3.1.5.0.20250521081311-8e2db0a29d7d
 	github.com/cometbft/cometbft v0.38.12
@@ -43,7 +44,6 @@ require (
 	cloud.google.com/go/storage v1.41.0 // indirect
 	cosmossdk.io/errors v1.0.2 // indirect
 	cosmossdk.io/store v1.1.1 // indirect
-	cosmossdk.io/x/tx v0.13.7 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/4meepo/tagalign v1.3.4 // indirect
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
@@ -86,7 +86,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/charithe/durationcheck v0.0.10 // indirect
 	github.com/chavacava/garif v0.1.0 // indirect
-	github.com/cheqd/bdjuno v0.0.0-00010101000000-000000000000 // indirect
 	github.com/cheqd/cheqd-node/api/v2 v2.3.5-0.20250514151055-c7d12358336f // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/ckaznocha/intrange v0.1.2 // indirect
@@ -372,8 +371,6 @@ require (
 // This is to avoid warnings while running the binary
 // See here: https://github.com/desmos-labs/desmos/pull/1131#discussion_r1194090419
 replace (
-	// Allow proto imports to use cheqd/bdjuno path
-	github.com/cheqd/bdjuno => ./
 	github.com/cheqd/cheqd-node => github.com/cheqd/cheqd-node v1.4.6-pseudo-version-4.0.0
 	github.com/cosmos/cosmos-sdk => github.com/cheqd/cosmos-sdk v0.50.13-height-mismatch-patched
 	// replace iavl v1.2.2

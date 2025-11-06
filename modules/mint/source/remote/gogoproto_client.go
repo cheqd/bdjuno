@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 
-	mintpb "github.com/cheqd/bdjuno/proto/cosmos/mint/v1beta1"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	gogoproto "github.com/cosmos/gogoproto/proto"
 	"google.golang.org/grpc"
@@ -63,7 +63,7 @@ func (w *grpcConnWrapper) Close() error {
 type GogoprotoQueryClient struct {
 	cc  *grpc.ClientConn
 	cdc codec.Codec
-	pb  mintpb.QueryClient
+	pb  minttypes.QueryClient
 }
 
 // NewGogoprotoQueryClient creates a new gogoproto-based query client
@@ -72,7 +72,7 @@ func NewGogoprotoQueryClient(cc *grpc.ClientConn, cdc codec.Codec) *GogoprotoQue
 	wrapped := &grpcConnWrapper{ClientConn: cc}
 
 	// Create the gogoproto-generated client which uses gogoproto for marshaling/unmarshaling
-	pbClient := mintpb.NewQueryClient(wrapped)
+	pbClient := minttypes.NewQueryClient(wrapped)
 
 	return &GogoprotoQueryClient{
 		cc:  cc,
@@ -81,10 +81,10 @@ func NewGogoprotoQueryClient(cc *grpc.ClientConn, cdc codec.Codec) *GogoprotoQue
 	}
 }
 
-func (c *GogoprotoQueryClient) Inflation(ctx context.Context, req *mintpb.QueryInflationRequest, opts ...grpc.CallOption) (*mintpb.QueryInflationResponse, error) {
+func (c *GogoprotoQueryClient) Inflation(ctx context.Context, req *minttypes.QueryInflationRequest, opts ...grpc.CallOption) (*minttypes.QueryInflationResponse, error) {
 	return c.pb.Inflation(ctx, req, opts...)
 }
 
-func (c *GogoprotoQueryClient) Params(ctx context.Context, req *mintpb.QueryParamsRequest, opts ...grpc.CallOption) (*mintpb.QueryParamsResponse, error) {
+func (c *GogoprotoQueryClient) Params(ctx context.Context, req *minttypes.QueryParamsRequest, opts ...grpc.CallOption) (*minttypes.QueryParamsResponse, error) {
 	return c.pb.Params(ctx, req, opts...)
 }

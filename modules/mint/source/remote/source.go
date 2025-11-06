@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"cosmossdk.io/math"
-	mintpb "github.com/cheqd/bdjuno/proto/cosmos/mint/v1beta1"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	mintsource "github.com/forbole/callisto/v4/modules/mint/source"
 	"github.com/forbole/juno/v6/node/remote"
@@ -21,8 +20,8 @@ type Source struct {
 
 // QueryClient interface for mint queries using gogoproto-generated types
 type QueryClient interface {
-	Inflation(ctx context.Context, req *mintpb.QueryInflationRequest, opts ...grpc.CallOption) (*mintpb.QueryInflationResponse, error)
-	Params(ctx context.Context, req *mintpb.QueryParamsRequest, opts ...grpc.CallOption) (*mintpb.QueryParamsResponse, error)
+	Inflation(ctx context.Context, req *minttypes.QueryInflationRequest, opts ...grpc.CallOption) (*minttypes.QueryInflationResponse, error)
+	Params(ctx context.Context, req *minttypes.QueryParamsRequest, opts ...grpc.CallOption) (*minttypes.QueryParamsResponse, error)
 }
 
 // NewSource returns a new Source instance
@@ -35,7 +34,7 @@ func NewSource(source *remote.Source, querier QueryClient) *Source {
 
 // GetInflation implements mintsource.Source
 func (s Source) GetInflation(height int64) (math.LegacyDec, error) {
-	req := &mintpb.QueryInflationRequest{}
+	req := &minttypes.QueryInflationRequest{}
 	res, err := s.querier.Inflation(remote.GetHeightRequestContext(s.Ctx, height), req)
 	if err != nil {
 		return math.LegacyDec{}, err
@@ -46,24 +45,12 @@ func (s Source) GetInflation(height int64) (math.LegacyDec, error) {
 
 // Params implements mintsource.Source
 func (s Source) Params(height int64) (minttypes.Params, error) {
-	req := &mintpb.QueryParamsRequest{}
+	req := &minttypes.QueryParamsRequest{}
 	res, err := s.querier.Params(remote.GetHeightRequestContext(s.Ctx, height), req)
 	if err != nil {
 		return minttypes.Params{}, err
 	}
 
-	// Convert from generated Params to cosmos-sdk minttypes.Params
-	return convertParams(res.Params), nil
-}
-
-// convertParams converts from generated Params to cosmos-sdk minttypes.Params
-func convertParams(p mintpb.Params) minttypes.Params {
-	return minttypes.Params{
-		MintDenom:           p.MintDenom,
-		InflationRateChange: p.InflationRateChange,
-		InflationMax:        p.InflationMax,
-		InflationMin:        p.InflationMin,
-		GoalBonded:          p.GoalBonded,
-		BlocksPerYear:       p.BlocksPerYear,
-	}
+	// res.Params is already of type minttypes.Params (proto-generated types are canonical)
+	return res.Params, nil
 }
