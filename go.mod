@@ -8,6 +8,7 @@ require (
 	cosmossdk.io/x/circuit v0.1.1
 	cosmossdk.io/x/evidence v0.1.1
 	cosmossdk.io/x/feegrant v0.1.1
+	cosmossdk.io/x/tx v0.13.7
 	cosmossdk.io/x/upgrade v0.1.4
 	github.com/cheqd/cheqd-node v1.4.6-pseudo-version-3.1.5.0.20250521081311-8e2db0a29d7d
 	github.com/cometbft/cometbft v0.38.12
@@ -43,7 +44,6 @@ require (
 	cloud.google.com/go/storage v1.41.0 // indirect
 	cosmossdk.io/errors v1.0.2 // indirect
 	cosmossdk.io/store v1.1.1 // indirect
-	cosmossdk.io/x/tx v0.13.7 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/4meepo/tagalign v1.3.4 // indirect
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
