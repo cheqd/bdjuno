@@ -45,7 +45,6 @@ import (
 	stakingsource "github.com/forbole/callisto/v4/modules/staking/source"
 	localstakingsource "github.com/forbole/callisto/v4/modules/staking/source/local"
 	remotestakingsource "github.com/forbole/callisto/v4/modules/staking/source/remote"
-	"github.com/forbole/callisto/v4/utils"
 )
 
 type Sources struct {
@@ -120,11 +119,8 @@ func buildRemoteSources(cfg *remote.Details) (*Sources, error) {
 		return nil, fmt.Errorf("error while creating remote source: %s", err)
 	}
 
-	// Get codec for gogoproto client
-	cdc := utils.GetCodec()
-
 	// Create gogoproto client for mint queries to handle math.LegacyDec properly
-	mintGogoClient := remotemintsource.NewGogoprotoQueryClient(source.GrpcConn, cdc)
+	mintGogoClient := remotemintsource.NewGogoprotoQueryClient(source.GrpcConn)
 
 	return &Sources{
 		AuthSource:     remoteauthsource.NewSource(source, authtypes.NewQueryClient(source.GrpcConn)),

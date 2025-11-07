@@ -2,9 +2,8 @@ package remote
 
 import (
 	"context"
-	"io"
+	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/codec"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	gogoproto "github.com/cosmos/gogoproto/proto"
 	"google.golang.org/grpc"
@@ -27,14 +26,14 @@ func (gogoprotoCodec) Marshal(v interface{}) ([]byte, error) {
 	if msg, ok := v.(gogoproto.Marshaler); ok {
 		return msg.Marshal()
 	}
-	return nil, io.EOF
+	return nil, fmt.Errorf("value does not implement gogoproto.Marshaler")
 }
 
 func (gogoprotoCodec) Unmarshal(data []byte, v interface{}) error {
 	if msg, ok := v.(gogoproto.Unmarshaler); ok {
 		return msg.Unmarshal(data)
 	}
-	return io.EOF
+	return fmt.Errorf("value does not implement gogoproto.Unmarshaler")
 }
 
 // grpcConnWrapper wraps a standard grpc.ClientConn to implement grpc1.ClientConn interface
@@ -61,13 +60,12 @@ func (w *grpcConnWrapper) Close() error {
 
 // GogoprotoQueryClient uses gogoproto-generated types for mint queries
 type GogoprotoQueryClient struct {
-	cc  *grpc.ClientConn
-	cdc codec.Codec
-	pb  minttypes.QueryClient
+	cc *grpc.ClientConn
+	pb minttypes.QueryClient
 }
 
 // NewGogoprotoQueryClient creates a new gogoproto-based query client
-func NewGogoprotoQueryClient(cc *grpc.ClientConn, cdc codec.Codec) *GogoprotoQueryClient {
+func NewGogoprotoQueryClient(cc *grpc.ClientConn) *GogoprotoQueryClient {
 	// Wrap the standard grpc.ClientConn to implement grpc1.ClientConn interface
 	wrapped := &grpcConnWrapper{ClientConn: cc}
 
@@ -75,9 +73,8 @@ func NewGogoprotoQueryClient(cc *grpc.ClientConn, cdc codec.Codec) *GogoprotoQue
 	pbClient := minttypes.NewQueryClient(wrapped)
 
 	return &GogoprotoQueryClient{
-		cc:  cc,
-		cdc: cdc,
-		pb:  pbClient,
+		cc: cc,
+		pb: pbClient,
 	}
 }
 
