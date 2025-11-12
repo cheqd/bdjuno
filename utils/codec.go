@@ -18,7 +18,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
+	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	consensus "github.com/cosmos/cosmos-sdk/x/consensus"
@@ -69,6 +71,16 @@ func GetCodec() codec.Codec {
 		)
 		getBasicManagers().RegisterInterfaces(interfaceRegistry)
 		std.RegisterInterfaces(interfaceRegistry)
+
+		// Explicitly register vesting account types
+		interfaceRegistry.RegisterImplementations(
+			(*authtypes.AccountI)(nil),
+			&vestingtypes.ContinuousVestingAccount{},
+			&vestingtypes.DelayedVestingAccount{},
+			&vestingtypes.PeriodicVestingAccount{},
+			&vestingtypes.PermanentLockedAccount{},
+		)
+
 		cdc = codec.NewProtoCodec(interfaceRegistry)
 	})
 	return cdc
