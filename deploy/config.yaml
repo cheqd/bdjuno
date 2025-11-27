@@ -12,6 +12,7 @@ chain:
         - slashing
         - staking
         - distribution
+        - top_accounts
         - actions
 node:
     type: remote
