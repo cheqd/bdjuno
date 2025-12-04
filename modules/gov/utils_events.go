@@ -37,13 +37,21 @@ func WeightVoteOptionFromEvents(events sdk.StringEvents) (govtypesv1.WeightedVot
 }
 
 // parseWeightVoteOption returns the vote option from the given string
-// option value in string has 2 cases, for example:
+// option value in string has 3 cases, for example:
 // 1. "{\"option\":1,\"weight\":\"1.000000000000000000\"}"
-// 2. "option:VOTE_OPTION_NO weight:\"1.000000000000000000\""
+// 2. "[{\"option\":1,\"weight\":\"1.000000000000000000\"}]"
+// 3. "option:VOTE_OPTION_NO weight:\"1.000000000000000000\""
 func parseWeightVoteOption(optionValue string) (govtypesv1.WeightedVoteOption, error) {
-	// try parse json option value
+	// try parse as JSON array (v1 format may wrap in array)
+	var voteOptionsArray []govtypesv1.WeightedVoteOption
+	err := json.Unmarshal([]byte(optionValue), &voteOptionsArray)
+	if err == nil && len(voteOptionsArray) > 0 {
+		// For simple votes, take the first option (should be the only one)
+		return voteOptionsArray[0], nil
+	}
+
 	var weightedVoteOption govtypesv1.WeightedVoteOption
-	err := json.Unmarshal([]byte(optionValue), &weightedVoteOption)
+	err = json.Unmarshal([]byte(optionValue), &weightedVoteOption)
 	if err == nil {
 		return weightedVoteOption, nil
 	}

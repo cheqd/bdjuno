@@ -3,6 +3,7 @@ package gov
 import (
 	"fmt"
 	"strconv"
+	"time"
 
 	juno "github.com/forbole/juno/v6/types"
 
@@ -19,7 +20,8 @@ func (m *Module) HandleBlock(
 	b *tmctypes.ResultBlock, blockResults *tmctypes.ResultBlockResults, txs []*juno.Transaction, vals *tmctypes.ResultValidators,
 ) error {
 	txEvents := collectTxEvents(txs)
-	err := m.updateProposalsStatus(b.Block.Height, txEvents, blockResults.FinalizeBlockEvents, vals)
+	blockTime := b.Block.Time
+	err := m.updateProposalsStatus(b.Block.Height, blockTime, txEvents, blockResults.FinalizeBlockEvents, vals)
 	if err != nil {
 		log.Error().Str("module", "gov").Int64("height", b.Block.Height).
 			Err(err).Msg("error while updating proposals")
@@ -30,7 +32,7 @@ func (m *Module) HandleBlock(
 
 // updateProposalsStatus updates the status of proposals if they have been included in the EndBlockEvents or status
 // was changed from deposit to voting
-func (m *Module) updateProposalsStatus(height int64, txEvents, endBlockEvents []abci.Event, blockVals *tmctypes.ResultValidators) error {
+func (m *Module) updateProposalsStatus(height int64, blockTime time.Time, txEvents, endBlockEvents []abci.Event, blockVals *tmctypes.ResultValidators) error {
 	var ids []uint64
 	// check if EndBlockEvents contains active_proposal event
 	endBlockIDs, err := findProposalIDsInEvents(endBlockEvents, govtypes.EventTypeActiveProposal, govtypes.AttributeKeyProposalID)
@@ -52,6 +54,14 @@ func (m *Module) updateProposalsStatus(height int64, txEvents, endBlockEvents []
 		return err
 	}
 	ids = append(ids, idsInDepositTxs...)
+
+	// Update proposals that are currently in voting period to ensure statuses are updated when voting period ends
+	votingPeriodIDs, err := m.db.GetOpenProposalsIds(blockTime)
+	if err != nil {
+		log.Error().Err(err).Str("module", "gov").Msg("error while getting open proposals ids")
+	} else {
+		ids = append(ids, votingPeriodIDs...)
+	}
 
 	// update status for proposals IDs stored in ids array
 	for _, id := range ids {
