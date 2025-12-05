@@ -370,11 +370,15 @@ require (
 // This is to avoid warnings while running the binary
 // See here: https://github.com/desmos-labs/desmos/pull/1131#discussion_r1194090419
 replace (
+	// replace cosmossdk.io/store with patched version
+	cosmossdk.io/store => github.com/cheqd/cosmos-sdk/store v1.1.2-0.20250808071119-3b33570d853b
+	// replace cheqd-node with pseudo version pointing to cheqd v4.1.6
 	github.com/cheqd/cheqd-node => github.com/cheqd/cheqd-node v1.4.6-pseudo-version-4.1.6
+	// replace cosmos-sdk with cheqd's forked version to include uneven heights iavl changes
 	github.com/cosmos/cosmos-sdk => github.com/cheqd/cosmos-sdk v0.50.14-height-mismatch-iavl.0.20250808071119-3b33570d853b
 	// replace iavl v1.2.2
 	// https://github.com/cheqd/iavl/tree/cheqd-v1.2.2-uneven-heights
-	github.com/cosmos/iavl => github.com/cheqd/iavl v0.19.2-0.20250417102206-84370d5811fb
+	github.com/cosmos/iavl => github.com/cheqd/iavl v1.2.2-uneven-heights.0.20250808065519-2c3d5a9959cc
 	// https://github.com/cheqd/fee-abstraction/tree/cheqd/v0.50.x
 	github.com/osmosis-labs/fee-abstraction/v8 => github.com/cheqd/fee-abstraction/v8 v8.0.3-uneven-heights-formula
 	// https://github.com/cheqd/feemarket/tree/cheqd/v0.50.x
