@@ -63,18 +63,25 @@ func (m *Module) HandleMsg(index int, msg juno.Message, tx *juno.Transaction) er
 
 	case "/cosmos.gov.v1.MsgVote":
 		cosmosMsg := utils.UnpackMessage(m.cdc, msg.GetBytes(), &govtypesv1.MsgVote{})
-		return m.handleVoteEvent(tx, cosmosMsg.Voter, eventutils.FindEventsByMsgIndex(sdk.StringifyEvents(tx.Events), index))
+		return m.handleMsgVote(tx, cosmosMsg.ProposalId, cosmosMsg.Voter, cosmosMsg.Option)
 	case "/cosmos.gov.v1beta1.MsgVote":
 		cosmosMsg := utils.UnpackMessage(m.cdc, msg.GetBytes(), &govtypesv1beta1.MsgVote{})
-		return m.handleVoteEvent(tx, cosmosMsg.Voter, eventutils.FindEventsByMsgIndex(sdk.StringifyEvents(tx.Events), index))
+		return m.handleMsgVote(tx, cosmosMsg.ProposalId, cosmosMsg.Voter, govtypesv1.VoteOption(cosmosMsg.Option))
 
 	case "/cosmos.gov.v1.MsgVoteWeighted":
 		cosmosMsg := utils.UnpackMessage(m.cdc, msg.GetBytes(), &govtypesv1.MsgVoteWeighted{})
-		return m.handleVoteEvent(tx, cosmosMsg.Voter, eventutils.FindEventsByMsgIndex(sdk.StringifyEvents(tx.Events), index))
+		return m.handleMsgVoteWeighted(tx, cosmosMsg.ProposalId, cosmosMsg.Voter, cosmosMsg.Options)
 	case "/cosmos.gov.v1beta1.MsgVoteWeighted":
 		cosmosMsg := utils.UnpackMessage(m.cdc, msg.GetBytes(), &govtypesv1beta1.MsgVoteWeighted{})
-
-		return m.handleVoteEvent(tx, cosmosMsg.Voter, eventutils.FindEventsByMsgIndex(sdk.StringifyEvents(tx.Events), index))
+		// Convert v1beta1 options to v1 options
+		options := make([]*govtypesv1.WeightedVoteOption, len(cosmosMsg.Options))
+		for i, opt := range cosmosMsg.Options {
+			options[i] = &govtypesv1.WeightedVoteOption{
+				Option: govtypesv1.VoteOption(opt.Option),
+				Weight: opt.Weight.String(),
+			}
+		}
+		return m.handleMsgVoteWeighted(tx, cosmosMsg.ProposalId, cosmosMsg.Voter, options)
 	}
 
 	return nil
@@ -183,30 +190,52 @@ func (m *Module) handleDepositEvent(tx *juno.Transaction, depositor string, even
 	})
 }
 
-// handleVoteEvent allows to properly handle a handleVoteEvent
-func (m *Module) handleVoteEvent(tx *juno.Transaction, voter string, events sdk.StringEvents) error {
-	// Get the proposal id
-	proposalID, err := ProposalIDFromEvents(events)
-	if err != nil {
-		return fmt.Errorf("error while getting proposal id: %s", err)
-	}
+// handleMsgVote handles a simple vote message by extracting data directly from the message
+func (m *Module) handleMsgVote(tx *juno.Transaction, proposalID uint64, voter string, option govtypesv1.VoteOption) error {
+	log.Debug().Str("module", "gov").Str("hash", tx.TxHash).Uint64("height", tx.Height).
+		Uint64("proposal_id", proposalID).Str("voter", voter).Int32("option", int32(option)).
+		Msg("handleMsgVote called")
 
 	txTimestamp, err := time.Parse(time.RFC3339, tx.Timestamp)
 	if err != nil {
 		return fmt.Errorf("error while parsing time: %s", err)
 	}
 
-	// Get the vote option
-	weightVoteOption, err := WeightVoteOptionFromEvents(events)
-	if err != nil {
-		return fmt.Errorf("error while getting vote option: %s", err)
-	}
-
-	vote := types.NewVote(proposalID, voter, weightVoteOption.Option, weightVoteOption.Weight, txTimestamp, int64(tx.Height))
+	// For simple votes, weight is always 1.0
+	vote := types.NewVote(proposalID, voter, option, "1.000000000000000000", txTimestamp, int64(tx.Height))
 
 	err = m.db.SaveVote(vote)
 	if err != nil {
 		return fmt.Errorf("error while saving vote: %s", err)
+	}
+
+	// update tally result for given proposal
+	err = m.UpdateProposalTallyResult(proposalID, int64(tx.Height))
+	if err != nil {
+		return err
+	}
+
+	return m.UpdateProposalStakingPoolSnapshot(int64(tx.Height), proposalID)
+}
+
+// handleMsgVoteWeighted handles a weighted vote message by extracting data directly from the message
+func (m *Module) handleMsgVoteWeighted(tx *juno.Transaction, proposalID uint64, voter string, options []*govtypesv1.WeightedVoteOption) error {
+	log.Debug().Str("module", "gov").Str("hash", tx.TxHash).Uint64("height", tx.Height).
+		Uint64("proposal_id", proposalID).Str("voter", voter).Int("options_count", len(options)).
+		Msg("handleMsgVoteWeighted called")
+
+	txTimestamp, err := time.Parse(time.RFC3339, tx.Timestamp)
+	if err != nil {
+		return fmt.Errorf("error while parsing time: %s", err)
+	}
+
+	// Save each weighted vote option
+	for _, opt := range options {
+		vote := types.NewVote(proposalID, voter, opt.Option, opt.Weight, txTimestamp, int64(tx.Height))
+		err = m.db.SaveVote(vote)
+		if err != nil {
+			return fmt.Errorf("error while saving vote: %s", err)
+		}
 	}
 
 	// update tally result for given proposal
