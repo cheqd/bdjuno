@@ -170,13 +170,15 @@ func refreshProposalDeposits(parseCtx *parser.Context, proposalID uint64, govMod
 }
 
 func refreshProposalVotes(parseCtx *parser.Context, proposalID uint64, govModule *gov.Module) error {
-	log.Debug().Msg("refreshing proposal votes")
+	log.Info().Uint64("proposal_id", proposalID).Msg("refreshing proposal votes")
 
 	// Get the tx that voted the proposal
 	txs, err := utils.QueryTxs(parseCtx.Node, fmt.Sprintf("proposal_vote.proposal_id=%d", proposalID))
 	if err != nil {
 		return err
 	}
+
+	log.Info().Int("tx_count", len(txs)).Msg("found vote transactions")
 
 	for _, tx := range txs {
 		// Get the tx details
@@ -212,10 +214,12 @@ func refreshProposalVotes(parseCtx *parser.Context, proposalID uint64, govModule
 			// for different proposals which can cause error if one of the proposals
 			// info is not stored in database
 			if proposalID == msgProposalID {
+				log.Info().Str("tx_hash", junoTx.TxHash).Int("msg_index", index).Str("msg_type", junoTx.Body.Messages[index].GetType()).Msg("processing vote message")
 				err = govModule.HandleMsg(index, junoTx.Body.Messages[index], junoTx)
 				if err != nil {
 					return fmt.Errorf("error while handling MsgVote: %s", err)
 				}
+				log.Info().Str("tx_hash", junoTx.TxHash).Msg("vote saved successfully")
 			} else {
 				// skip votes for proposals with IDs
 				// different than requested in the query
