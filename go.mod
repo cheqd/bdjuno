@@ -379,10 +379,10 @@ replace (
 	// replace iavl v1.2.2
 	// https://github.com/cheqd/iavl/tree/cheqd-v1.2.2-uneven-heights
 	github.com/cosmos/iavl => github.com/cheqd/iavl v1.2.2-uneven-heights.0.20250808065519-2c3d5a9959cc
+	// local juno fork to skip failed tx fetches
+	github.com/forbole/juno/v6 => ./juno-fork
 	// https://github.com/cheqd/fee-abstraction/tree/cheqd/v0.50.x
 	github.com/osmosis-labs/fee-abstraction/v8 => github.com/cheqd/fee-abstraction/v8 v8.0.3-uneven-heights-formula
 	// https://github.com/cheqd/feemarket/tree/cheqd/v0.50.x
 	github.com/skip-mev/feemarket => github.com/cheqd/feemarket v1.0.5-uneven-heights
-	// local juno fork to skip failed tx fetches
-	github.com/forbole/juno/v6 => ./juno-fork
 )
