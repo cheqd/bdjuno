@@ -417,6 +417,7 @@ celerybeat.pid
 .env
 .venv
 env/
+!juno-fork/types/env/
 venv/
 ENV/
 env.bak/
