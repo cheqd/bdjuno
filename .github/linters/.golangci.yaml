@@ -50,9 +50,6 @@ issues:
     - text: "SA1019:"
       linters:
         - staticcheck
-    - path: "undefined \\(type \\*Db has no field or method SQL\\)"
-      linters:
-        - typecheck
   max-issues-per-linter: 10000
   max-same-issues: 10000
 
