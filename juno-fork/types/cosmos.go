@@ -3,8 +3,10 @@ package types
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"time"
 
+	abci "github.com/cometbft/cometbft/abci/types"
 	tmctypes "github.com/cometbft/cometbft/rpc/core/types"
 	"github.com/cosmos/cosmos-sdk/types/tx"
 
@@ -107,13 +109,43 @@ func NewTransaction(txResponse *TxResponse, tx *Tx) (*Transaction, error) {
 // to find the event having the given type, and returns it.
 // If no such event is found, returns an error instead.
 func (tx Transaction) FindEventByType(index int, eventType string) (sdk.StringEvent, error) {
-	for _, ev := range tx.Logs[index].Events {
-		if ev.Type == eventType {
-			return ev, nil
+	// In SDK v0.50.x, Logs is empty but Events contains data with msg_index attribute
+	if len(tx.Logs) > index {
+		for _, ev := range tx.Logs[index].Events {
+			if ev.Type == eventType {
+				return ev, nil
+			}
+		}
+	} else if tx.TxResponse != nil && len(tx.Events) > 0 {
+		// Fallback to Events for SDK v0.50.x compatibility
+		for _, ev := range tx.Events {
+			// Check if this event belongs to the specified message index
+			for _, attr := range ev.Attributes {
+				if attr.Key == "msg_index" {
+					if idx, err := strconv.Atoi(attr.Value); err == nil && idx == index {
+						if ev.Type == eventType {
+							return sdk.StringEvent{
+								Type:       ev.Type,
+								Attributes: stringifyAttributes(ev.Attributes),
+							}, nil
+						}
+					}
+					break
+				}
+			}
 		}
 	}
 
 	return sdk.StringEvent{}, fmt.Errorf("no %s event found inside tx with hash %s", eventType, tx.TxHash)
+}
+
+// stringifyAttributes converts abci.EventAttribute to sdk.Attribute
+func stringifyAttributes(attrs []abci.EventAttribute) []sdk.Attribute {
+	result := make([]sdk.Attribute, len(attrs))
+	for i, attr := range attrs {
+		result[i] = sdk.Attribute{Key: attr.Key, Value: attr.Value}
+	}
+	return result
 }
 
 // FindAttributeByKey searches inside the specified event of the given tx to find the attribute having the given key.
@@ -144,6 +176,48 @@ type TxResponse struct {
 	Height    uint64 `json:"height,string,omitempty"`
 	GasWanted uint64 `json:"gas_wanted,string,omitempty"`
 	GasUsed   uint64 `json:"gas_used,string,omitempty"`
+}
+
+// EventsToLogs converts a slice of ABCI events to ABCIMessageLogs by grouping events by msg_index.
+// This is needed for Cosmos SDK v0.50.x compatibility where Logs are no longer populated.
+func EventsToLogs(events []sdk.StringEvent) sdk.ABCIMessageLogs {
+	// Group events by msg_index
+	eventsByMsgIndex := make(map[int][]sdk.StringEvent)
+	maxMsgIndex := -1
+
+	for _, event := range events {
+		msgIndex := 0
+		for _, attr := range event.Attributes {
+			if attr.Key == "msg_index" {
+				if idx, err := strconv.Atoi(attr.Value); err == nil {
+					msgIndex = idx
+				}
+				break
+			}
+		}
+
+		if msgIndex > maxMsgIndex {
+			maxMsgIndex = msgIndex
+		}
+
+		eventsByMsgIndex[msgIndex] = append(eventsByMsgIndex[msgIndex], event)
+	}
+
+	// Handle case where no events have msg_index (all events go to index 0)
+	if maxMsgIndex < 0 {
+		maxMsgIndex = 0
+	}
+
+	// Create ABCIMessageLogs from grouped events
+	logs := make(sdk.ABCIMessageLogs, maxMsgIndex+1)
+	for i := 0; i <= maxMsgIndex; i++ {
+		logs[i] = sdk.ABCIMessageLog{
+			MsgIndex: uint32(i),
+			Events:   eventsByMsgIndex[i],
+		}
+	}
+
+	return logs
 }
 
 // -------------------------------------------------------------------------------------------------------------------

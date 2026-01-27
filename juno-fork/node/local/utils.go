@@ -56,6 +56,13 @@ func makeTxResult(txConfig client.TxConfig, resTx *tmctypes.ResultTx, resBlock *
 
 // NewTxResponseFromSdkTxResponse allows to build a new TxResponse instance from the given sdk.TxResponse
 func NewTxResponseFromSdkTxResponse(txResponse *sdk.TxResponse, tx *types.Tx) *types.TxResponse {
+	// In Cosmos SDK v0.50.x, the Logs field is no longer populated.
+	// Events now contain a msg_index attribute to correlate with messages.
+	// We need to convert Events to Logs format for backward compatibility.
+	if len(txResponse.Logs) == 0 && len(txResponse.Events) > 0 {
+		txResponse.Logs = types.EventsToLogs(sdk.StringifyEvents(txResponse.Events))
+	}
+
 	return &types.TxResponse{
 		TxResponse: txResponse,
 		Tx:         tx,

@@ -22,6 +22,7 @@ import (
 	httpclient "github.com/cometbft/cometbft/rpc/client/http"
 	tmctypes "github.com/cometbft/cometbft/rpc/core/types"
 	jsonrpcclient "github.com/cometbft/cometbft/rpc/jsonrpc/client"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 var (
@@ -209,6 +210,13 @@ func (cp *Node) Tx(hash string) (*types.Transaction, error) {
 	err = json.Unmarshal(body, &convTx)
 	if err != nil {
 		return nil, fmt.Errorf("error converting transaction: %s", err.Error())
+	}
+
+	// Convert Events to Logs for SDK v0.50.x compatibility
+	if convTx.TxResponse != nil && convTx.TxResponse.TxResponse != nil {
+		if len(convTx.TxResponse.Logs) == 0 && len(convTx.TxResponse.Events) > 0 {
+			convTx.TxResponse.Logs = types.EventsToLogs(sdk.StringifyEvents(convTx.TxResponse.Events))
+		}
 	}
 
 	return convTx, nil
