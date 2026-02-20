@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/client"
 	tmtypes "github.com/cometbft/cometbft/types"
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/rs/zerolog/log"
 
 	constypes "github.com/cometbft/cometbft/consensus/types"

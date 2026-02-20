@@ -3,8 +3,8 @@ package remote
 import (
 	"fmt"
 
-	"github.com/cosmos/gogoproto/proto"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/gogoproto/proto"
 )
 
 // InjectedVoteExtensionTx matches cheqd.oracle.v2.InjectedVoteExtensionTx
