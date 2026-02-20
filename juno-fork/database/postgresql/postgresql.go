@@ -138,7 +138,7 @@ VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING`
 // GetTotalBlocks implements database.Database
 func (db *Database) GetTotalBlocks() int64 {
 	var blockCount int64
-	err := db.SQL.QueryRow(`SELECT count(*) FROM block;`).Scan(&blockCount)
+	err := db.SQL.QueryRow(`SELECT height FROM block ORDER BY height DESC LIMIT 1;`).Scan(&blockCount)
 	if err != nil {
 		return 0
 	}

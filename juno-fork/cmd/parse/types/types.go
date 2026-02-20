@@ -1,6 +1,7 @@
 package types
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/forbole/juno/v6/logging"
 	"github.com/forbole/juno/v6/types/config"
 
@@ -16,6 +17,7 @@ type Config struct {
 	setupCfg     SdkConfigSetup
 	buildDb      database.Builder
 	logger       logging.Logger
+	codec        codec.Codec
 }
 
 // NewConfig allows to build a new Config instance
@@ -91,4 +93,15 @@ func (cfg *Config) GetLogger() logging.Logger {
 		return logging.DefaultLogger()
 	}
 	return cfg.logger
+}
+
+// WithCodec sets the codec to be used
+func (cfg *Config) WithCodec(c codec.Codec) *Config {
+	cfg.codec = c
+	return cfg
+}
+
+// GetCodec returns the codec to be used
+func (cfg *Config) GetCodec() codec.Codec {
+	return cfg.codec
 }

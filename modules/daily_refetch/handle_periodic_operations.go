@@ -11,6 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	parsecmdtypes "github.com/forbole/juno/v6/cmd/parse/types"
+	"github.com/forbole/callisto/v4/utils"
 )
 
 func (m *Module) RegisterPeriodicOperations(scheduler *gocron.Scheduler) error {
@@ -49,7 +50,7 @@ func (m *Module) refetchMissingBlocks() error {
 		return nil
 	}
 
-	parseCtx, err := parsecmdtypes.GetParserContext(config.Cfg, parsecmdtypes.NewConfig())
+	parseCtx, err := parsecmdtypes.GetParserContext(config.Cfg, parsecmdtypes.NewConfig().WithCodec(utils.GetCodec()))
 	if err != nil {
 		return err
 	}

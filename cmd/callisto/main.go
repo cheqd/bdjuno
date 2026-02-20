@@ -23,6 +23,7 @@ func main() {
 
 	cdc := utils.GetCodec()
 	parseCfg := parsetypes.NewConfig().
+		WithCodec(cdc).
 		WithDBBuilder(database.Builder(cdc)).
 		WithRegistrar(modules.NewRegistrar(getAddressesParser(), cdc))
 

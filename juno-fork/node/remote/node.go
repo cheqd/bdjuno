@@ -10,7 +10,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/cosmos/cosmos-sdk/client"
 	tmtypes "github.com/cometbft/cometbft/types"
+	"github.com/rs/zerolog/log"
 
 	constypes "github.com/cometbft/cometbft/consensus/types"
 	tmjson "github.com/cometbft/cometbft/libs/json"
@@ -35,10 +37,11 @@ type Node struct {
 	ctx          context.Context
 	client       *httpclient.HTTP
 	txServiceAPI string
+	txConfig     client.TxConfig
 }
 
 // NewNode allows to build a new Node instance
-func NewNode(cfg *Details) (*Node, error) {
+func NewNode(cfg *Details, txConfig client.TxConfig) (*Node, error) {
 	httpClient, err := jsonrpcclient.DefaultHTTPClient(cfg.RPC.Address)
 	if err != nil {
 		return nil, err
@@ -66,6 +69,7 @@ func NewNode(cfg *Details) (*Node, error) {
 
 		client:       rpcClient,
 		txServiceAPI: cfg.API.Address,
+		txConfig:     txConfig,
 	}, nil
 }
 
@@ -229,8 +233,34 @@ func (cp *Node) Txs(block *tmctypes.ResultBlock) ([]*types.Transaction, error) {
 		txHash := fmt.Sprintf("%X", tmTx.Hash())
 		txResponse, err := cp.Tx(txHash)
 		if err != nil {
-			// Skip transactions that fail to fetch (e.g., 500 errors from node)
-			fmt.Printf("[WARN] skipping tx %s at height %d: %s\n", txHash, block.Block.Height, err)
+			// Transaction failed to fetch from API
+			// Try to decode as standard Cosmos SDK tx first
+			if cp.txConfig != nil {
+				if tx, decodeErr := cp.txConfig.TxDecoder()(tmTx); decodeErr == nil {
+					// Successfully decoded as Cosmos SDK tx - this shouldn't fail to fetch
+					var msgTypes []string
+					for _, msg := range tx.GetMsgs() {
+						msgTypes = append(msgTypes, sdk.MsgTypeURL(msg))
+					}
+					fmt.Printf("[WARN] Height %d tx %s - Valid Cosmos SDK tx failed to fetch (types: %v): %s\n",
+						block.Block.Height, txHash, msgTypes, err)
+					continue
+				}
+			}
+
+			// Not a standard Cosmos SDK tx - try to decode as vote extension oracle data
+			if voteExt, decodeErr := DecodeVoteExtension(tmTx); decodeErr == nil {
+				// Vote extension tx - log at debug level
+				log.Debug().Int64("height", block.Block.Height).Int("votes", len(voteExt.ExchangeRateVotes)).Msg("Vote extension detected")
+				for _, vote := range voteExt.ExchangeRateVotes {
+					log.Debug().Str("validator", vote.Voter).Str("rates", vote.ExchangeRates.String()).Msg("Oracle vote")
+				}
+				continue
+			}
+
+			// Unknown format - log for investigation
+			fmt.Printf("[WARN] Height %d tx %s - Unknown tx format, skipping\n",
+				block.Block.Height, txHash)
 			continue
 		}
 		txResponses = append(txResponses, txResponse)

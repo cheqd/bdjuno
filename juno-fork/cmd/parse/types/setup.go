@@ -11,7 +11,9 @@ import (
 
 	"github.com/forbole/juno/v6/database"
 
+	"github.com/cosmos/cosmos-sdk/client"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 
 	modsregistrar "github.com/forbole/juno/v6/modules/registrar"
 )
@@ -33,8 +35,13 @@ func GetParserContext(cfg config.Config, parseConfig *Config) (*parser.Context, 
 	}
 
 	// Init the client
-	// Juno itself does not support local node type, so we can safely set codec and txConfig to nil
-	cp, err := nodebuilder.BuildNode(cfg.Node, nil, nil)
+	// Create txConfig for remote node to decode transactions
+	cdc := parseConfig.GetCodec()
+	var txConfig client.TxConfig
+	if cdc != nil {
+		txConfig = authtx.NewTxConfig(cdc, authtx.DefaultSignModes)
+	}
+	cp, err := nodebuilder.BuildNode(cfg.Node, txConfig, cdc)
 	if err != nil {
 		return nil, fmt.Errorf("failed to start client: %s", err)
 	}
