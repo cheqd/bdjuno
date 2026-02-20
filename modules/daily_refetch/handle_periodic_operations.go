@@ -10,8 +10,8 @@ import (
 	"github.com/go-co-op/gocron"
 	"github.com/rs/zerolog/log"
 
-	parsecmdtypes "github.com/forbole/juno/v6/cmd/parse/types"
 	"github.com/forbole/callisto/v4/utils"
+	parsecmdtypes "github.com/forbole/juno/v6/cmd/parse/types"
 )
 
 func (m *Module) RegisterPeriodicOperations(scheduler *gocron.Scheduler) error {
