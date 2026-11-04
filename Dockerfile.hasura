@@ -4,11 +4,16 @@
 
 FROM ubuntu:jammy
 
-RUN apt update && apt install -y curl
+# Upgrade base packages (incl. OpenSSL security fixes) and install curl
+RUN apt update && apt upgrade -y && apt install -y curl \
+    && rm -rf /var/lib/apt/lists/*
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
-# Get latest Hasura CLI and install
-RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
+# Pin Hasura CLI version (get.sh otherwise defaults to an outdated hardcoded version)
+ARG HASURA_VERSION="v2.51.3"
+
+# Get Hasura CLI and install
+RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=${HASURA_VERSION} bash
 
 # Set user directory and details
 ARG HOME_DIR="/hasura"
